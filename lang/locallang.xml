@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for plugin &quot;tx_ncgovpermits_controller&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<!-- configuration -->
+
+			<!-- generic -->
+
+			<!-- permit list view -->
+			<label index="label_view_details">Meer informatie</label>
+			<label index="label_month_1">Januari</label>
+			<label index="label_month_2">Februari</label>
+			<label index="label_month_3">Maart</label>
+			<label index="label_month_4">April</label>
+			<label index="label_month_5">Mei</label>
+			<label index="label_month_6">Juni</label>
+			<label index="label_month_7">Juli</label>
+			<label index="label_month_8">Augustus</label>
+			<label index="label_month_9">September</label>
+			<label index="label_month_10">Oktober</label>
+			<label index="label_month_11">November</label>
+			<label index="label_month_12">December</label>
+			<label index="label_week">Week</label>
+			<label index="label_type_permit">--Type vergunningen--</label>
+			<label index="label_type_publication">--Type bekendmakingen--</label>
+			<label index="label_termtype">--Termijn type--</label>
+			<label index="label_fulltext_submit">Zoek</label>
+			<label index="label_submit">Zoek</label>
+			<label index="label_fulltext_placeholder">Zoeken...</label>
+			<label index="label_postcode">Postcode</label>
+			<label index="label_postcode_submit">Zoek</label>
+			<label index="label_radius">Straal</label>
+			<label index="label_postcodeNum_placeholder">1234</label>
+			<label index="label_postcodeAlpha_placeholder">AA</label>
+			
+			<!-- permit detail view -->
+			<label index="label_general">Algemeen</label>
+			<label index="label_location">Locatie</label>
+			<label index="label_download">Download</label>
+			<label index="label_lot">Perceel</label>
+			<label index="label_fieldheader_tstamp">Laatst gewijzigd</label>
+			<label index="label_fieldheader_crdate">Aanmaakdatum</label>
+			<label index="label_fieldheader_publishdate">Publicatiedatum</label>
+			<label index="label_fieldheader_title">Titel</label>
+			<label index="label_fieldheader_producttype">Product</label>
+			<label index="label_fieldheader_productactivities">Activiteit(en)</label>
+			<label index="label_fieldheader_validity_start">Geldig van</label>
+			<label index="label_fieldheader_validity_end">Geldig tot</label>
+			<label index="label_fieldheader_description">Beschrijving</label>
+			<label index="label_fieldheader_publicationbody">Bekendmakingsbericht</label>
+			<label index="label_fieldheader_publication">Publicatie</label>
+			<label index="label_fieldheader_documents">Bijlage(n)</label>
+			<label index="label_fieldheader_document">Bijlage</label>
+			<label index="label_fieldheader_link">Document of verwijzing</label>
+			<!--  label index="label_fieldheader_documenttypes"></label-->
+			<label index="label_fieldheader_casereference">Zaaknummer</label>
+			<label index="label_fieldheader_casereference_pub">Zaaknummer</label>
+			<label index="label_fieldheader_phase">Fase</label>
+			<label index="label_fieldheader_termtype">Termijn</label>
+			<label index="label_fieldheader_termtype_start">Termijn start</label>
+			<label index="label_fieldheader_termtype_end">Termijn eind</label>
+			<label index="label_fieldheader_company">Bedrijf</label>
+			<label index="label_fieldheader_companynumber">Bedrijfnummer</label>
+			<label index="label_fieldheader_companyaddress">Adres bedrijf</label>
+			<label index="label_fieldheader_companyaddressnumber">Huisnummer bedrijf</label>
+			<label index="label_fieldheader_companyzipcode">Postcode bedrijf</label>
+			<label index="label_fieldheader_objectreference">Referentienummer (BAG)</label>
+			<label index="label_fieldheader_zipcode">Postcode object</label>
+			<label index="label_fieldheader_addressnumber">Huisnummer object</label>
+			<label index="label_fieldheader_addressnumberadditional">Toevoeging huisnummer object</label>
+			<label index="label_fieldheader_address">Adres object</label>
+			<label index="label_fieldheader_city">Plaats object</label>
+			<label index="label_fieldheader_municipality">Gemeente object</label>
+			<label index="label_fieldheader_province">Provincie object</label>
+			<label index="label_fieldheader_cadastremunicipality">Kadastrale gemeente object</label>
+			<label index="label_fieldheader_section">Sectie</label>
+			<label index="label_fieldheader_number">Nummer</label>
+			<label index="label_fieldheader_related">Gerelateerd</label>
+			<label index="label_fieldheader_coordinates">Coordinaten object</label>
+			<label index="label_fieldheader_identifier">Identifier</label>
+			<label index="label_fieldheader_imported">Geimporteerd</label>
+			<label index="label_fieldheader_session_number">Sessie nummer</label>
+			<label index="label_return">Terug naar overzicht</label>
+
+			<!-- error handling -->
+			<label index="no_records_available">Er zijn voor de door u geselecteerde maand en type geen gegevens aanwezig.</label>
+			<label index="no_records_available_for_period">Er zijn geen gegevens aanwezig voor de afgelopen periode.</label>
+			<label index="record_not_found">Kan details voor dit document niet vinden.</label>
+			<label index="label_error_googlemaps_wecmap_not_loaded">Om Google Maps te kunnen gebruiken moet de extensie wec_map zijn geinstalleerd (googleMaps.enabled).</label>
+			<label index="label_error_googlemaps_apikey_not_set">De Google Maps API key is niet geconfigureerd, stel deze eerst in (googleMaps.apiKey).</label>
+			<label index="label_error_googlemaps_width_not_set">Google Maps niet goed geconfigureerd: breedte niet ingesteld, stel deze eerst in (googleMaps.width).</label>
+			<label index="label_error_googlemaps_height_not_set">Google Maps niet goed geconfigureerd: hoogte niet ingesteld, stel deze eerst in (googleMaps.width).</label>
+			
+			<label index="label_error_owmsdefaults_province_not_set">OWMS niet goed geconfigureerd: provincie niet ingesteld, stel deze eerst in (owmsDefaults.province).</label>
+			<label index="label_error_owmsdefaults_city_not_set">OWMS niet goed geconfigureerd: plaats niet ingesteld, stel deze eerst in (owmsDefaults.city).</label>
+			<label index="label_error_owmsdefaults_municipality_not_set">OWMS niet goed geconfigureerd: gemeente niet ingesteld, stel deze eerst in (owmsDefaults.municipality).</label>
+		</languageKey>
+	</data>
+</T3locallang>

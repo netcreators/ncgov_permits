@@ -1,0 +1,168 @@
+.tx_ncgovpermits_filter_topbox .years {margin:0; padding:0;}
+
+.tx_ncgovpermits_filter_topbox .years li {
+	padding-right:10px;
+	font-weight:bold;
+	float: left;
+}
+
+.tx_ncgovpermits_filter_topbox .months {
+	clear:both;
+	border-top:1px dotted #cbcbcb;
+	border-bottom:1px dotted #cbcbcb;
+	overflow:hidden;
+	padding:0;
+}
+
+.tx_ncgovpermits_filter_topbox .months li {
+	float:left;
+	margin-left:0;
+	margin-right:5px;
+	padding:3px;
+	width:auto;
+}
+
+.tx_ncgovpermits_filter_topbox .month_active {
+	background:#000;
+	color:#fff;
+}
+
+.tx_ncgovpermits_filter_topbox .weeks li {
+	border-bottom:1px solid #CECECE;
+	line-height:230%;
+	list-style-type:none;
+	margin-left:0;
+}
+
+.tx_ncgovpermits_filter_topbox li {
+	list-style-type:none;
+	margin: 0;
+}
+
+.tx_ncgovpermits_filter_topbox li.year_active {
+	background: url(../../../img/bg-year-active.gif) no-repeat left 2px;
+	padding-left:17px;
+}
+
+.tx_ncgovpermits_filter_sidebox {
+	clear:both;
+	float:right;
+	width:190px;
+}
+
+
+.tx_ncgovpermits_filter_sidebox .fulltext input {
+	width: 12em;
+}
+
+.tx_ncgovpermits_filter_sidebox button {
+	margin: 3px;
+	width: 2.6em;
+}
+
+.tx_ncgovpermits_filter_sidebox .phase input {
+	margin: 0.5em;
+}
+
+.tx_ncgovpermits_filter_sidebox .phase label {
+	width: 17em;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0.3em;
+}
+
+.tx_ncgovpermits_filter_sidebox .postcode .label {
+	display: inline-block;
+	margin: 0.3em;
+}
+
+.tx_ncgovpermits_filter_sidebox .postcode input.num {
+	width: 3em;
+}
+
+.tx_ncgovpermits_filter_sidebox .postcode input.alpha {
+	width: 1.5em;
+}
+
+.available-records li { list-style-type:none; clear:both;}
+
+.available-records li p {
+	margin-bottom:0.3em;
+	padding:0;
+	text-decoration:none;
+}
+.available-records li .permit-view-date {float:left;}
+.available-records li .permit-view-date-link {
+	float:left;
+	padding-left:10px;
+	width:50%;
+}
+
+.available-records li a { text-decoration: none; font-weight:bold; padding-left:5px;}
+.available-records li .permit-view-date-link a { padding-left:0px;}
+.available-records li a:hover {text-decoration:underline;}
+
+.available-records li h2 {
+	margin-left: 0;
+	color:#77008A;
+}
+
+.available-records li a:hover h2 {
+	text-decoration: underline;
+}
+
+.available-records span {
+	clear: both;
+	display: block;
+	color:#2C2C2C;
+}
+
+.available-records li .permit-date {
+	color:#000BB5;
+	font-size:0.9em;
+}
+
+/* detail ///////////////////////////////////*/
+.detail div {/* breaks google map Map/Satellite/Terrain buttons: padding-bottom:5px; */}
+.doc-general-label {
+	clear: both;
+	width: 100px;
+	padding-right: 15px;
+	color: #09384B;
+	text-align: right;
+}
+.detail-publishdate .detail-label, .detail-title .detail-label, .detail-case div.detail-label {
+	float:left;
+	padding-right:5px;
+}
+.detail-case .detail-label {width:120px; color:#5C0042;}
+.detail-case div.detail-field-description p {margin-bottom:0;}
+.detail-description p,
+.detail-description span,
+.detail-description div {
+	margin-left: 0;
+	margin-top: 0;
+	padding-left: 0;
+	padding-top: 0;
+}
+.btn-overview {
+	background:url(../../../img/arrow-right.gif) no-repeat left 9px;
+	border-top:1px dotted #CBCBCB;
+	border-bottom:1px dotted #CBCBCB;
+	clear:both;
+	display:block;
+	padding:5px 0;
+	margin-top:10px;
+}
+.detail .google_maps, .list .google_maps, .latest .google_maps { padding:0 0 20px 0; }
+.document-appendix { padding: 15px 0 0 23px; }
+
+.records-available { width: 710px; }
+
+.available-records { padding: 0; }
+
+#map_txncgovpermits_list {
+	width:300px;
+	height:500px;
+	
+}

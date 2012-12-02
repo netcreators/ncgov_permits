@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv xmlns="http://standaarden.overheid.nl/owms/terms" name="overheidvg:Fase"
+    topicanaid="13788">
+   <cvvalue topicanaid="13792">aanvraag ontvangen</cvvalue>
+   <cvvalue topicanaid="13794">aanvraag ontvankelijk</cvvalue>
+   <cvvalue topicanaid="13816">advies bekend</cvvalue>
+   <cvvalue topicanaid="13806">beroep aangetekend</cvvalue>
+   <cvvalue topicanaid="13808">bezwaar ingediend</cvvalue>
+   <cvvalue topicanaid="13812">bezwaar of beroep ontvangen</cvvalue>
+   <cvvalue topicanaid="13814">bezwaar of beroep ontvankelijk</cvvalue>
+   <cvvalue topicanaid="13798">conceptvergunning gereed</cvvalue>
+   <cvvalue topicanaid="13796">ontwerpbesluit genomen</cvvalue>
+   <cvvalue topicanaid="13820">procedure afgebroken</cvvalue>
+   <cvvalue topicanaid="13818">vergunning geschorst</cvvalue>
+   <cvvalue topicanaid="13802">vergunning geweigerd</cvvalue>
+   <cvvalue topicanaid="13810">vergunning onherroepelijk</cvvalue>
+   <cvvalue topicanaid="13804">vergunning verleend</cvvalue>
+   <cvvalue topicanaid="13822">vergunning vernietigd</cvvalue>
+   <cvvalue topicanaid="13800">zienswijze ingediend</cvvalue>
+</cv>

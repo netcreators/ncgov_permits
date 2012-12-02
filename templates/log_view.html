@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+</head>
+<body>
+
+<!--
+getViewSelectProducts
+-->
+<!-- ###VIEWSELECTPRODUCTS### begin-->
+###CONTENT_MESSAGE###
+<form action="###BASEURL###" method="POST">
+	<fieldset>
+		<input type="hidden" name="id" value="###TSFE_ID###" />
+		<input type="hidden" name="L" value="###LANGUAGE_ID###" />	
+		<input type="hidden" name="###PREFIXID###[step]" value="###STEP###" />
+		<input type="hidden" name="###PREFIXID###[mode]" value="###MODE###" />
+		<input type="hidden" id="clusters" name="clusters" value="###CLUSTER_LIST###" />
+		<!-- ###HAS_ERRORS### -->
+		<div class="feedback_message">
+			<ul>
+				<li>###LABEL_ERROR_FEEDBACK###</li>
+				<!-- ###ERRORS### -->
+				<li>###ERROR_MESSAGE###</li>
+				<!-- ###ERRORS### end -->
+			</ul>	
+		</div>
+		<!-- ###HAS_ERRORS### end -->
+		<div class="product_list">
+			<ul>
+				<!-- ###CLUSTERS### -->
+					<li id="cluster" class="clustername">
+						###CLUSTER###
+					</li>
+					<!-- ###PRODUCTS### -->
+						<li id="li_product_###PRODUCT_UID###" class="product_enabled">
+							<input type="checkbox" id="product_###PRODUCT_UID###" name="###PREFIXID###[selectedProducts][###PRODUCT_UID###]" value="1" onclick="checkAndDisableOtherClusterProducts(###PRODUCT_CLUSTER###,###PRODUCT_UID###)"###PRODUCT_CHECKED### />
+							<label>###PRODUCT_NAME### <br /> ###PRODUCT_INTRO_TEXT###</label>
+						</li>
+					<!-- ###PRODUCTS### end -->
+				<!-- ###CLUSTERS### -->
+				<!-- ###NO_PRODUCTS_FOUND### -->
+					<li id="cluster" class="clustername">
+						###LABEL_ERROR_NO_PRODUCTS_FOUND###
+					</li>
+				<!-- ###NO_PRODUCTS_FOUND### -->
+			</ul>
+		</div>
+		<div class="appointment_productlist_submit">
+			<input type="submit" name="###PREFIXID###[next]" value="###LABEL_NEXT###" class="button" />
+		</div>
+	</fieldset>
+</form>
+<!-- ###VIEWSELECTPRODUCTS### end-->
+
+<!--
+getViewAppointmentDetails
+-->
+<!-- ###VIEWAPPOINTMENTDETAILS### begin-->
+###CONTENT_MESSAGE###
+<div class="appointment_details">###LABEL_OLD_APPOINTMENT_DETAILS### ###LABEL_OLD_MULTIPLE_PERSONS###</div>
+<div class="appointment_details">###LABEL_DETAILS### ###LABEL_MULTIPLE_PERSONS### ###LABEL_YOUR_CODE###</div>
+<!-- ###SUBMIT_CONTINUE### -->
+<div class="appointment_confirm_link">
+	<form action="###BASEURL###" method="POST">
+		<fieldset>
+			<input type="hidden" name="id" value="###TSFE_ID###" />
+			<input type="hidden" name="L" value="###LANGUAGE_ID###" />	
+			<input type="hidden" name="###PREFIXID###[step]" value="###STEP###" />
+			<input type="hidden" name="###PREFIXID###[mode]" value="###MODE###" />
+			<div class="appointment_productlist_submit">
+				<input type="submit" name="###PREFIXID###[next]" value="###LABEL_CONFIRM###" class="button" />
+			</div>
+		</fieldset>
+	</form>
+</div>
+<!-- ###SUBMIT_CONTINUE### end -->
+<!-- ###HAS_REQUIREMENTS### -->
+	<div class="appointment_requirements">
+		<div class="product_requireds">###LABEL_EMAIL_REQUIRED###</div>
+		<!-- ###PRODUCT_REQUIREMENTS### -->
+		<div class="product_name">###PRODUCT_NAME###</div>
+		<div class="product_required">###PRODUCT_REQUIREDS###</div>
+		<!-- ###PRODUCT_REQUIREMENTS### -->
+	</div>
+<!-- ###HAS_REQUIREMENTS### -->
+<!-- ###VIEWAPPOINTMENTDETAILS### end-->
+
+<!--
+getViewEnterAppointmentCode
+-->
+<!-- ###VIEWENTERAPPOINTMENTCODE### begin-->
+###CONTENT_MESSAGE###
+<form action="###BASEURL###" method="POST">
+	<fieldset>
+		<input type="hidden" name="id" value="###TSFE_ID###" />
+		<input type="hidden" name="L" value="###LANGUAGE_ID###" />	
+		<input type="hidden" name="###PREFIXID###[step]" value="###STEP###" />
+		<input type="hidden" name="###PREFIXID###[mode]" value="###MODE###" />
+		<ul class="user_registration">
+			<li>
+				<label>###LABEL_APPOINTMENT_CODE###*</label>
+				<input name="###PREFIXID###[code]" type="text" class="inputform" id="f2" value="###APPOINTMENT_CODE###" />
+			</li>
+			<li>
+				<input type="submit" name="###PREFIXID###[submit]" value="###LABEL_NEXT###" class="button" />
+			</li>
+		</ul>
+	</fieldset>
+</form>
+<!-- ###VIEWENTERAPPOINTMENTCODE### end-->
+
+<!--
+getViewFindAppointment
+-->
+<!-- ###VIEWFINDAPPOINTMENT### begin-->
+###CONTENT_MESSAGE###
+<form action="###BASEURL###" method="POST">
+	<fieldset>
+		<input type="hidden" name="id" value="###TSFE_ID###" />
+		<input type="hidden" name="L" value="###LANGUAGE_ID###" />	
+		<input type="hidden" name="###PREFIXID###[step]" value="###STEP###" />
+		<input type="hidden" name="###PREFIXID###[mode]" value="###MODE###" />
+		<ul class="confirm_cancel_appointment">
+			<li>
+				<label>###LABEL_FIELD_NAME###</label>
+				<input name="###PREFIXID###[name]" type="text" class="inputform" id="f1" value="###CI_NAME###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_CODE###</label>
+				<input name="###PREFIXID###[code]" type="text" class="inputform" id="f3" value="###CI_CODE###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_tx_ncgovpermits_BSN###</label>
+				<input name="###PREFIXID###[tx_ncgovpermits_bsn]" type="text" class="inputform" id="f4" value="###CI_tx_ncgovpermits_BSN###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_EMAIL###</label>
+				<input name="###PREFIXID###[email]" type="text" class="inputform" id="f5" value="###CI_EMAIL###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_ZIP###</label>
+				<input name="###PREFIXID###[zip]" type="text" class="inputform" id="f5" value="###CI_ZIP###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_PHONE###</label>
+				<input name="###PREFIXID###[phone]" type="text" class="inputform" id="f6" value="###CI_PHONE###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_MOBILE###</label>
+				<input name="###PREFIXID###[mobile]" type="text" class="inputform" id="f7" value="###CI_MOBILE###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_DATE###</label>
+				<input name="###PREFIXID###[date]" type="text" class="inputform" id="f8" value="###CI_DATE###" />
+			</li>
+			<li>
+				<input type="submit" name="###PREFIXID###[submit]" id="f9" value="###LABEL_FIND_APPOINTMENT###" class="button" />
+			</li>
+		</ul>
+	</fieldset>
+</form>
+<!-- ###APPOINTMENTS_FOUND### -->
+<div class="appointments">
+	<ul>
+		<!-- ###APPOINTMENTS### -->
+			<li>###APPOINTMENT###</li>
+		<!-- ###APPOINTMENTS### end -->
+	</ul>
+</div>
+<!-- ###APPOINTMENTS_FOUND### end-->
+<!-- ###VIEWFINDAPPOINTMENT### end-->
+
+<!--
+getViewConfirmCancelAppointment
+-->
+<!-- ###VIEWCONFIRMAPPOINTMENTREASON### begin-->
+<form action="###BASEURL###" method="POST">
+	<fieldset>
+		<input type="hidden" name="id" value="###TSFE_ID###" />
+		<input type="hidden" name="L" value="###LANGUAGE_ID###" />	
+		<input type="hidden" name="###PREFIXID###[step]" value="###STEP###" />
+		<input type="hidden" name="###PREFIXID###[mode]" value="###MODE###" />
+		<ul class="confirm_cancel_appointment">
+			<input type="hidden" name="###PREFIXID###[cancel_or_move_reason]" value="" />
+<!-- ###TEMPLATE_COMMENT###-->
+			<li>
+				<label>###LABEL_FIELD_REASON###</label>
+				<textarea name="###PREFIXID###[cancel_or_move_reason]" id="f1" cols="50" rows="10"></textarea>
+			</li>
+<!-- ###TEMPLATE_COMMENT### end-->
+			<li>
+				<input type="submit" name="###PREFIXID###[submit]" value="###LABEL_CONFIRM###" class="button" />
+			</li>
+		</ul>
+	</fieldset>
+</form>
+<!-- ###VIEWCONFIRMAPPOINTMENTREASON### end-->
+
+
+<!--
+getViewRegisterUserInformation
+-->
+<!-- ###VIEWREGISTERUSERINFORMATION### begin-->
+###CONTENT_MESSAGE###
+<!-- ###HAS_ERRORS### -->
+<div class="feedback_message">
+	<ul>
+		<li>###LABEL_ERROR_FEEDBACK###</li>
+		<!-- ###ERRORS### -->
+		<li>###ERROR_MESSAGE###</li>
+		<!-- ###ERRORS### end -->
+	</ul>
+</div>
+<!-- ###HAS_ERRORS### end -->
+<form action="###BASEURL###" method="POST">
+	<fieldset>
+		<input type="hidden" name="id" value="###TSFE_ID###" />
+		<input type="hidden" name="L" value="###LANGUAGE_ID###" />	
+		<input type="hidden" name="###PREFIXID###[step]" value="###STEP###" />
+		<input type="hidden" name="###PREFIXID###[mode]" value="###MODE###" />
+		<ul class="user_registration">
+			<li class="radio">
+				<label class="f1name">###LABEL_FIELD_GENDER###</label>
+				<input type="radio" id="f1a" name="###PREFIXID###[tx_ncgovpermits_gender]" value="0"###CI_GENDER_MALE### />
+				<label>###LABEL_FIELD_GENDER_MALE###</label>
+				<input type="radio" id="f1b" name="###PREFIXID###[tx_ncgovpermits_gender]" value="1"###CI_GENDER_FEMALE### />
+				<label>###LABEL_FIELD_GENDER_FEMALE###</label>
+			</li>
+			<li>
+				<label>###LABEL_FIELD_FIRST_NAME###*</label>
+				<input name="###PREFIXID###[first_name]" type="text" class="inputform" id="f2" value="###CI_FIRST_NAME###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_MIDDLE_NAME###</label>
+				<input name="###PREFIXID###[middle_name]" type="text" class="inputform" id="f3" value="###CI_MIDDLE_NAME###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_LAST_NAME###*</label>
+				<input name="###PREFIXID###[last_name]" type="text" class="inputform" id="f3" value="###CI_LAST_NAME###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_tx_ncgovpermits_BSN###</label>
+				<input name="###PREFIXID###[tx_ncgovpermits_bsn]" type="text" class="inputform" id="f4" value="###CI_tx_ncgovpermits_BSN###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_ADDRESS###</label>
+				<input name="###PREFIXID###[address]" type="text" class="inputform" id="f5" value="###CI_ADDRESS###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_ZIP###</label>
+				<input name="###PREFIXID###[zip]" type="text" class="inputform" id="f6" value="###CI_ZIP###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_CITY###</label>
+				<input name="###PREFIXID###[city]" type="text" class="inputform" id="f7" value="###CI_CITY###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_EMAIL###**</label>
+				<input name="###PREFIXID###[email]" type="text" class="inputform" id="f8" value="###CI_EMAIL###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_RETYPE_EMAIL###</label>
+				<input name="###PREFIXID###[retype_email]" type="text" class="inputform" id="f9" value="###CI_RETYPE_EMAIL###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_MOBILE###**</label>
+				<input name="###PREFIXID###[mobile]" type="text" class="inputform" id="f10" value="###CI_MOBILE###" />
+			</li>
+			<li>
+				<label>###LABEL_FIELD_PHONE###**</label>
+				<input name="###PREFIXID###[phone]" type="text" class="inputform" id="f11" value="###CI_PHONE###" />
+			</li>
+			<li class="check">
+				<input name="###PREFIXID###[send_email]" type="checkbox" class="inputform" id="f12" value="1"###CI_SEND_EMAIL### />
+				<label>###LABEL_FIELD_SEND_EMAIL###</label>
+			</li>
+			<li class="check">
+				<input name="###PREFIXID###[remind_per_sms]" type="checkbox" class="inputform" id="f13" value="1"###CI_REMIND_PER_SMS### />
+				<label>###LABEL_FIELD_REMIND_PER_SMS###</label>
+			</li>
+			<!-- ###CAN_SELECT_MULTIPLE_PERSONS### -->
+			<li>
+				###LABEL_FIELD_MULTIPLE_PERSONS###
+			</li>
+			<li>
+				<label>###LABEL_FIELD_SELECT_NUMBER_OF_PERSONS###</label>
+				<select name="###PREFIXID###[number_of_persons]" id="f15">
+					<!-- ###MULTIPLE_PERSONS### begin -->
+					<option value="###NUM###"###SELECTED###>###NUM###</option>
+					<!-- ###MULTIPLE_PERSONS### begin -->
+					<option value="###MAX_PERSONS###"###MAX_PERSONS_SELECTED###>###LABEL_FIELD_MORE_PERSONS###</option>
+				</select>
+			</li>
+			<!-- ###CAN_SELECT_MULTIPLE_PERSONS### end -->
+			<li>
+				<div>* ###LABEL_FIELD_REQUIRED###</div>
+				<div>** ###LABEL_FIELD_ONE_REQUIRED###</div>
+			</li>
+			<li>
+				<input type="submit" name="###PREFIXID###[submit]" value="###LABEL_NEXT###" class="button" />
+			</li>
+		</ul>
+	</fieldset>
+</form>
+<!-- ###VIEWREGISTERUSERINFORMATION### end-->
+
+<!--
+getViewSelectDate
+-->
+<!-- ###VIEWSELECTDATE### begin-->
+###CONTENT_MESSAGE###
+<ul class="select_dates">
+	<!-- ###DATES### -->
+	<li>###DATE###</li>
+	<!-- ###DATES### end -->
+</ul>
+<!-- ###VIEWSELECTDATE### end-->
+
+<!--
+getViewSelectTime
+-->
+<!-- ###VIEWSELECTTIME### begin-->
+###CONTENT_MESSAGE###
+<form action="###BASEURL###" method="POST">
+	<fieldset>
+		<input type="hidden" name="id" value="###TSFE_ID###" />
+		<input type="hidden" name="L" value="###LANGUAGE_ID###" />	
+		<input type="hidden" name="###PREFIXID###[step]" value="###STEP###" />
+		<input type="hidden" name="###PREFIXID###[mode]" value="###MODE###" />
+		<input type="hidden" name="###PREFIXID###[date]" value="###DATE_YMD###" />
+		<ul class="select_dates">
+			<li>
+				###DATE###
+			</li>
+			<li>
+				<select name="###PREFIXID###[time]">
+					<!-- ###TIMES### -->
+						<option value="###TIME###">###TIME_START### - ###TIME_END###</option>
+					<!-- ###TIMES### end -->
+				</select>
+			</li>
+			<li>
+				<input type="submit" name="###PREFIXID###[submit]" value="###LABEL_NEXT###" class="button" />
+			</li>
+		</ul>
+	</fieldset>
+</form>
+<!-- ###VIEWSELECTTIME### end-->
+
+<!--
+getViewAppointmentChanged
+-->
+<!-- ###VIEWAPPOINTMENTCHANGED### begin-->
+###CONTENT_MESSAGE###
+<!-- ###VIEWAPPOINTMENTCHANGED### end-->
+
+<!--
+getViewAppointmentCancelled
+-->
+<!-- ###VIEWAPPOINTMENTCANCELLED### begin-->
+###CONTENT_MESSAGE###
+<!-- ###VIEWAPPOINTMENTCANCELLED### end-->
+
+<!--
+getViewAppointmentSaved
+-->
+<!-- ###VIEWAPPOINTMENTSAVED### begin-->
+###CONTENT_MESSAGE###
+<!-- ###VIEWAPPOINTMENTSAVED### end-->
+
+<!--
+getViewSessionExpired
+-->
+<!-- ###VIEWSESSIONEXPIRED### begin-->
+###CONTENT_MESSAGE###
+<!-- ###VIEWSESSIONEXPIRED### end-->
+
+<!--
+getViewDateTimeError
+-->
+<!-- ###VIEWDATETIMEERROR### begin-->
+###CONTENT_MESSAGE###
+
+<p>###RETRY_LINK###</p>
+<!-- ###VIEWDATETIMEERROR### end-->
+
+<!--
+
+-->
+<!-- ###### begin-->
+<!-- ###### end-->
+
+</body>
+</html>

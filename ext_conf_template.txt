@@ -1,0 +1,32 @@
+# cat=basic; type=string; label=XML bestand waar alle door de overheid gedefinieerde gemeenten in staan
+permitMunicipalityXmlFile = EXT:ncgov_permits/res/xml/overheid.Gemeente.xml
+
+# cat=basic; type=string; label=XML bestand waar alle door de overheid gedefinieerde producttypen in staan
+permitProductTypeXmlFile = EXT:ncgov_permits/res/xml/overheidvg.Product.xml
+
+# cat=basic; type=string; label=XML bestand waar alle door de overheid gedefinieerde product activiteiten in staan
+permitProductActivityXmlFile = EXT:ncgov_permits/res/xml/overheidvg.Activiteit.xml
+
+# cat=basic; type=string; label=XML bestand waar alle door de overheid gedefinieerde product activiteiten in staan
+permitPhaseXmlFile = EXT:ncgov_permits/res/xml/overheidvg.Fase.xml
+
+# cat=basic; type=string; label=XML bestand waar alle door de overheid gedefinieerde product activiteiten in staan
+permitTermTypeXmlFile = EXT:ncgov_permits/res/xml/overheidvg.Termijnsoort.xml
+
+# cat=basic; type=string; label=XML bestand waar alle door de overheid gedefinieerde product activiteiten in staan
+permitProvinceXmlFile = EXT:ncgov_permits/res/xml/overheid.Provincie.xml
+
+# cat=basic; type=string; label=XML bestand waar alle door de overheid gedefinieerde gemeenten in staan
+permitCadastreMunicipalityXmlFile = EXT:ncgov_permits/res/xml/overheid.KadastraleGemeente.xml
+
+# cat=basic; type=string; label=XML bestand waar alle door de overheid gedefinieerde gemeenten in staan
+permitDocumentTypeXmlFile = EXT:ncgov_permits/res/xml/overheidvg.Documenttype.xml
+
+# cat=basic; type=string; label=XML bestand waar alle door de overheid gedefinieerde gemeenten in staan
+publicationProductTypeTxtFile = EXT:ncgov_permits/res/txt/OVERHEIDbm.BekendmakingtypeGemeente.txt
+
+# cat=basic; type=boolean; label=Extra velden voor bekendmakingen toestaan
+enableAdditionalBekendmakingElements = 0
+
+# cat=basic; type=boolean; label=Coordinaten voor bekendmakingen toestaan
+enableCoordinatesForBekendmakingen = 0

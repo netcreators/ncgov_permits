@@ -1,0 +1,8 @@
+includeLibs.ncgov_permits_controller = EXT:ncgov_permits/controller/class.tx_ncgovpermits_controller.php
+
+plugin.tx_ncgovpermits_controller = USER
+plugin.tx_ncgovpermits_controller {
+	userFunc = tx_ncgovpermits_controller->getContent
+}
+
+tt_content.list.20.ncgov_permits_controller =< plugin.tx_ncgovpermits_controller

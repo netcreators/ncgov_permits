@@ -1,0 +1,216 @@
+﻿Waardelijst Bekendmakingen Gemeente
+########### TABS AND ALL TEXT AFTER '#' ARE NOT PART OF THE ACTUAL ENCODING SCHEME ############
+#
+# Vocabulary encoding scheme for:       DC.type
+# Name of vocabulary encoding scheme:   OVERHEIDbm.BekendmakingtypeGemeente
+#
+# Version: 2009-05-18
+#
+# Character set: UTF-8 Encoding (with BOM)
+#
+# Co-ordinating organisation for this CV: Overheid heeft Antwoord(c) (www.overheidheeftantwoord.nl)
+# Editor: Overheid heeft Antwoord(c)
+# Contact: T +31-70-8887850, E technischadvies@overheid.nl
+# Date created: 01 November 2005
+#
+# Mutations and points for discussion:
+# (See below)
+#
+# Toelichting:
+# (See below)
+#
+# ToDo list:
+# 1.  -
+#
+# notation: [value]     # Explanation or definition of the element value (if applicable; in Dutch)
+#########################
+
+aanlegvergunning
+aanwijzingsbesluit
+agenda en notulen
+apv vergunning
+belastingbesluit
+besluitenlijst
+bestemmingsplan
+bodembeschermingsvergunning
+bouwvergunning
+collectevergunning
+drank- en horecavergunning
+evenementenvergunning
+exploitatievergunning
+gebruiksvergunning
+gedoogbesluit
+gehandicaptenparkeervergunning
+geluidvergunning
+gemeenschappelijke regelingen
+huisafval
+in- en uitritvergunning
+inspraak
+kansspelvergunning
+kapvergunning
+ligplaatsvergunning
+loterijvergunning
+marktvergunning
+mededelingen
+meldingen
+milieu-informatie
+milieuvergunning
+monumentenvergunning
+omgevingsvergunning
+onttrekkingsvergunning
+openingstijden
+optochtvergunning
+overig
+reclamevergunning
+register kinderopvang
+rectificatie
+sloopvergunning
+speelautomatenvergunning
+splitsingsvergunning
+standplaatsvergunning
+stookvergunning
+terrasvergunning
+uitstallingvergunning 
+ventvergunning
+verkeersbesluit
+verkiezingen
+verordeningen en reglementen
+vervoer gevaarlijke stoffen vergunning
+vestigingsvergunning
+voorbereidingsbesluit
+
+#########################
+#
+# Mutations (change date jjjj-mm-dd):
+# 1.  changed ' - ' into ' | ', since ' - ' is used in the value of some taxonomies (2005-10-16)
+# 2.  removed 'beleidsplannen en besluiten', 'vergunningen' and 'algemene informatie' 
+#     from the values, as requested by the 'Bekendmakingen' project leader (2005-11-03)
+# 3.  removed the value 'uitritvergunning', since the list also contains the value
+#     'in- en uitritvergunning' (2005-11-03)
+# 4.  moved 'overig' to a seperated list, because it is not part of 'algemene informatie' (2005-11-30)
+# 5.  changed 'drank en horecavergunning' to 'drank- en horecavergunning' (2005-11-30)
+# 6.  added 'kerstbomenverkoopvergunning' (2005-11-30)
+# 6.  added 'stookvergunning' (2005-11-30)
+# 7.  added 'agenda commissievergadering' (2005-11-30)
+# 8.  added 'verslag commissievergadering' (2005-11-30)
+# 9.  changed the value 'kerstbomenverbrandingsvergunning' to kerstboomverbrandingsvergunning (2005-12-01)
+# 10. added 'aanhangwagenvergunning' (2005-12-01)
+# 11. added 'meldingen' (2005-12-01)
+# 12. changed 'gevaarlijke stoffenvergunning' (2005-12-01)
+# 13. changed 'honden en kattenvergunning' to 'honden- en kattenvergunning' (2005-12-01)
+# 14. added 'Point 6 in de toelichting' (2006-01-19)
+# 15. changed 'agenda raadsvergadering B en W into agenda raadsvergadering' (2006-01-19)
+# 16. added 'agenda B en W vergadering' (2006-01-19)
+# 17. changed 'verslag raadsvergadering B en W into verslag raadsvergadering' (2006-01-19)
+# 18. added 'gedoogbesluit' (2006-01-19)
+# 19. changed 'lichtreclamevergunning into reclamevergunning' (2006-01-19)
+# 20. changed 'verordening en regelementen into verordening en reglementen' (2006-01-19)
+# 21. changed 'gehandicapten parkeervergunning intro gehandicaptenparkeervergunning' (2006-01-19)
+# 22. removed 'wapenvergunning' (2006-01-19)
+# 22. removed 'duivenvergunning op verzoek van de gemeente Almelo, omdat de vergunning niet meer
+#     bestaat sinds 1-1-2005' (2006-01-19)
+# 23. changed 'geluidsvergunning into geluidshindervergunning' (2006-01-19)
+# 24. removed 'bijenvergunning' (2006-02-28)
+# 25. changed 'agenda B en W vergadering, agenda commissievergadering, agenda raadsvergadering, 
+#     verslag commissievergadering, verslag raadsvergadering' into 'agenda en notulen'
+# 26. removed 'Circusvergunning, demonstratievergunning, kermisvergunning, luchtballonvergunning, 
+#     optochtvergunning' they are part of 'evenementenvergunning' (2006-03-29)
+# 27. added 'belastingbesluit' (2006-03-29)
+# 28. changed 'besluitenlijst B en W into besluitenlijst' (2006-03-29)
+# 29. changed: Character set changed from ISO-8859-1 to UTF-8 (2007-01-08)
+# 30. changed: Fileformat from DOS Format (CR/LF) to Unix Format (LF only)
+# 31. removed 'aanbesteding' (2007-09-04)
+# 32. removed 'aanhangwagenvergunning' (2007-09-04)
+# 33. removed 'afvaldoorzoekvergunning' (2007-09-04)
+# 34. removed 'afvalstoffenvergunning huishoudelijk' (2007-09-04)
+# 35. removed 'archeologische vergunning' (2007-09-04)
+# 36. removed 'bedrijfsvestigingsvergunning' (2007-09-04)
+# 37. removed 'garagevergunning' (2007-09-04)
+# 38. removed 'grafmonumentenvergunning' (2007-09-04)
+# 39. removed 'groenbeleidsplan' (2007-09-04)
+# 40. removed 'honden- en kattenvergunning' (2007-09-04)
+# 41. removed 'huisvestingsvergunning' (2007-09-04)
+# 42. removed 'inrichtingvergunning' (2007-09-04)
+# 43. removed 'inzamelingsvergunning' (2007-09-04)
+# 44. removed 'kamerverhuurvergunning' (2007-09-04)
+# 45. removed 'kampeerterreinvergunning' (2007-09-04)
+# 46. removed 'kerstboomverbrandingsvergunnning' (2007-09-04)
+# 47. removed 'kerstboomverkoopvergunning' (2007-09-04)
+# 48. removed 'ligplaatsvergunning' (2007-09-04)
+# 49. removed 'lozingsvergunning' (2007-09-04)
+# 50. removed 'opbreekvergunning' (2007-09-04)
+# 51. removed 'parkeervergunning' (2007-09-04)
+# 52. removed 'recreatievergunning' (2007-09-04)
+# 53. removed 'referendum' (2007-09-04)
+# 54. removed 'rioolaansluitvergunning' (2007-09-04)
+# 55. removed 'sexinrichtingvergunning' (2007-09-04)
+# 56. removed 'stookvergunning' (2007-09-04)
+# 57. removed 'straatartiestvergunning' (2007-09-04)
+# 58. removed 'subsidiebesluit' (2007-09-04)
+# 59. removed 'terrasvergunning' (2007-09-04)
+# 60. removed 'uitstallingsvergunning' (2007-09-04)
+# 61. removed 'ventvergunning' (2007-09-04)
+# 62. removed 'verkeersmaatregelen' (2007-09-04)
+# 63. removed 'voetgangersgebiedvergunning' (2007-09-04)
+# 64. removed 'vuurwerkvergunning' (2007-09-04)
+# 65. removed 'winkeltijdenvergunning' (2007-09-04)
+# 66. removed 'woonvergunning' (2007-09-04)
+# 67. changeded 'onttrekingsvergunning' to 'onttrekkingsvergunning' (2007-09-04)
+# 68. added 'milieu-informatie' (2007-09-04)
+# 69. changed section 'Toelichting' below (2007-09-17)
+# 70. changed: scheme name to initcap to comply to DC naming convention (2008-01-25)
+# 71. removed 'objectvergunning' (2008-02-19)
+# 72. added 'gemeenschappelijke regelingen' (2008-02-19)
+# 73. added 'ventvergunning' (2008-02-19)
+# 74. changed 'geluidshindervergunning' into 'geluidvergunning' (2008-02-19)
+# 75. changed 'verordening en reglementen' into 'verordeningen en reglementen' (2008-02-19)
+# 76. removed 'gevaarlijkestoffenvergunning' (2009-05-18)
+# 77. added 'aanwijzingsbesluit' (2009-05-18)
+# 78. added 'bodembeschermingsvergunning' (2009-05-15)
+# 79. added 'ligplaatsvergunning' (2009-05-18)
+# 80. added 'loterijvergunning' (2009-05-18)
+# 81. added 'marktvergunning' (2009-05-18)
+# 82. added 'omgevingsvergunning' (2009-05-18)
+# 83. added 'optochtvergunning' (2009-05-18)
+# 84. added 'register kinderopvang' (2009-05-18)
+# 85. added 'speelautomatenvergunning' (2009-05-18)
+# 86. added 'splitsingsvergunning' (2009-05-18)
+# 87. added 'stookvergunning' (2009-05-18)
+# 88. added 'terrasvergunning' (2009-05-18)
+# 89. added 'uitstallingvergunning' (2009-05-18)
+# 90. added 'vervoer gevaarlijke stoffen vergunning' (2009-05-18)
+# 91. added 'voorbereidingsbesluit' (2009-05-18)
+
+
+# Discussion:
+# 1.  -
+#########################
+#
+# Toelichting
+# 1. Dit overzicht bevat een lijst van toegestane type bekendmakingen die gelden voor een gemeente. 
+# 2. Dit overzicht is de basis voor de controle op de toegestane waarden van het schema 
+#    "OVERHEID.bekendmakingtypeGemeente". Zie voor meer informatie en voorbeelden het 
+#    IPM versie 3.0.
+# 3. Bij het toevoegen van de content aan het metadataveld 'type bekendmaking' dient u één van 
+#    deze type te selecteren.
+# 4. Alle Ontheffingen en vrijstellingen zijn niet apart opgenomen in het overzicht. Dit is gedaan
+#    omdat deze in principe te herleiden moeten zijn naar een vergunning of besluit. Omdat het
+#    voor een burger wel relevante informatie kan zijn verzoeken wij de gemeenten om deze
+#    termen in de metadata van de titel of in de omschrijving mee te geven.
+# 5. Bij categorie vergunningen staat o.a. de 'apv vergunning' (verzameling van vergunningen). 
+#    Daarnaast staan in deze categorie ook specifieke vergunnningen die onderdeel kunnen zijn 
+#    van de apv vergunning. De metadata voor dit project moet zo specifiek mogelijk gekozen 
+#    worden. Dit betekent dat wanneer de specifieke vergunning in de lijst voorkomt dat deze 
+#    geselecteerd dient te worden. Wanneer de betreffende vergunning er niet tussen staat dan 
+#    moet de 'keurvergunning' geselecteerd worden.
+# 6. Alleen wanneer echt geen juist type bekendmaking geselecteerd kan worden mag voor
+#    ‘overig’ gekozen worden.
+# 7. Op verzoek kunnen wij deze woordenlijst ook in XML formaat (XSD) aanleveren. 
+# 8. Wij verzoeken de gemeenten om fouten en suggesties in dit overzicht aan ons te melden. Komt u in de
+#    praktijk een veel voorkomende type bekendmaking tegen die u nergens makkelijk kunt
+#    onderbrengen, mail dit dan naar bekendmakingen@ictu.nl en geef ons daarbij een suggestie
+#    hoe we het kunnen verbeteren.
+#
+#    Het projectteam bekendmakingen hoopt dat jullie met deze lijst uit de voeten kunnen en we
+#    willen iedereen veel succes wensen bij de implementatie van het project binnen zijn of haar
+#    organisatie.

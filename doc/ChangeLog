@@ -1,0 +1,126 @@
+2012-11-27 0.4.4 Frans van der Veen <extensions@netcreators.com>
+	* fixed doing bekendmakingen publication to https url
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-06-28 0.4.3 Frans van der Veen <extensions@netcreators.com>
+
+	* made showing permits published in the future optional (through configuration - dontShowRecordsPublishedInTheFuture)
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-06-04 0.4.1 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed publication issues bekendmakingen
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-04-25 0.4.1 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed webrichtlijnen issues (validation, maps)
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-03-20 0.4.0 Frans van der Veen <extensions@netcreators.com>
+
+	* updated bekendmakingen publisher test url, removed default pass and username
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2011-12-14 0.3.9 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed linking to detail page in google maps description page.stdWrap_HTMLparser was deforming the link
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2011-12-14 0.3.8 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed linking to files which are not in the upload folder but a fully qualified url
+	* fixed linking to files, now uses type as link text (which is better presentable)
+	* added some labels which gave an error
+
+2011-12-14 0.3.7 Frans van der Veen <extensions@netcreators.com>
+
+	* changed template: added FIELD_ADDRESS for detail view
+
+2011-11-09 0.3.6 Frans van der Veen <extensions@netcreators.com>
+
+	* changed template: HAS_MAPS moved outside of AVAILABLE_RECORDS subpart so it can be moved more freely.
+
+2011-11-09 0.3.5 Frans van der Veen <extensions@netcreators.com>
+
+	* improved html template
+
+2011-08-23 0.3.4 Frans van der Veen <extensions@netcreators.com>
+
+	* improved html template
+
+2011-06-22 0.3.4 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed warnings (flooding the error log)
+
+2011-06-21 0.3.3 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed fieldwraps, now working (correctly)
+	* added show field list for detail page (to be able to show additional fields)
+	* added support for publication push ipm 4
+	* added additional fields for bekendmakingen (configurable)
+
+2009-11-10 0.1.9 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed broken xml generation, now converts (mixed) latin characters to utf-8
+
+2009-11-10 0.1.8 Frans van der Veen <extensions@netcreators.com>
+
+	* Links for attachments being generated correctly now
+	* Changed default message when no records are found
+
+2009-11-02 0.1.7 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed hasPart not being generated correctly
+	* fixed company name not being generated correctly
+
+2009-11-02 0.1.6 Frans van der Veen <extensions@netcreators.com>
+
+	* updated spatial generation
+	* updated maps generation
+	* fixed description breaking owms validation when contained special chars
+
+2009-10-13 0.1.4 Frans van der Veen <extensions@netcreators.com>
+
+	* added last modified date in permit view
+
+2009-10-06 0.1.4 Frans van der Veen <extensions@netcreators.com>
+
+	* generation of xml messages validates in the OWMS validator
+	* created list view for permits to be spidered
+	* minor fixes (correct address display in list view, description RTE rendered correctly)
+
+2009-09-14 0.1.3 Frans van der Veen <extensions@netcreators.com>
+
+	* all fields not correctly showing date & time
+	* time now empty when not set, so being omitted in view
+	* title being shown for publications
+
+2009-09-10 0.1.1 Frans van der Veen <extensions@netcreators.com>
+
+	* improved Google Maps positioning
+	* improved description at marker
+	* minor bugfixes
+	* added improved css, templates
+
+2009-07-20 0.1.0 Frans van der Veen <extensions@netcreators.com>
+
+	* Added Google Maps
+	* Added realurl autoconfiguration
+	* Fixed list view not showing description, showing title + publication date
+	* Rearranged address record, made zipcode + number compulsory, changed fields for Google Maps only
+	* Improved check for wec_map presence
+
+2009-06-11 0.0.5 Frans van der Veen <extensions@netcreators.com>
+
+	* Alpha version release
+
+2009-05-11 Frans van der Veen <extensions@netcreators.com>
+
+	* Initial version

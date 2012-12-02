@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv xmlns="http://standaarden.overheid.nl/owms/terms" name="overheidvg:Termijnsoort"
+    topicanaid="13827">
+   <cvvalue topicanaid="13835">beroep</cvvalue>
+   <cvvalue topicanaid="13833">bezwaar</cvvalue>
+   <cvvalue topicanaid="13837">vergunningsduur</cvvalue>
+   <cvvalue topicanaid="13831">zienswijze</cvvalue>
+</cv>

@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+</head>
+<body>
+<!-- 
+
+exception template
+
+-->
+<!-- ###EXCEPTION_VIEW### begin -->
+<div>
+	<h3>Fout opgetreden</h3>
+	<p>Er is iets fout gegaan. Onze excuses voor het ongemak.</p>
+	<p>Informatie over de fout</p>
+	<h2>###ERROR_MESSAGE###</h2>
+	<ul>
+		<!-- ###TRACE### BEGIN --><li>###FILE###[###LINE###]:###CLASS###->###FUNCTION###</li><!-- ###TRACE### END -->
+	</ul>
+</div>
+<!-- ###EXCEPTION_VIEW### end -->
+
+</body>
+</html>
