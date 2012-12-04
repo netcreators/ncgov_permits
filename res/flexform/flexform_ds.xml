@@ -41,6 +41,10 @@
 										<numIndex index="0">LLL:EXT:ncgov_permits/lang/locallang_flexform.xml:pluginMode_option5</numIndex>
 										<numIndex index="1">latest_publications</numIndex>
 									</numIndex>
+                                                                        <numIndex index="6" type="array">
+										<numIndex index="0">LLL:EXT:ncgov_permits/lang/locallang_flexform.xml:pluginMode_option6</numIndex>
+										<numIndex index="1">permitsall</numIndex>
+									</numIndex>
 								</items>
 							</config>
 						</TCEforms>

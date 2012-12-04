@@ -12,6 +12,7 @@
 
 			<!-- permit list view -->
 			<label index="label_view_details">Meer informatie</label>
+                        <label index="label_month_13">Alle</label>
 			<label index="label_month_1">Januari</label>
 			<label index="label_month_2">Februari</label>
 			<label index="label_month_3">Maart</label>
@@ -24,6 +25,7 @@
 			<label index="label_month_10">Oktober</label>
 			<label index="label_month_11">November</label>
 			<label index="label_month_12">December</label>
+                        <label index="label_year_9999">Alle</label>
 			<label index="label_week">Week</label>
 			<label index="label_type_permit">--Type vergunningen--</label>
 			<label index="label_type_publication">--Type bekendmakingen--</label>

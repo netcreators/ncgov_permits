@@ -190,6 +190,9 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 				case 'publications':
 					$content = $this->getView();
 					break;
+				case 'permitsall':
+					$content = $this->getViewAll();
+					break;                                    
 				case 'publish_permits':
 					$content = $this->getPublishPermits();
 					break;
@@ -254,6 +257,49 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 		return $content;
 	}
 
+        // New Interface and search all months & all years
+        public function getViewAll() {
+		$this->setIncomingVariablesSanitization($this->knownParams);
+		$this->sanitizePiVars();
+		
+		if(count($_POST)) {
+			# We requested fulltext or postcode filter.
+			# So let's forget about no_cache, add a nice valid cHash to make the page cachable and redirect using GET.
+			# Also, this prevents old values sitting in GET (e.g. old "fulltext" values) after a new one was sent by POST.
+			$newUrl = $this->getURLToFilteredResult();
+			header(sprintf('Location: %s', $newUrl[0] == '/' ? $newUrl : '/'.$newUrl));
+			exit();
+		}
+
+		$id = $this->getPiVar('id');
+		$doc = $this->getPiVar('doc');
+		$mode = $this->getPiVar('mode');
+		if(empty($id) || $mode === 'list') {
+			$content = $this->getListAll();
+		} else {
+			if(!empty($id)) {
+				$mode = 'details';
+			}
+			if(!empty($doc)) {
+				$mode = 'document';
+			}
+			switch($mode) {
+				case 'details':
+					$content = $this->getDetailsAll();
+					break;
+				case 'document':
+					$content = $this->getDocumentAll();
+					break;
+				case 'search':
+					break;
+				default:
+					throw new tx_nclib_exception('label_error_unknown_submode', $this);
+			}
+		}
+		return $content;
+	}        
+        
+        
 	/**
 	 * Returns the latest items view.
 	 */
@@ -290,6 +336,23 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 		$content = $view->getList();
 		return $content;
 	}
+        
+	/**
+	 * Returns a list of permits all months/years - new interface
+	 * @return string
+	 */
+	public function getListAll() {
+		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view->initialize($this, 'list');
+		$this->prepareDateFilterAll();
+		$this->prepareProductTypeFilter();
+		$this->preparePhaseFilter();
+		$this->prepareTermTypeFilter();
+		// filter the permits by the selected year/month, productType and phase
+		$this->permitsModel->loadPermitsFiltered();
+		$content = $view->getListAll();
+		return $content;
+	}        
 
 	/**
 	 * Returns details of a permit.
@@ -309,6 +372,25 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 		$content = $view->getDetails();
 		return $content;
 	}
+        
+	/**
+	 * Returns details of a permit for the new interface - all months/years.
+	 * @return string
+	 */
+	public function getDetailsAll() {
+		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view->initialize($this, 'details');
+		$this->permitsModel->loadRecordById(
+			$this->getPiVar('id')
+		);
+		if($this->getPluginMode() == 'permitsall' && !$this->permitsModel->isPermit()
+			
+		) {
+			$this->permitsModel->setRecord(false, true);
+		}
+		$content = $view->getDetailsAll();
+		return $content;
+	}        
 
 	/**
 	 * Returns details of a permit.
@@ -323,6 +405,21 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 		$content = $view->getDocument();
 		return $content;
 	}
+        
+	/**
+	 * Returns details of a permit for the new interface - all months/years.
+         * Show filenames
+	 * @return string
+	 */
+	public function getDocumentAll() {
+		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view->initialize($this, 'document');
+		$this->permitsModel->loadRecordById(
+			$this->getPiVar('id')
+		);
+		$content = $view->getDocumentAll();
+		return $content;
+	}        
 
 	/**
 	 * Creates list of permits, readable for the overheid.nl spider
@@ -496,6 +593,150 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 			$iStartDate = mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear);
 			$iEndDate = mktime(0, 0, 0, $iActiveMonth+1, 1, $iActiveYear);
 		}
+		// Location filtering
+		$sZipcode = $this->getPiVar('zipcode');
+		$iRadius = $this->getPiVar('radius');
+		
+		// create data for view
+		$this->dateFilter = array(
+			'iStartYear' => $iStartYear,
+			'iEndYear' => $iEndYear,
+			'iStartWeek' => $iStartWeek,
+			'iEndWeek' => $iEndWeek,
+			'iActiveYear' => $iActiveYear,
+			'iActiveMonth' => $iActiveMonth,
+			'iActiveWeek' => $iActiveWeek,
+			'iCurrentYear' => $iCurrentYear,
+			'iCurrentMonth' => $iCurrentMonth,
+			'iCurrentWeek' => $iCurrentWeek,
+			'iStartTime' => $iStartDate,
+			'iEndTime' => $iEndDate,
+			'bCurrentYearActive' => $bCurrentYearActive,
+			'sZipcode' => $sZipcode,
+			'iRadius' => $iRadius
+		);
+	}
+        
+        
+	/**
+	 * Prepares the filter date list.
+	 * @return void
+	 */
+	public function prepareDateFilterAll() {
+		// determine min, max time for the selected pages
+		$aTimeRange = $this->permitsModel->getTimeRange();
+		// determine min, max years
+		$iStartYear = date('Y', $aTimeRange['startTime']);
+		$iEndYear = date('Y', $aTimeRange['endTime']);
+		// set currents
+		$iCurrentYear = date('Y');
+		$iCurrentMonth = date('m');
+		$iCurrentWeek = date('W');
+		// determine if there are incoming vars
+                $showallrecordsoftheactiveyear = false;
+		if($this->getPiVar('activeMonth') != '') {
+			$iActiveMonth = $this->getPiVar('activeMonth');
+                        if ($iActiveMonth == 13)
+                        {
+                            $showallrecordsoftheactiveyear = true;
+                        }
+		}
+		if($this->getPiVar('activeYear') != ''){
+			$iActiveYear = $this->getPiVar('activeYear');
+                        if ($iActiveYear == 9999)
+                        {
+                            $showallrecordsofallyears = true;
+                        }                        
+		}
+		/*if($this->getPiVar('activeWeek') != '') {
+			$iActiveWeek = $this->piVars['activeWeek'];
+		}*/
+		// if some vars were not set as incoming, define the defaults
+		$bMonthWasNotActive = false;
+		if(!isset($iActiveMonth)) {
+			$iActiveMonth = 1;	// default to first month of year
+			$bMonthWasNotActive = true;
+		}
+		if(!isset($iActiveYear)) {
+			$iActiveYear = (int)date('Y');	// default to current year
+			$iActiveMonth = (int)date('m'); 	// default to current month
+			if($this->configModel->get('defaultShowCurrentWeek')) {
+				if($bMonthWasNotActive) {
+					$iActiveWeek = $iCurrentWeek;	// default to current week when nothing was set
+				}
+			}
+		}
+		// check the values and correct if nessecary
+		$bCurrentYearActive = false;
+		if($iActiveYear == $iCurrentYear) {
+			$bCurrentYearActive = true;
+		}
+		// determine week timestamps
+                if ($showallrecordsofallyears == false) {
+                    if ($showallrecordsoftheactiveyear == false) {
+                        $iStartWeek = date('W', mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear));
+                        $iEndWeek = date('W', mktime(0, 0, 0, $iActiveMonth+1, 1, $iActiveYear));
+                    }else
+                    {
+                        $iStartWeek = date('W', mktime(0, 0, 0, 1, 1, $iActiveYear));
+                        $iEndWeek = date('W', mktime(0, 0, 0, 12, 1, $iActiveYear));                    
+                    }
+                }else{
+                        $iStartWeek = date('W', mktime(0, 0, 0, 1, 1, 1900));
+                        $iEndWeek = date('W', mktime(0, 0, 0, 12, 1, $iActiveYear));                     
+                }
+  
+		if($iEndWeek < $iStartWeek) {
+			$iEndWeek = 52;
+		}
+		// check if the week was set correctly
+		if($iActiveWeek < $iStartWeek || $iActiveWeek > $iEndWeek) {
+			// make sure it is empty
+			unset($iActiveWeek);
+		}
+		// month stars from 1
+		$iStartMonth = 1;
+                if ($showallrecordsoftheactiveyear == false) {                
+                    $iEndMonth = $iActiveMonth;
+                }else
+                {
+                    $iEndMonth = 12;
+                }
+		// determine visibility
+		if(isset($iActiveWeek)) {
+			// filter on active week
+			$iWeek = 60*60*24*7;
+                        if ($showallrecordsofallyears == false) {
+                            if ($showallrecordsoftheactiveyear == false) {   
+                                $iStartDate = mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear) + ($iActiveWeek - $iStartWeek) * $iWeek;          
+                            }
+                            else {
+                                $iStartDate = mktime(0, 0, 0,1, 1, $iActiveYear) + ($iActiveWeek - $iStartWeek) * $iWeek;                                      
+                            }
+                        }else{
+                            $iStartDate = mktime(0, 0, 0,1, 1, 1900) + ($iActiveWeek - $iStartWeek) * $iWeek;  
+                        }
+                        
+                        $iDayOfWeek = date('N', $iStartDate);
+			$iStartDate -= ($iDayOfWeek-1) * 60*60*24;
+			$iEndDate = $iStartDate + $iWeek;
+		} else {
+			// filter on active month, year
+                        if ($showallrecordsofallyears == false) {                    
+                            if ($showallrecordsoftheactiveyear == false) {                       
+                                $iStartDate = mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear);
+                                $iEndDate = mktime(0, 0, 0, $iActiveMonth+1, 1, $iActiveYear);
+                            }else {
+                                $iStartDate = mktime(0, 0, 0, 1, 1, $iActiveYear);
+                                $iEndDate = mktime(0, 0, 0, 12, 1, $iActiveYear);                            
+                            }
+                        }else {
+                                $iStartDate = mktime(0, 0, 0, 1, 1, 1900);
+                                $iEndDate = mktime(0, 0, 0, 12, 1, $iActiveYear);                            
+                        }
+                        
+		}
+                
 		// Location filtering
 		$sZipcode = $this->getPiVar('zipcode');
 		$iRadius = $this->getPiVar('radius');

@@ -85,7 +85,8 @@ class tx_ncgovpermits_config_model extends tx_nclib_config_model {
 			// default authorization key for pro6pp, empty
 			'pro6ppAuthKey' => '',
 			// default radius options for region search 
-			'searchRadiusOptions' => '5,10,20,50,100',
+			//'searchRadiusOptions' => '5,10,20,50,100',
+                        'searchRadiusOptions' => '1,2,3,4,5',
 			// special hardened version to convert latin characters to UTF-8
 			'convertLatinToUtf8' => false,
 			// shows fields on detail screen

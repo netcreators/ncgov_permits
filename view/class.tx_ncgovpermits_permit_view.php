@@ -280,8 +280,123 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		return $content;
 	}
 
+        
+        /**
+	 * Shows a list of permits. New interface - all months/years
+	 *
+	 * @return string	the content
+	 */
+	public function getListAll() {
+		$subparts = array();
+		$this->addTranslationLabel('label_view_details');
+		$this->addTranslationLabel('label_radius');
+		$this->addTranslationLabel('label_submit');
+
+		$permitFields = $this->controller->permitsModel->getFieldList();
+		$main = 'PERMIT_LIST_VIEWALL';
+		$configBasePath = 'viewPermitList.';
+
+		$permitIndex = 0;
+		if($this->controller->permitsModel->getCount() > 0) {
+			$addressesAdded = false;
+			while ($this->controller->permitsModel->hasNextRecord()) {
+				$record = $this->controller->permitsModel->getRecord();    
+
+                               $weeknumber = date('W', $this->controller->permitsModel->getField('publishdate', true));
+                               $year = date('Y', $this->controller->permitsModel->getField('publishdate', true));
+                               $sweeknumberyear=$weeknumber.$year;
+                                //if ($previousweeknumber != $weeknumber)
+                               if ($previousweeknumber != $sweeknumberyear)
+                                {
+                                    
+                                   $permitweek['WEEKNUMBER'] = 'wk'.$sweeknumberyear;
+                                   if ($permitIndex > 0){
+                                        //$permitweek['VIEW'] = 'style="display: none;"'; 
+                                        $permitweek['VIEWCLASS'] = ''; 
+                                   }else {
+                                       //$permitweek['VIEW'] = '';
+                                       $permitweek['VIEWCLASS'] = 'class="active"'; 
+                                   }
+
+                                   $subparts['RECORDS'][$sweeknumberyear] = $permitweek;                         
+                                }                                   
+				foreach($permitFields as $field) {
+					$content = $this->getFieldWrap(
+						$configBasePath,
+						$field,
+						$record,
+						$this->controller->permitsModel->getTableName()
+					);
+					$permit['FIELD_' . strtoupper($field)] = $content;
+                              }
+                                
+				$permit['FIELD_ADDRESS'] = $this->controller->permitsModel->getAddress();
+                                                               
+				$permit['FIELD_LINK'] = $this->controller->getHtmlCompliantLinkToController(false, false,
+					array(
+						'id' => $record['uid'],
+						'activeMonth' => $this->controller->getPiVar('activeMonth'),
+						'activeYear' => $this->controller->getPiVar('activeYear')
+					),
+					false
+				);
+                                
+				$permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));
+                                $permit['FIELD_WEEK'] =  date('W', $this->controller->permitsModel->getField('publishdate', true));
+                                                          
+				if($this->addAddressMarkersForRecord($record)) {
+					$addressesAdded = true;
+				}
+                      
+                                $subparts['RECORDS'][$sweeknumberyear]['SUBRECORDS'][$permitIndex] = $permit;      
+                                
+				$permitIndex++;                            
+                                $previousweeknumber = $sweeknumberyear;
+				$this->controller->permitsModel->moveToNextRecord();
+			}
+                        
+                        //var_dump( $subparts['SUBRECORDS']);
+			if($addressesAdded === false) {
+				$subparts['HAS_MAPS'] = array();
+				$this->disableGoogleMaps();
+			}
+
+			if($this->hasGoogleMapsEnabled()) {
+				$subparts['GOOGLE_MAPS'] = $this->map->drawMap();
+				$subparts['GOOGLE_MAPS'] = $this->fixIssuesWithMap($subparts['GOOGLE_MAPS']);
+			} else {
+				$subparts['GOOGLE_MAPS'] = '';
+			}
+			
+		} else {
+			$subparts['RECORDS_AVAILABLE'] = array(
+				$this->getTranslatedLabel('no_records_available')
+			);
+			$subparts['HAS_MAPS'] = array();
+		}
+                $subparts['PATH']= '/typo3conf/ext/ncgov_permits'; 
+                
+		$subparts['DATE_FILTER'] = $this->getDateFilterAll();
+		$subparts['FULLTEXT_FILTER'] = $this->getFulltextFilter();
+                $subparts['MONTH_FILTER'] = $this->getMonthFilter();
+                $subparts['YEAR_FILTER'] = $this->getYearFilter();                
+		$subparts['PRODUCT_TYPE_FILTER'] = $this->getProductTypeFilter();
+		$subparts['PHASE_FILTER'] = $this->getPhaseFilter();
+		$subparts['TERMTYPE_FILTER'] = $this->getTermTypeFilter();
+		$subparts['POSTCODE_FILTER'] = $this->getPostcodeFilter();
+		$subparts['ACTION'] = $this->controller->getLinkToController(false, false, array(
+			'activeMonth' => $this->controller->getPiVar('activeMonth'),
+			'activeYear' => $this->controller->getPiVar('activeYear')
+		));
+		
+		$content = $this->subpartReplaceRecursive(
+			$subparts, $main, false, true, $this->controller->configModel->get('cleanRemainingMarkers')
+		);
+		return $content;
+	}
+
 	/**
-	 * Shows the latest top X items there are
+	 * Shows the latest top X items there are 
 	 * @return string the content
 	 */
 	public function getLatestList() {
@@ -552,6 +667,216 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	}
 
 	/**
+	 * detail view of a permit - New interface - all months/years
+         * Show filename
+	 * @return string	the content
+	 */
+	public function getDetailsAll() {
+		$this->addTranslationLabel('label_return');
+		$subparts = array();
+		$helpIcon = $this->controller->configModel->get('help.icon');
+		$permit = array();
+
+		if($this->controller->permitsModel->isPermit()) {
+			$main = 'PERMIT_DETAIL_VIEW_ALL';
+			$configBasePath = 'viewPermitDetails.';
+			$permitFields = $this->controller->permitsModel->getFieldList();
+			$removeFields = array(
+				'uid', 'pid', 'cruser_id', 'deleted', 'hidden', 'documenttypes', 'municipality', 'lastpublished', 'language',
+				'type', 'title', 'publishdate', 'link', 'objectaddresses', 'coordinates', 'lots', 'related'
+			);
+			$permitFields = array_diff($permitFields, $removeFields);
+		} else {
+			$main = 'PUBLICATION_DETAIL_VIEW';
+			$configBasePath = 'viewPublicationDetails.';
+			$permitFields = array(
+				'publishdate', 'title', 'description', 'zipcode', 'address', 'addressnumber',
+				'addressnumberadditional', 'municipality', 'tstamp', 'related', 'link',
+			);
+		}
+		if($this->controller->configModel->get('showDetailsFieldList') != FALSE) {
+			$permitFields = t3lib_div::trimExplode(',', $this->controller->configModel->get('showDetailsFieldList'));
+		}
+		foreach($permitFields as $field) {
+			$helpText = '';
+			if($this->controller->configModel->exists('help.' . $field)) {
+				$helpText = htmlentities($this->controller->configModel->get('help.'.$field));	
+			}
+			if(!empty($helpText)) {
+				$helpText = sprintf('<img src="%s" title="%s" alt="%s" />', $helpIcon, $helpText, $helpText);
+			}
+			$permit['LABEL_FIELDHEADER_'.strtoupper($field)] = $this->getTranslatedLabel('label_fieldheader_' . $field) . $helpText;
+		}
+		$permitIndex = 0;
+		if($this->controller->permitsModel->isLoaded()) {
+			$record = $this->controller->permitsModel->getRecord();
+			$permit['FIELD_ADDRESS'] = $this->controller->permitsModel->getAddress();
+			foreach($permitFields as $field) {
+				$content = $this->getFieldWrap(
+					$configBasePath,
+					$field,
+					$record,
+					$this->controller->permitsModel->getTableName()
+				);
+				if($field == 'link') {
+					$field = 'link2';
+				}
+				if($field == 'description') {
+					$content = $this->controller->permitsModel->getRichDescription();
+				}
+				if($field == 'publicationbody') {
+					$content = $this->controller->permitsModel->getRichPublicationBody();
+				}
+				if(empty($content)) {
+					$permit['HAS_' . strtoupper($field)] = array();
+					//$content = '-';
+				} else {
+					if($field != 'link2') {
+						$permit['FIELD_' . strtoupper($field)] = ucfirst($content);
+					}
+				}
+			}
+			if(tx_nclib::isLoopable($record['documents'])) {
+				foreach($record['documents'] as $index => $document) {
+					$doctype = $record['documenttypes'][$index];
+                                        $filename = basename($document);
+					$permit['DOCUMENTS'][$index]['PERMIT_DOCUMENT'] = $this->controller->getLinkToController(
+						$doctype, false, array('id' => $record['uid'], 'doc' => md5($document))
+					);
+					$permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTTYPE'] = $doctype;
+                                        
+                                        $permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = $this->controller->getLinkToFile(
+							'Download',
+							$this->controller->getLinkToItemFileUrl(
+								'documents', $document
+							)." _blank"
+						);                                        
+                                        //echo $document . '<br>';
+                                        //t3lib_div::getHostname();
+                                        $lengthstrhostname = strlen(t3lib_div::getHostname());
+                                        $file = substr($document, $lengthstrhostname+1);
+                                        //echo $file . '  grootte: ' . filesize($file). '<br>';
+                                        //echo filesize('fileadmin/jquery_uitklappen.php'). '<br>';
+                                        // echo filesize('fileadmin/vergunningen/121715 VERGREGPROCINTEGRMODEL-256.PDF'). '<br>';
+                                         $permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTFILESIZE'] = filesize($document);
+                                        
+                                        //$permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = $document;
+				}
+			} else {
+				$permit['HAS_DOCUMENTS'] = array();
+				//$permit['DOCUMENTS'] = array('<li>-</li>');
+			}
+			$addressesAdded = $this->addAddressMarkersForRecord($record);
+			
+			$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
+			if(tx_nclib::isLoopable($record['objectaddresses'])) {
+				foreach($record['objectaddresses'] as $index => $address) {
+					if(tx_nclib::isLoopable($address)) {
+						foreach($address as $key=>$value) {
+							if(array_search($key, $skipFields) === false) {
+								$permit['ADDRESSES'][$index]['LABEL_FIELDHEADER_'.strtoupper($key)] =
+									$this->getTranslatedLabel('label_fieldheader_' . $key);
+								if(empty($value)) {
+									$permit['ADDRESSES'][$index]['HAS_'.strtoupper($key)] = array();
+									//$value = '-';
+								} else {
+									$permit['ADDRESSES'][$index]['FIELD_'.strtoupper($key)] = ucfirst($value);
+								}
+							}
+						}
+					}
+				}
+			} else {
+				$permit['ADDRESSES'] = array();
+			}
+			if($addressesAdded === false) {
+				$permit['HAS_MAPS'] = array();
+				$this->disableGoogleMaps();
+			}
+			$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
+			if(tx_nclib::isLoopable($record['lots'])) {
+				foreach($record['lots'] as $index => $lot) {
+					if(tx_nclib::isLoopable($lot)) {
+						foreach($lot as $key=>$value) {
+							if(array_search($key, $skipFields) === false) {
+								$permit['LOTS'][$index]['LABEL_FIELDHEADER_'.strtoupper($key)] =
+									$this->getTranslatedLabel('label_fieldheader_' . $key);
+								if(empty($value)) {
+									$permit['LOTS'][$index]['HAS_'.strtoupper($key)] = array();
+									//$value = '-';
+								} else {
+									$permit['LOTS'][$index]['FIELD_'.strtoupper($key)] = $value;
+								}
+							}
+						}
+					}
+				}
+			} else {
+				$permit['LOTS'] = array();
+			}
+			$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
+			if(tx_nclib::isLoopable($record['coordinates'])) {
+				foreach($record['coordinates'] as $index => $coordinates) {
+					$permit['COORDINATES'][$index]['LABEL_FIELDHEADER_COORDINATES'] =
+						$this->getTranslatedLabel('label_fieldheader_coordinates') . ' (x, y, z)';
+					foreach($coordinates as $subIndex => $coordinate) {
+						if(empty($coordinate)) {
+							$coordinates[$subIndex] = '-';
+						}
+					}
+					$coords = '(' . $coordinates['coordinatex'] . ', ' . $coordinates['coordinatey'];
+					if(!empty($coordinates['coordinatez'])) {
+						$coords .= ', ' . $coordinates['coordinatez'] . ')';
+					} else {
+						$coords .= ')';
+					}
+					$permit['COORDINATES'][$index]['FIELD_COORDINATES'] = $coords;
+				}
+			} else {
+				$permit['COORDINATES'] = array('');
+			}
+
+			if(!$this->controller->permitsModel->hasCompanyInfo()) {
+				$permit['HAS_COMPANY_INFO'] = array();
+			}
+			$permit['FIELD_TITLE'] = $this->controller->permitsModel->getTitle();
+			$permit['FIELD_LINK'] = $this->controller->getHtmlCompliantLinkToController(false, false,
+				array('id' => $record['uid']),
+				false
+			);
+
+			if($this->hasGoogleMapsEnabled()) {
+				// google maps stuff
+				$permit['GOOGLE_MAPS'] = $this->map->drawMap();
+				$permit['GOOGLE_MAPS'] = $this->fixIssuesWithMap($permit['GOOGLE_MAPS']);
+			} else {
+				$subparts['GOOGLE_MAPS'] = '';
+			}
+			$subparts = $permit;
+			$this->addMetaDataRecord();
+
+		} else {
+			$subparts['DETAILS'] = array(
+				$this->getTranslatedLabel('record_not_found')
+			);
+		}
+		$subparts['LINK_BACK'] = $this->controller->getHtmlCompliantLinkToController(false, false,
+			array(
+				'activeMonth' => $this->controller->getPiVar('activeMonth'),
+				'activeYear' => $this->controller->getPiVar('activeYear')
+			),
+			false
+		);
+
+		$content = $this->subpartReplaceRecursive(
+			$subparts, $main, false, true, $this->controller->configModel->get('cleanRemainingMarkers')
+		);
+		return $content;
+	}
+        
+        
+        
+	/**
 	 * Checks if Google Maps is enabled for this extension.
 	 * @return boolean	true if so, false otherwise
 	 */
@@ -727,6 +1052,93 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	}
 
 	/**
+	 * Document view - New interface - all months/years
+         * Show filenames
+	 * @return string	the content
+	 */
+	public function getDocumentAll() {
+		$this->addTranslationLabel('label_return');
+		$this->addTranslationLabel('label_fieldheader_document');
+		$this->addTranslationLabel('label_general');
+		$this->addTranslationLabel('label_location');
+		$subparts = array();
+		$main = 'PERMIT_DOCUMENT_VIEW_ALL';
+		$permitFields = $this->controller->permitsModel->getFieldList();
+		$removeFields = array(
+			'uid', 'pid', 'cruser_id', 'deleted', 'hidden', 'documenttypes', 'municipality', 'lastpublished', 'language',
+			'type', 'link', 'objectaddresses', 'lots'
+		);
+		$permitFields = array_diff($permitFields, $removeFields);
+		foreach($permitFields as $field) {
+			$this->addTranslationLabel('label_fieldheader_' . $field);
+		}
+		$configBasePath = 'viewPermitDocument.';
+		$permitIndex = 0;
+		$currentDocument = false;
+		$record = $this->controller->permitsModel->getRecord();
+		if($record !== false) {
+			$record = $this->controller->permitsModel->getRecord();
+			foreach($permitFields as $field) {
+				$content = $this->getFieldWrap(
+					$configBasePath,
+					$field,
+					$record,
+					$this->controller->permitsModel->getTableName()
+				);
+				$permit['PERMIT_' . strtoupper($field)] = $content;
+			}
+			$permit['PERMIT_LOCATION'] = $this->controller->permitsModel->getAddress();
+			if(tx_nclib::isLoopable($record['documents'])) {
+				foreach($record['documents'] as $index => $document) {
+					if($this->controller->getPiVar('doc') === md5($document)) {
+						$currentDocument = $document;
+						//$doctype = $record['documenttypes'][$index];
+                                                $doctype =  basename($document);
+						$permit['PERMIT_DOCUMENT'] = $this->controller->getLinkToFile(
+							$doctype,
+							$this->controller->getLinkToItemFileUrl(
+								'documents', $document
+							)." _blank"
+						);
+
+                                                //echo t3lib_div::getFileAbsFileName($document);
+                                                //echo basename($document);
+                                                $permit['PERMIT_FILENAME'] = basename($document);
+                                                
+						$permit['PERMIT_DOCUMENTTYPE'] = $doctype;
+
+						$permit['PERMIT_DOWNLOAD'] = $this->controller->getLinkToFile(
+							$this->getTranslatedLabel('label_download'),
+							$this->controller->getLinkToItemFileUrl(
+								'documents', $document
+							)
+						);
+						break;
+					}
+				}
+			}
+			$permit['PERMIT_TITLE'] = $this->controller->permitsModel->getTitle();
+			$permit['PERMIT_LINK'] = $this->controller->getHtmlCompliantLinkToController(false, false,
+				array('id' => $record['uid']),
+				false
+			);
+			$subparts = $permit;
+		} else {
+			$subparts['PERMIT_DOCUMENT_DETAILS'] = array(
+				$this->getTranslatedLabel('permit_not_found')
+			);
+		}
+		$this->addMetaDataDocument($currentDocument);
+
+		$content = $this->subpartReplaceRecursive(
+			$subparts, $main, false, true, $this->controller->configModel->get('cleanRemainingMarkers')
+		);
+		return $content;
+	}
+        
+        
+        
+	/**
 	 * Publication list
 	 * @return string content
 	 */
@@ -836,8 +1248,130 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		}
 		return $aResult;
 	}
+	/**
+	 * Creates year - month(- week) filter for use in the front-end - New interface - all months/years
+	 * @return array
+	 */
+	function getDateFilterAll() {
+		$aData = $this->controller->dateFilter;
+		$aResult = array();
+
+		$aWeeks = range($aData['iStartWeek'], $aData['iEndWeek']);
 
 
+		if(tx_nclib::isLoopable($aWeeks)) {
+			foreach($aWeeks as $iIndex=>$iWeek) {
+				$sWeek = $this->getTranslatedLabel('label_week') . ' ' . $iWeek;
+				if($iWeek == $aData['iActiveWeek']) {
+					$aResult['WEEKS'][$iIndex]['WEEK'] = $sWeek;
+					$aResult['WEEKS'][$iIndex]['ACTIVE'] = 'active';
+				} else {
+					if($iWeek > $aData['iCurrentWeek'] && $aData['bCurrentYearActive']) {
+						//$aResult['WEEKS'][$iIndex]['WEEK'] = $sWeek;
+						$aResult['WEEKS'][$iIndex]['WEEK'] =
+							$this->controller->getLinkToFilteredResult($sWeek, array('activeYear' => $aData['iActiveYear'], 'activeMonth' => $aData['iActiveMonth'], 'activeWeek' => $iWeek));
+					} else {
+						$aResult['WEEKS'][$iIndex]['WEEK'] =
+							$this->controller->getLinkToFilteredResult($sWeek, array('activeYear' => $aData['iActiveYear'], 'activeMonth' => $aData['iActiveMonth'], 'activeWeek' => $iWeek));
+					}
+					$aResult['WEEKS'][$iIndex]['ACTIVE'] = 'inactive';
+				}
+			}
+		} else {
+			$aResult['WEEKS'] = array();
+		}
+		return $aResult;
+	}
+
+	/**
+	 * Creates month filter for use in the front-end.
+	 * @return array
+	 */
+	function getMonthFilter() {
+		$aData = $this->controller->dateFilter;
+		$aResult = array();
+
+		$aMonths = range(1, 13);                
+                $count = 1;
+                
+                
+                if($this->controller->getPiVar('activeYear')!=9999)
+                {
+                    if($this->controller->getPiVar('activeMonth') != '') {
+                            $actMonth = $this->controller->getPiVar('activeMonth');
+                    }  else {
+                            $actMonth = $aData['iActiveMonth'];
+                    }  
+                }else{
+                   $actMonth = 13; 
+                }
+                
+                if(tx_nclib::isLoopable($aMonths)) {
+			foreach($aMonths as $iIndex=>$iMonth) {
+				$sMonth = $this->getTranslatedLabel('label_month_' . $iMonth);
+    				//$aResult['MONTHS'][$iIndex]['TITLE'] =
+						//$this->controller->getLinkToFilteredResult($sMonth, array('activeYear' => $aData['iActiveYear'], 'activeMonth' => $iMonth));
+                                $aResult['MONTHS'][$iIndex]['TITLE'] = $sMonth;
+                                $aResult['MONTHS'][$iIndex]['VALUE'] = $count;	
+                                $aResult['MONTHS'][$iIndex]['SELECTED'] = $actMonth == $iMonth ? ' selected="selected"' : '';	
+                                //$aResult['MONTHS'][$iIndex]['SELECTED'] = $iMonth ? ' selected="selected"' : '';
+                                $count++;
+                                
+                                if($productTypes[$index] == '')
+                                    $result['PRODUCT_TYPES'][$index]['TITLE'] = htmlentities($this->getTranslatedLabel('label_type_'.
+					($this->controller->permitsModel->getModelType() ==  tx_ncgovpermits_permits_model::TYPE_PERMIT ? 'permit' : 'publication')
+				));                                
+			}
+		} else {
+			$aResult['MONTHS'] = array();
+		}
+                
+                
+		return $aResult;
+	}
+
+	/**
+	 * Creates year filter for use in the front-end. New interface - all months/years
+	 * @return array
+	 */
+	function getYearFilter() {
+		$aData = $this->controller->dateFilter;
+		$aResult = array();
+
+		$aYears = range($aData['iStartYear'], $aData['iEndYear']); 
+                
+                //add option - all - value 9999
+                $aYears[] = 9999;
+                
+		if($this->controller->getPiVar('activeYear') != '') {
+			$actYear = $this->controller->getPiVar('activeYear');
+		}else {
+                    
+                    $actYear = $aData['iActiveYear'];
+                }
+                   
+                
+		if(tx_nclib::isLoopable($aYears)) {
+			foreach($aYears as $iIndex=>$iYear) {
+                                if ($iYear == 9999)
+                                {
+                                    $sYear = $this->getTranslatedLabel('label_year_' . $iYear);
+                                    $aResult['YEARS'][$iIndex]['TITLE'] = $sYear;
+                                }else{    
+                                    $aResult['YEARS'][$iIndex]['TITLE'] = $iYear;
+                                }
+                                $aResult['YEARS'][$iIndex]['VALUE'] = $iYear;   	
+                                $aResult['YEARS'][$iIndex]['SELECTED'] = $actYear ==$iYear ? ' selected="selected"' : '';
+                        }
+                }else{        
+			$aResult['YEARS'] = array();
+		}		
+                
+                
+		return $aResult;
+	}
+                
+        
 	/**
 	 * Creates fulltext filter for use in the front-end.
 	 * @return array
