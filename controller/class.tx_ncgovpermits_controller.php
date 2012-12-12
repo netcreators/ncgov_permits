@@ -191,6 +191,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 					$content = $this->getView();
 					break;
 				case 'permitsall':
+                                case 'publicationsall':
 					$content = $this->getViewAll();
 					break;                                    
 				case 'publish_permits':
@@ -384,6 +385,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 			$this->getPiVar('id')
 		);
 		if($this->getPluginMode() == 'permitsall' && !$this->permitsModel->isPermit()
+                        || $this->getPluginMode() == 'publicationsall' && $this->permitsModel->isPermit()
 			
 		) {
 			$this->permitsModel->setRecord(false, true);

@@ -14,6 +14,7 @@
 			<label index="pluginMode_option4">Laatste vergunningen</label>
 			<label index="pluginMode_option5">Laatste bekendmakingen</label>
                         <label index="pluginMode_option6">Vergunningen Nieuwe Interface</label>
+                        <label index="pluginMode_option7">Bekendmakingen Nieuwe Interface</label>
 			<label index="displayPage">Kies de pagina waarop de vergunningen FE getoond worden</label>
 
 			<label index="sheet_general">Algemeen</label>

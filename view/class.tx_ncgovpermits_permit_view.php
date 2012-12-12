@@ -293,8 +293,17 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		$this->addTranslationLabel('label_submit');
 
 		$permitFields = $this->controller->permitsModel->getFieldList();
-		$main = 'PERMIT_LIST_VIEWALL';
-		$configBasePath = 'viewPermitList.';
+		//$main = 'PERMIT_LIST_VIEWALL';
+		//$configBasePath = 'viewPermitList.';
+                
+		if($this->controller->getPluginMode() == 'permitsall') {
+			$main = 'PERMIT_LIST_VIEWALL';
+			$configBasePath = 'viewPermitList.';
+		} else {
+			$main = 'PUBLICATION_LIST_VIEW_ALL';
+			$configBasePath = 'viewPublicationList.';
+		}                
+                
 
 		$permitIndex = 0;
 		if($this->controller->permitsModel->getCount() > 0) {
@@ -687,7 +696,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			);
 			$permitFields = array_diff($permitFields, $removeFields);
 		} else {
-			$main = 'PUBLICATION_DETAIL_VIEW';
+			$main = 'PUBLICATION_DETAIL_VIEW_ALL';
 			$configBasePath = 'viewPublicationDetails.';
 			$permitFields = array(
 				'publishdate', 'title', 'description', 'zipcode', 'address', 'addressnumber',
@@ -754,12 +763,25 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                                         //echo $document . '<br>';
                                         //t3lib_div::getHostname();
                                         $lengthstrhostname = strlen(t3lib_div::getHostname());
-                                        $file = substr($document, $lengthstrhostname+1);
-                                        //echo $file . '  grootte: ' . filesize($file). '<br>';
-                                        //echo filesize('fileadmin/jquery_uitklappen.php'). '<br>';
-                                        // echo filesize('fileadmin/vergunningen/121715 VERGREGPROCINTEGRMODEL-256.PDF'). '<br>';
-                                         $permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTFILESIZE'] = filesize($document);
-                                        
+                                        $file = substr($document, $lengthstrhostname+2);
+                                        $search_string ='%20';
+                                        $file = str_replace($search_string, ' ', $file);
+
+                                        $filename = substr(basename($file),0,strrpos(basename($file), '.'));
+                                        // strip filename
+                                        if (strrpos($filename, '_') > 0 ){
+                                            $pos_underscore = strrpos($filename, '_');  
+                                                $filename = substr($filename,$pos_underscore+1);
+                                        }
+                                        $file_size = filesize($file);
+                                         if ($file_size < 1024) $file_size.' B';
+                                            elseif ($file_size < 1048576) $file_size = round($file_size / 1024, 2).' KB';
+                                            elseif ($file_size < 1073741824) $file_size = round($file_size / 1048576, 2).' MB';
+
+                                        $file_extension = strtoupper(substr(strrchr(basename($file),'.'),1));
+                                           
+                                         $permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTFILESIZE'] =  $file_extension.' / '. $file_size;
+                                         $permit['DOCUMENTS'][$index]['PERMIT_FILENAME'] = $filename;
                                         //$permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = $document;
 				}
 			} else {
