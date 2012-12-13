@@ -319,6 +319,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                                 {
                                     
                                    $permitweek['WEEKNUMBER'] = 'wk'.$sweeknumberyear;
+                                   $permitweek['WEEKNUMBERSTRING'] = 'Week '.$weeknumber.' '.$year;
                                    if ($permitIndex > 0){
                                         //$permitweek['VIEW'] = 'style="display: none;"'; 
                                         $permitweek['VIEWCLASS'] = ''; 

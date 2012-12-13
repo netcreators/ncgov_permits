@@ -656,9 +656,9 @@ permit template
 		<dl class="detail-documents">
 			<dt class="detail-label">###LABEL_FIELDHEADER_DOCUMENTS###:</dt>
 			<dd class="detail-field detail-doctype">
-                            <table><tr><th> Bestandsnaam</th>   <th> Download</th> <th class="documentsize"> extensie/grootte</th> </tr>
+                            <table><tr><th> </th><th> Bestandsnaam</th>   <th> Download</th> <th class="documentsize"> extensie/grootte</th> </tr>
 			<!-- ###DOCUMENTS### -->
-                            <tr><td>###PERMIT_FILENAME###</td><td>   ###PERMIT_DOWNLOAD###</td><td>###PERMIT_DOCUMENTFILESIZE###</td></tr>
+                            <tr><td>###PERMIT_DOCUMENTTYPE###</td><td>###PERMIT_FILENAME###</td><td>   ###PERMIT_DOWNLOAD###</td><td>###PERMIT_DOCUMENTFILESIZE###</td></tr>
 			<!-- ###DOCUMENTS### -->
                             </table>
 			</dd>
@@ -951,7 +951,7 @@ publication template
 	<!-- / ###HAS_MAPS### -->
 	<ul>
 	<!-- ###RECORDS### begin -->
-        	<li class="week ###WEEKNUMBER###"><h3 ###VIEWCLASS###>###WEEKNUMBER###</h3>
+        	<li class="week ###WEEKNUMBER###"><h3 ###VIEWCLASS###>###WEEKNUMBERSTRING###</h3>
         	<ul class="permit-result">
                 <!-- ###SUBRECORDS### begin -->
                     		<li>###FIELD_PUBLISHDATE###: <a href="###FIELD_LINK###">###FIELD_PRODUCTTYPE### ###FIELD_ADDRESS###</a></li>
