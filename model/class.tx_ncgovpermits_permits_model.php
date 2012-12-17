@@ -362,7 +362,6 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 				} catch (Exception $e) {
 					$skipRegionSearch = true;
 				}
-                                                                        var_dump($arrReq);
 				if(!$skipRegionSearch) {
 					$arrRes = get_object_vars($result->results->result);
 
