@@ -91,6 +91,8 @@ class tx_ncgovpermits_config_model extends tx_nclib_config_model {
 			'convertLatinToUtf8' => false,
 			// shows fields on detail screen
 			'showDetailsFieldList' => false,
+                        //Permit page
+                        'permitPage' => '',
 			// default DC settings
 			'owmsDefaults.' => array(
 				'municipality' => false,

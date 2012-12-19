@@ -877,6 +877,17 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 
 	/**
 	 *
+	 * @param $params
+	 * @return string
+	 */
+	function getURLToFilteredResultPublication($params = array()) {
+                $permitPage = $this->configModel->get('permitPage');
+		$linkParams = $this->fillPiVarParams($params);
+		return $this->getLinkToController(false, $permitPage, $linkParams);
+	}        
+        
+	/**
+	 *
 	 * @param $sFieldName
 	 * @param $sFile
 	 * @return string

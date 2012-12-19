@@ -164,11 +164,26 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 						} else {
 							$title = ucfirst($this->controller->permitsModel->getField('title')) . '<br />';
 						}
-						$link = $this->controller->getHtmlCompliantLinkToController(false,
+                                                
+                                                // link the publication to permit (field related) 
+                                                if ($record['related']){ 
+                                                    $link = $this->controller->getHtmlCompliantLinkToController(false,
+							$this->controller->configModel->get('permitPage'),
+							array('id' => $record['related']),
+							false
+                                                    );        
+                                                }else{
+                                                    $link = $this->controller->getHtmlCompliantLinkToController(false,
 							$this->controller->configModel->get('displayPage'),
 							array('id' => $record['uid']),
 							false
-						);
+                                                    );
+                                                }                                                
+						/*$link = $this->controller->getHtmlCompliantLinkToController(false,
+							$this->controller->configModel->get('displayPage'),
+							array('id' => $record['uid']),
+							false
+						);*/
 						$title = sprintf("<a href='%s'>%s</a>", $link, $title);
 						$this->map->addMarkerByAddress(
 							$address['address'] . ' ' . $address['addressnumber'] . $address['addressnumberadditional'],
@@ -351,7 +366,16 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 					false
 				);
                                 
-				$permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));
+                               if($this->controller->getPluginMode() == 'permitsall') {
+                                   $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));    
+                                }else{
+                                   // link the publication to permit (field related) 
+                                   if ($record['related']){ 
+                                      $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResultPublication(array('id' => $record['related']));    
+                                   }else{
+                                       $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));    
+                                   }
+                                }
                                 $permit['FIELD_WEEK'] =  date('W', $this->controller->permitsModel->getField('publishdate', true));
                                                           
 				if($this->addAddressMarkersForRecord($record)) {
