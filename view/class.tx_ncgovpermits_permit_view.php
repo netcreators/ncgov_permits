@@ -321,6 +321,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                 
 
 		$permitIndex = 0;
+                $firsttime = true;
 		if($this->controller->permitsModel->getCount() > 0) {
 			$addressesAdded = false;
 			while ($this->controller->permitsModel->hasNextRecord()) {
@@ -338,6 +339,12 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                                    $permitIndex = 0; 
                                    $permitweek['WEEKNUMBER'] = 'wk'.$sweeknumberyear;
                                    $permitweek['WEEKNUMBERSTRING'] = 'Week '.$weeknumber.' '.$year;
+                                   if ($firsttime == true){
+                                       $permitweek['CLASS'] = 'class="active"';
+                                       $firsttime = false;
+                                   }else{
+                                       $permitweek['CLASS'] = '';
+                                   }                                       
                                    
                                    $subparts['RECORDS'][$sweeknumberyear] = $permitweek;                                               
                                 }                                   
