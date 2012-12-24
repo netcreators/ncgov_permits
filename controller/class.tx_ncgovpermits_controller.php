@@ -636,6 +636,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 		$iCurrentWeek = date('W');
 		// determine if there are incoming vars
                 $showallrecordsoftheactiveyear = false;
+                $showallrecordsofallyears = false;
 		if($this->getPiVar('activeMonth') != '') {
 			$iActiveMonth = $this->getPiVar('activeMonth');
                         if ($iActiveMonth == 13)
@@ -672,22 +673,16 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 		$bCurrentYearActive = false;
 		if($iActiveYear == $iCurrentYear) {
 			$bCurrentYearActive = true;
-		}
+		}                         
 		// determine week timestamps
-                if ($showallrecordsofallyears == false) {
-                    if ($showallrecordsoftheactiveyear == false) {
-                        $iStartWeek = date('W', mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear));
-                        $iEndWeek = date('W', mktime(0, 0, 0, $iActiveMonth+1, 1, $iActiveYear));
-                    }else
-                    {
-                        $iStartWeek = date('W', mktime(0, 0, 0, 1, 1, $iActiveYear));
-                        $iEndWeek = date('W', mktime(0, 0, 0, 12, 1, $iActiveYear));                    
-                    }
-                }else{
-                        $iStartWeek = date('W', mktime(0, 0, 0, 1, 1, 1900));
-                        $iEndWeek = date('W', mktime(0, 0, 0, 12, 1, $iActiveYear));                     
-                }
-  
+                $iStartWeek = date('W', mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear));
+                $iEndWeek = date('W', mktime(0, 0, 0, $iActiveMonth+1, 1, $iActiveYear));
+          
+                if (($showallrecordsoftheactiveyear == true) or ($showallrecordsofallyears == true)) {    
+                        $iStartWeek = 1;
+                        $iEndWeek = 52;    
+                }            
+
 		if($iEndWeek < $iStartWeek) {
 			$iEndWeek = 52;
 		}
@@ -708,33 +703,24 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 		if(isset($iActiveWeek)) {
 			// filter on active week
 			$iWeek = 60*60*24*7;
-                        if ($showallrecordsofallyears == false) {
-                            if ($showallrecordsoftheactiveyear == false) {   
-                                $iStartDate = mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear) + ($iActiveWeek - $iStartWeek) * $iWeek;          
-                            }
-                            else {
-                                $iStartDate = mktime(0, 0, 0,1, 1, $iActiveYear) + ($iActiveWeek - $iStartWeek) * $iWeek;                                      
-                            }
-                        }else{
-                            $iStartDate = mktime(0, 0, 0,1, 1, 1900) + ($iActiveWeek - $iStartWeek) * $iWeek;  
-                        }
-                        
+                        $iStartDate = mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear) + ($iActiveWeek - $iStartWeek) * $iWeek;                                                
                         $iDayOfWeek = date('N', $iStartDate);
 			$iStartDate -= ($iDayOfWeek-1) * 60*60*24;
 			$iEndDate = $iStartDate + $iWeek;
 		} else {
 			// filter on active month, year
-                        if ($showallrecordsofallyears == false) {                    
-                            if ($showallrecordsoftheactiveyear == false) {                       
-                                $iStartDate = mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear);
-                                $iEndDate = mktime(0, 0, 0, $iActiveMonth+1, 1, $iActiveYear);
-                            }else {
+                        $iStartDate = mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear);
+                        $iEndDate = mktime(0, 0, 0, $iActiveMonth+1, 1, $iActiveYear);
+                    
+                        if ($showallrecordsoftheactiveyear == true) {                       
                                 $iStartDate = mktime(0, 0, 0, 1, 1, $iActiveYear);
-                                $iEndDate = mktime(0, 0, 0, 12, 1, $iActiveYear);                            
-                            }
-                        }else {
+                                $iEndDate = mktime(0, 0, 0, 1, 1, $iActiveYear+1);                                              
+                        }                                              
+                        
+                        if ($showallrecordsofallyears == true) {    
                                 $iStartDate = mktime(0, 0, 0, 1, 1, 1900);
-                                $iEndDate = mktime(0, 0, 0, 12, 1, $iActiveYear);                            
+                                $iEndDate = mktime(0, 0, 0, 1, 1, 2100);   
+                                
                         }
                         
 		}

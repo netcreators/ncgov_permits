@@ -326,24 +326,20 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			while ($this->controller->permitsModel->hasNextRecord()) {
 				$record = $this->controller->permitsModel->getRecord();    
 
-                               $weeknumber = date('W', $this->controller->permitsModel->getField('publishdate', true));
+                               $weeknumber = (int)date('W', $this->controller->permitsModel->getField('publishdate', true));
                                $year = date('Y', $this->controller->permitsModel->getField('publishdate', true));
                                $sweeknumberyear=$weeknumber.$year;
+                               $weeknumberindex = $weeknumber+$year;
+                               $weeknumberyear =  $weeknumber.$year;
+                               $weeknumberyearstr = strval($weeknumber.$year);                       
                                 //if ($previousweeknumber != $weeknumber)
                                if ($previousweeknumber != $sweeknumberyear)
                                 {
-                                    
+                                   $permitIndex = 0; 
                                    $permitweek['WEEKNUMBER'] = 'wk'.$sweeknumberyear;
                                    $permitweek['WEEKNUMBERSTRING'] = 'Week '.$weeknumber.' '.$year;
-                                   if ($permitIndex > 0){
-                                        //$permitweek['VIEW'] = 'style="display: none;"'; 
-                                        $permitweek['VIEWCLASS'] = ''; 
-                                   }else {
-                                       //$permitweek['VIEW'] = '';
-                                       $permitweek['VIEWCLASS'] = 'class="active"'; 
-                                   }
-
-                                   $subparts['RECORDS'][$sweeknumberyear] = $permitweek;                         
+                                   
+                                   $subparts['RECORDS'][$sweeknumberyear] = $permitweek;                                               
                                 }                                   
 				foreach($permitFields as $field) {
 					$content = $this->getFieldWrap(
@@ -381,9 +377,9 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 				if($this->addAddressMarkersForRecord($record)) {
 					$addressesAdded = true;
 				}
-                      
+                                                   
                                 $subparts['RECORDS'][$sweeknumberyear]['SUBRECORDS'][$permitIndex] = $permit;      
-                                
+                               
 				$permitIndex++;                            
                                 $previousweeknumber = $sweeknumberyear;
 				$this->controller->permitsModel->moveToNextRecord();
