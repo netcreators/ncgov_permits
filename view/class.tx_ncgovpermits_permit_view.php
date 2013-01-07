@@ -322,31 +322,35 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 
 		$permitIndex = 0;
                 $firsttime = true;
+                $previousweeknumber = 0;
 		if($this->controller->permitsModel->getCount() > 0) {
 			$addressesAdded = false;
 			while ($this->controller->permitsModel->hasNextRecord()) {
 				$record = $this->controller->permitsModel->getRecord();    
-
-                               $weeknumber = (int)date('W', $this->controller->permitsModel->getField('publishdate', true));
-                               $year = date('Y', $this->controller->permitsModel->getField('publishdate', true));
-                               $sweeknumberyear=$weeknumber.$year;
-                               $weeknumberindex = $weeknumber+$year;
-                               $weeknumberyear =  $weeknumber.$year;
-                               $weeknumberyearstr = strval($weeknumber.$year);                       
+                               
+                               //$weeknumber = (int)date('W', $this->controller->permitsModel->getField('publishdate', true));                              
+                               $weeknumber = (int)date('oW', $this->controller->permitsModel->getField('publishdate', true));                              
+                               $strweeknumber = date('W', $this->controller->permitsModel->getField('publishdate', true));
+                               //$year = date('Y', $this->controller->permitsModel->getField('publishdate', true));                                         
+                               $year = date('o', $this->controller->permitsModel->getField('publishdate', true)); 
+                               $weeknumberyear=$weeknumber.$year;
+                               //$weeknumberindex = $weeknumber+$year;
+                               //$weeknumberyear =  $weeknumber.$year;
+                               //$weeknumberyearstr = strval($weeknumber.$year);                       
                                 //if ($previousweeknumber != $weeknumber)
-                               if ($previousweeknumber != $sweeknumberyear)
+                               if ($previousweeknumber != $weeknumberyear)
                                 {
                                    $permitIndex = 0; 
-                                   $permitweek['WEEKNUMBER'] = 'wk'.$sweeknumberyear;
-                                   $permitweek['WEEKNUMBERSTRING'] = 'Week '.$weeknumber.' '.$year;
+                                   $permitweek['WEEKNUMBER'] = 'wk'.$strweeknumber;
+                                   $permitweek['WEEKNUMBERSTRING'] = 'Week '.$strweeknumber.' '.$year;
                                    if ($firsttime == true){
-                                       $permitweek['CLASS'] = 'class="active"';
+                                       $permitweek['CLASS'] = 'class=active';
                                        $firsttime = false;
                                    }else{
                                        $permitweek['CLASS'] = '';
                                    }                                       
                                    
-                                   $subparts['RECORDS'][$sweeknumberyear] = $permitweek;                                               
+                                   $subparts['RECORDS'][$weeknumberyear] = $permitweek;                                               
                                 }                                   
 				foreach($permitFields as $field) {
 					$content = $this->getFieldWrap(
@@ -385,14 +389,14 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 					$addressesAdded = true;
 				}
                                                    
-                                $subparts['RECORDS'][$sweeknumberyear]['SUBRECORDS'][$permitIndex] = $permit;      
+                                $subparts['RECORDS'][$weeknumberyear]['SUBRECORDS'][$permitIndex] = $permit;      
                                
 				$permitIndex++;                            
-                                $previousweeknumber = $sweeknumberyear;
+                                $previousweeknumber = $weeknumberyear;
 				$this->controller->permitsModel->moveToNextRecord();
 			}
                         
-                        //var_dump( $subparts['SUBRECORDS']);
+                        //var_dump( $subparts['RECORDS']);
 			if($addressesAdded === false) {
 				$subparts['HAS_MAPS'] = array();
 				$this->disableGoogleMaps();

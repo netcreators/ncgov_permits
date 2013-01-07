@@ -1,3 +1,9 @@
+2013-01-07 0.4.9 Jordi Bakker <jordi@netcreators.com>
+
+	* Bug weeknumbers 31 dec 2012 -> wk1 from 2013
+	* added changes to changelog
+	* updated version number to reflect changes
+
 2012-12-19 0.4.8 Jordi Bakker <jordi@netcreators.com>
 
 	* Bug search all months

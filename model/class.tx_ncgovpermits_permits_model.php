@@ -411,11 +411,11 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 				$where[] = sprintf('permits.objectaddresses in (%s)', implode(',', $addressIds));				
 			}
 		}
-			
+                
 		$where = $this->database->getWhere($where);
 		$orderBy = 'permits.publishdate DESC';
 		$groupBy = '';
-
+            
 		$table = sprintf(
 			"%s permits LEFT JOIN %s addresses ON addresses.uid IN (permits.objectaddresses) AND addresses.hidden = 0 AND addresses.deleted = 0 AND addresses.pid IN (%s)",
 			$this->getTableName(),
