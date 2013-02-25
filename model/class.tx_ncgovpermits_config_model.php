@@ -76,6 +76,8 @@ class tx_ncgovpermits_config_model extends tx_nclib_config_model {
 			'dontShowRecordsPublishedInTheFuture' => false,
 			// the amount of time to look back
 			'latestDateOffset' => false,
+			// the limit of records latest view
+			'latestlimit' => false,
 			// default charset for htmlentities for sites that do not use UTF-8 by default
 			'htmlEntitiesCharset' => 'UTF-8',
 			// default setting for making it possible to use region search, should not be turned on without key

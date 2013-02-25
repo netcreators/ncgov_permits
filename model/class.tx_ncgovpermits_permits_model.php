@@ -114,9 +114,10 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 		$where = $this->database->getWhere($where);
 		$orderBy = '';
 		$groupBy = '';
+		$limit = $this->controller->configModel->get('latestlimit');
 
 		$this->database->clear();
-		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
+		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy, $limit);
 		if(!$records || !tx_nclib::isLoopable($records)) {
 			return false;
 		}
