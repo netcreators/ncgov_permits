@@ -162,6 +162,7 @@ class tx_ncgovpermits_config_model extends tx_nclib_config_model {
 			),
 			'viewPublicationDetails.' => array(),
 			'viewPermitDetails.' => array(),
+            'showFileName' => false,
 		);
 
 				// remember, don't forget

@@ -526,6 +526,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		$this->addTranslationLabel('label_return');
 		$subparts = array();
 		$helpIcon = $this->controller->configModel->get('help.icon');
+        $showFileName = $this->controller->configModel->get('showFileName');
 		$permit = array();
 
 		if($this->controller->permitsModel->isPermit()) {
@@ -590,10 +591,19 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			if(tx_nclib::isLoopable($record['documents'])) {
 				foreach($record['documents'] as $index => $document) {
 					$doctype = $record['documenttypes'][$index];
-					$permit['DOCUMENTS'][$index]['PERMIT_DOCUMENT'] = $this->controller->getLinkToController(
-						$doctype, false, array('id' => $record['uid'], 'doc' => md5($document))
-					);
+
+                    if ($showFileName== false) {
+                        $permit['DOCUMENTS'][$index]['PERMIT_DOCUMENT'] = $this->controller->getLinkToController(
+                            $doctype, false, array('id' => $record['uid'], 'doc' => md5($document))
+					    );
+                    }else{
+                        $permit['DOCUMENTS'][$index]['PERMIT_DOCUMENT'] = $this->controller->getLinkToController(
+                            $document, false, array('id' => $record['uid'], 'doc' => md5($document))
+                        );
+                    }
 					$permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTTYPE'] = $doctype;
+
+
 				}
 			} else {
 				$permit['HAS_DOCUMENTS'] = array();
@@ -796,6 +806,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                                         //t3lib_div::getHostname();
                                         $lengthstrhostname = strlen(t3lib_div::getHostname());
                                         $file = substr($document, $lengthstrhostname+2);
+
                                         $search_string ='%20';
                                         $file = str_replace($search_string, ' ', $file);
 
@@ -805,7 +816,9 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                                             $pos_underscore = strrpos($filename, '_');  
                                                 $filename = substr($filename,$pos_underscore+1);
                                         }
+
                                         $file_size = filesize($file);
+
                                          if ($file_size < 1024) $file_size.' B';
                                             elseif ($file_size < 1048576) $file_size = round($file_size / 1024, 2).' KB';
                                             elseif ($file_size < 1073741824) $file_size = round($file_size / 1048576, 2).' MB';

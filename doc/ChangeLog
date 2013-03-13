@@ -1,3 +1,9 @@
+2013-03-13 0.5.1 Jordi Bakker <jordi@netcreators.com>
+
+        * Added extra functionality to show filename detail view old design
+        * added changes to changelog
+        * updated version number to reflect changes
+
 2013-02-25 0.5.0 Jordi Bakker <jordi@netcreators.com>
 
         * Add config limit for latest view - latestlimit
