@@ -1889,12 +1889,15 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	public function getPermitXmls() {
 		$xmls = array();
 		$xmls[$this->controller->getCaseFileName()] = $this->getPermitXml(0);
-		$documents = $this->controller->permitsModel->getField('documents');
-		if(tx_nclib::isLoopable($documents)) {
-			foreach($documents as $index => $document) {
-				$xmls[$this->controller->getCaseFileName($index)] = $this->getPermitDocumentXml($index+1);
-			}
-		}
+        $publishPermitDocuments = $this->controller->configModel->get('publishPermitDocuments');
+        if ($publishPermitDocuments == true){
+            $documents = $this->controller->permitsModel->getField('documents');
+            if(tx_nclib::isLoopable($documents)) {
+                foreach($documents as $index => $document) {
+                    $xmls[$this->controller->getCaseFileName($index)] = $this->getPermitDocumentXml($index+1);
+                }
+            }
+        }
 		return $xmls;
 	}
 

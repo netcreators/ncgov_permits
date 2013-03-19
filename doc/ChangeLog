@@ -1,3 +1,8 @@
+2013-03-19 0.5.2 Jordi Bakker <jordi@netcreators.com>
+        * Extra setting publish permits documents by default do not
+        * added changes to changelog
+        * updated version number to reflect changes
+
 2013-03-13 0.5.1 Jordi Bakker <jordi@netcreators.com>
 
         * Added extra functionality to show filename detail view old design
