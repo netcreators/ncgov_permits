@@ -347,7 +347,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                                        $permitweek['CLASS'] = 'class=active';
                                        $firsttime = false;
                                    }else{
-                                       $permitweek['CLASS'] = '';
+                                       $permitweek['CLASS'] = 'class=not-active';
                                    }                                       
                                    
                                    $subparts['RECORDS'][$weeknumberyear] = $permitweek;                                               
@@ -429,7 +429,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			'activeMonth' => $this->controller->getPiVar('activeMonth'),
 			'activeYear' => $this->controller->getPiVar('activeYear')
 		));
-		
+
 		$content = $this->subpartReplaceRecursive(
 			$subparts, $main, false, true, $this->controller->configModel->get('cleanRemainingMarkers')
 		);

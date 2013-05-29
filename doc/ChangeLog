@@ -1,3 +1,8 @@
+2013-05-29 0.5.3 Jordi Bakker <jordi@netcreators.com>
+        * change css class week - active / not-active
+        * added changes to changelog
+        * updated version number to reflect changes
+
 2013-03-19 0.5.2 Jordi Bakker <jordi@netcreators.com>
         * Extra setting publish permits documents by default do not
         * added changes to changelog

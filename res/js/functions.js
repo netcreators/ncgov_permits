@@ -4,11 +4,16 @@ jQuery.noConflict();
 jQuery(document).ready(function($){
 	show = 0;
 
-	// slide menu right column news //////////////////////
-	$(".week h3").click(function () {
-		$(this).next(".permit-result").slideToggle();
-	});
-        
-        $(".permit-result:not(:first)").hide(); 
+    // toggle ncgov_permits //////////////////////
+    $(".week h3").click(function(event) {
+        $(this).next(".permit-result").slideToggle();
+        if ($(this).hasClass("active") ) {
+            $(this).removeClass("active");
+        } else {
+            $(this).addClass("active");
+        }
+    });
+
+    $(".permit-result:not(:first)").hide();
 
 });
