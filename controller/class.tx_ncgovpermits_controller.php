@@ -703,8 +703,8 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 		if(isset($iActiveWeek)) {
 			// filter on active week
 			$iWeek = 60*60*24*7;
-                        $iStartDate = mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear) + ($iActiveWeek - $iStartWeek) * $iWeek;                                                
-                        $iDayOfWeek = date('N', $iStartDate);
+            $iStartDate = mktime(0, 0, 0, $iActiveMonth, 1, $iActiveYear) + ($iActiveWeek - $iStartWeek) * $iWeek;
+            $iDayOfWeek = date('N', $iStartDate);
 			$iStartDate -= ($iDayOfWeek-1) * 60*60*24;
 			$iEndDate = $iStartDate + $iWeek;
 		} else {
@@ -717,10 +717,9 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
                                 $iEndDate = mktime(0, 0, 0, 1, 1, $iActiveYear+1);                                              
                         }                                              
                         
-                        if ($showallrecordsofallyears == true) {    
-                                $iStartDate = mktime(0, 0, 0, 1, 1, 1900);
-                                $iEndDate = mktime(0, 0, 0, 1, 1, 2100);   
-                                
+                        if ($showallrecordsofallyears == true) {
+                            $iStartDate = mktime(0, 0, 0, 1, 1, 1920);
+                            $iEndDate = mktime(0, 0, 0, 1, 1, ($iCurrentYear+1));
                         }
                         
 		}
