@@ -1,3 +1,8 @@
+2013-07-06 0.5.5 Jordi Bakker <jordi@netcreators.com>
+        * bug in IE 8 jquery not:first doesnt work there - so we set the class in the view
+        * added changes to changelog
+        * updated version number to reflect changes
+
 2013-05-31 0.5.4 Jordi Bakker <jordi@netcreators.com>
         * bug in PHP MKTIME before 1910 doesn't work - change in 1920
         http://php.bugs.free-usenet.eu/-48917-[NEW]-MKTIME-before-1910-doesn't-work_T27213681_S1

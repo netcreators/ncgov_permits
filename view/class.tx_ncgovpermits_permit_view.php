@@ -345,9 +345,11 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                                    $permitweek['WEEKNUMBERSTRING'] = 'Week '.$strweeknumber.' '.$year;
                                    if ($firsttime == true){
                                        $permitweek['CLASS'] = 'class=active';
+                                       $permitweek['PERMITSRESULTCLASS'] = 'permit-result-active';
                                        $firsttime = false;
                                    }else{
                                        $permitweek['CLASS'] = 'class=not-active';
+                                       $permitweek['PERMITSRESULTCLASS'] = 'permit-result-not-active';
                                    }                                       
                                    
                                    $subparts['RECORDS'][$weeknumberyear] = $permitweek;                                               
