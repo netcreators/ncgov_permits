@@ -414,7 +414,8 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 		}
                 
 		$where = $this->database->getWhere($where);
-		$orderBy = 'permits.publishdate DESC';
+		//$orderBy = 'permits.publishdate DESC';
+        $orderBy = 'permits.publishdate DESC, addresses.address ASC';
 		$groupBy = '';
             
 		$table = sprintf(
