@@ -1,14 +1,14 @@
 <?php
 
-########################################################################
-# Extension Manager/Repository config file for ext: "ncgov_permits"
-#
-# Auto generated 01-09-2008 10:55
-#
-# Manual updates:
-# Only the data in the array - anything else is removed by next write.
-# "version" and "dependencies" must not be touched!
-########################################################################
+/***************************************************************
+ * Extension Manager/Repository config file for ext "ncgov_permits".
+ *
+ * Auto generated 14-01-2014 16:10
+ *
+ * Manual updates:
+ * Only the data in the array - everything else is removed by next
+ * writing. "version" and "dependencies" must not be touched!
+ ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'Permits and publications',
@@ -29,7 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
 	'author_company' => 'Netcreators',
-	'version' => '0.5.5',
+	'version' => '0.5.6',
 	'constraints' => array(
 		'depends' => array(
 			'nc_lib' => '',
