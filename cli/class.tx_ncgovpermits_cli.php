@@ -22,27 +22,32 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 	var $xml_template;
 	var $errors;
 	var $sentPublications;
-	
+
 	//Defaults
 	var $creator = '';
 	var $producttypeScheme = 'overheidbm:BekendmakingtypeGemeente';
-	
+
 	function tx_ncgovpermits_cli() {
 		parent::t3lib_cli();
-		
+
 		$this->cli_help['name'] = '';
 		$this->cli_help['synopsis'] = '###OPTIONS###';
 		$this->cli_help['description'] = "";
 		$this->cli_help['examples'] = "";
 		$this->cli_help['author'] = "Erwin de Jong, (c) 2010";
-		
+
 		$this->prefix = 'tx_ncgovpermits_';
 		$this->xml_template = 'EXT:ncgov_permits/templates/publication_xml.html';
-		
+
 		$this->errors = 0;
 		$this->sentPublications = 0;
 	}
-	
+
+	/**
+	 * Main function
+	 * @param array $argv
+	 * @return void
+	 */
 	function cli_main($argv) {
 		$conf = array();
 		foreach ($argv as $arg) {
@@ -54,7 +59,7 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 				$this->displayHelp();
 			}
 		}
-		
+
 		if (empty($conf['user'])) {
 			$this->displayHelp('Missing username!');
 		}
@@ -72,10 +77,10 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 		}
 		elseif (empty($conf['casepage'])) {
 			$this->displayHelp('Missing case page UID!');
-		} 
+		}
 		elseif (empty($conf['creator'])) {
 			$this->displayHelp('Missing creator!');
-		} 
+		}
 		else {
 			// Get publications that have not yet been sent or that have been edited after they were sent
 			$publications = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -83,14 +88,14 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 				'tx_ncgovpermits_permits',
 				'tx_ncgovpermits_permits.pid = ' . $conf['pid'] . ' AND hidden = 0 AND deleted = 0 AND type = 1 AND tstamp > lastpublished AND publishdate <= UNIX_TIMESTAMP(NOW())'
 			);
-			
+
 			if (!empty($publications)) {
 				$objBekendmaking = new Bekendmaking($this->xml_template, $conf['user'], $conf['pass'], $conf['test']);
-				
+
 				foreach ($publications as $publication)
 				{
 					$publicationData = array();
-					
+
 					foreach ($publication as $publicationField => $publicationValue) {
 						//if (strpos($publicationField, $this->prefix) !== false) {
 							//$publicationData[substr($publicationField, strlen($this->prefix))] = $publicationValue;
@@ -98,7 +103,7 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 						//}
 					}
 					//$publicationData['producttype_scheme'] = '';
-					
+
 					// Get producttype
 					/*if ($publicationData['producttype']) {
 						$producttype = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -113,9 +118,9 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 					else {
 						$publicationData['producttype'] = '';
 					}*/
-					
+
 					$publicationData['producttype_scheme'] = $this->producttypeScheme;
-					
+
 					// Get addresses
 					$publicationData['addresses'] = array();
 					$addresses = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -123,7 +128,7 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 						'tx_ncgovpermits_addresses',
 						'uid IN (' . $publicationData['objectaddresses'] . ') AND hidden = 0 AND deleted = 0'
 					);
-					
+
 					$publicationData['location_scheme'] = $publicationData['location'] = '';
 					if (!empty($addresses)) {
 						foreach ($addresses as $address) {
@@ -140,7 +145,7 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 							else {
 								$address['municipality'] = '';
 							}*/
-							
+
 							// Get province
 /*							if ($address['province']) {
 								$province = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -160,8 +165,8 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 
 							$publicationData['addresses'][] = $address;
 						}
-						$firstAddress = $publicationData['addresses'][0];	
-					/* 
+						$firstAddress = $publicationData['addresses'][0];
+					/*
 						 * ncfrans: fix nav commentaar overheid.nl
 						if (!empty($firstAddress['zipcode'])) {
 							$location = $firstAddress['zipcode'];
@@ -175,7 +180,7 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 						} elseif (!empty($firstAddress['province'])) {
 							$publicationData['location_scheme'] = 'overheid:Provincie';
 							$publicationData['location'] = $firstAddress['province'];
-						} 
+						}
 						 */
 						$publicationData['location_scheme'] = 'overheid:Gemeente';
 						$publicationData['location'] = $conf['creator'];
@@ -184,7 +189,7 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 						$publicationData['location'] = $conf['creator'];
 						$publicationData['addresses'][] = array('municipality' => $conf['creator']);
 					}
-					
+
 					// Get parcels
 					$publicationData['parcels'] = array();
 					$parcels = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -207,11 +212,11 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 							else {
 								$parcel['cadastral_municipality'] = '';
 							}*/
-							
+
 							$publicationData['parcels'][] = $parcel;
 						}
 					}
-					
+
 					// Get coordinates
 					$publicationData['coordinates'] = array();
 					$coordinates = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -224,7 +229,7 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 							$publicationData['coordinates'][] = $coordinate;
 						}
 					}
-					
+
 					// Set remaining fields
 					if ($publicationData['lastpublished'] == 0) {
 						$publicationData['transactiontype'] = 'C';
@@ -235,46 +240,46 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 					else {
 						$publicationData['transactiontype'] = 'U';
 					}
-					
+
 					#if (empty($publicationData['transactionid'])) {
 						$publicationData['transactionid'] = $publication['uid'] . time();
 					#}
-					
+
 					#if (empty($publicationData['sequence'])) {
 						$publicationData['sequence'] = '1';
 					#}
-					
+
 					$publicationData['creationdate'] = date('Y-m-d', $publication['crdate']);
-					
+
 					$publicationData['identifier'] = $this->buildURL($conf['base'], $conf['page'], $publication['uid']);
-					
+
 					$publicationData['title'] = $publication['title'];
-					
+
 					$publicationData['creator'] = $conf['creator'];
-					
+
 					$publicationData['modified'] = date('Y-m-d' ,$publication['tstamp']);
-					
+
 					if ($publicationData['validity_start'] > 0) {
 						$publicationData['validity_start'] = date('Y-m-d', $publicationData['validity_start']);
 					}
-					
+
 					if ($publicationData['validity_end'] > 0) {
 						$publicationData['validity_end'] = date('Y-m-d', $publicationData['validity_end']);
 					}
-					
+
 					if ($publicationData['termtype_start'] > 0) {
 						$publicationData['termtype_start'] = date('Y-m-d', $publicationData['termtype_start']);
 					}
 					if ($publicationData['termtype_end'] > 0) {
 						$publicationData['termtype_end'] = date('Y-m-d', $publicationData['termtype_end']);
 					}
-					
+
 					$publicationData['content'] = !empty($publication['publicationbody']) ? $publication['publicationbody'] : $publication['description'];
-					
+
 					#if (empty($publicationData['description'])) {
 						$publicationData['description'] = strip_tags($publicationData['description']);
 					#}
-					
+
 					if (!empty($publicationData['casereference_pub'])) {
 						$case = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 							'uid',
@@ -288,12 +293,12 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 							$publicationData['caseurl'] = '';
 						}
 					}
-					
+
 					// Set data in object
 					$objBekendmaking->setData($publicationData);
-					
+
 					$validData = $objBekendmaking->validateData();
-					
+
 					$pushError = '';
 					if ($validData) {
 						$pushError = $objBekendmaking->process();
@@ -301,7 +306,7 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 					else {
 						$this->displayError('Publicationdata is incomplete or insufficient (uid: ' . $publication['uid'] . ')');
 					}
-					
+
 					if (empty($pushError)) {
 						$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 							'tx_ncgovpermits_permits',
@@ -315,71 +320,61 @@ class tx_ncgovpermits_cli extends t3lib_cli {
 					else {
 						$this->displayError('Server reply for uid ' . $publication['uid'] . ': ' . $pushError);
 					}
-					
+
 					$objBekendmaking->clear();
 				}
 			}
 			else {
 				echo("No publications to send...\n");
 			}
-			
+
 			$this->displayStats();
 		}
 	}
-	
+
+	/**
+	 * Builds url to publication / permit
+	 * @param string $baseURL
+	 * @param integer $pageUID
+	 * @param integer $contentUID
+	 * @return string
+	 */
 	function buildURL($baseURL, $pageUID, $contentUID) {
-		$TTclassName = t3lib_div::makeInstanceClassName('t3lib_timeTrack');
-		$TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
-		$id = isset($HTTP_GET_VARS['id'])?$HTTP_GET_VARS['id']:0;
-		
-		$GLOBALS['TT'] = new $TTclassName();
-		$GLOBALS['TT']->start();
-		
-		$GLOBALS['TSFE'] = new $TSFEclassName($TYPO3_CONF_VARS, $id, '0', 1, '', 
-		'','','');
-		$GLOBALS['TSFE']->connectToMySQL();
-		$GLOBALS['TSFE']->initFEuser();
-		$GLOBALS['TSFE']->fetch_the_id();
-		$GLOBALS['TSFE']->getPageAndRootline();
-		$GLOBALS['TSFE']->initTemplate();
-		$GLOBALS['TSFE']->tmpl->getFileName_backPath = PATH_site;
-		$GLOBALS['TSFE']->forceTemplateParsing = 1;
-		$GLOBALS['TSFE']->getConfigArray();
-		
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
-		$cObj->start(array(),'');
-		
-		$conf = array(
-			'parameter' => $pageUID,
-			'additionalParams' => '&tx_ncgovpermits_controller[id]=' . $contentUID,
-			'returnLast' => 'url',
-			'useCacheHash' => 1
-		);
-		
-		$GLOBALS['TSFE']->config['config']['tx_realurl_enable'] = 0;
-		$url = $baseURL . '/' . $cObj->typoLink(false, $conf);
-		if(strpos($url, 'http://') === FALSE) {
-			$url = 'http://' . $url;
-		}
+		$additionalParams = sprintf('&tx_ncgovpermits_controller[id]=%d', (int)$contentUID);
+		$url = sprintf('http://%s/index.php?id=%d%s&cHash=%s', $baseURL, (int)$pageUID, $additionalParams, t3lib_div::generateCHash($additionalParams));
 		return $url;
 	}
-	
+
+	/**
+	 * Shows error message
+	 * @param string $message
+	 * @return void
+	 */
 	function displayError($message) {
 		echo("! " . $message . "\n");
 		$this->errors++;
 	}
-	
+
+	/**
+	 * Shows statistics
+	 * @return void
+	 */
 	function displayStats() {
 		echo("\nPublications sent: " . $this->sentPublications . "\n");
 		echo("\nErrors: " . $this->errors . "\n");
 		echo("\nDone!\n");
 	}
-	
+
+	/**
+	 * Shows help message
+	 * @param string $message additional message
+	 * @return void
+	 */
 	function displayHelp($message = false) {
 		if ($message) {
 			echo($message . "\n\n");
 		}
-		
+
 		echo("Usage: cli_dispatch.phpsh ncgov_permits base=[www.example.com] pid=[Pid] page=[singleUid] casepage=[case singleUid] user=[Username] pass=[Password] creator=[Creator]\n");
 		exit;
 	}

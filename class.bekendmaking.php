@@ -23,6 +23,13 @@ class Bekendmaking {
 	var $url;
 	var $testurl;
 
+	/**
+	 * Constructor
+	 * @param string $xml_template
+	 * @param string $user
+	 * @param string $pass
+	 * @param boolean $test
+	 */
 	function Bekendmaking($xml_template, $user, $pass, $test = 0) {
 		$this->xml_template = $xml_template;
 		$this->user = $user;
@@ -39,10 +46,19 @@ class Bekendmaking {
 		$this->testurl = 'https://acc1zoekdienst.overheid.nl/BMPushServices/BMPushService.asmx/PushBMContent';
 	}
 
+	/**
+	 * Sets the data
+	 * @param array $data
+	 * @return void
+	 */
 	function setData($data) {
 		$this->data = $data;
 	}
 
+	/**
+	 * Validates data and returns if it was ok
+	 * @return boolean
+	 */
 	function validateData() {
 		$requiredFields = array(
 			'transactiontype',
@@ -76,6 +92,10 @@ class Bekendmaking {
 		return $requiredFilled && $locationFilled && !$locationInvalid;
 	}
 
+	/**
+	 * Validates currently active addresses
+	 * @return boolean
+	 */
 	function validateAddresses() {
 		$return = true;
 		foreach ($this->data['addresses'] as $i => $address) {
@@ -98,6 +118,10 @@ class Bekendmaking {
 		return $return;
 	}
 
+	/**
+	 * Validates parcels
+	 * @return boolean
+	 */
 	function validateParcels() {
 		$return = true;
 		foreach ($this->data['parcels'] as $parcel) {
@@ -113,6 +137,10 @@ class Bekendmaking {
 		return $return;
 	}
 
+	/**
+	 * Validates currently active coordinates
+	 * @return boolean
+	 */
 	function validateCoordinates() {
 		$return = true;
 		foreach ($this->data['coordinates'] as $coordinates) {
@@ -126,6 +154,10 @@ class Bekendmaking {
 		return $return;
 	}
 
+	/**
+	 * Processes the given bekendmaking and pushes it to government
+	 * @return string error
+	 */
 	function process() {
 		$this->buildXML();
 		$response = $this->pushXML();
@@ -142,29 +174,10 @@ class Bekendmaking {
 		return $error;
 	}
 
+	/**
+	 * Creates xml for bekendmaking
+	 */
 	function buildXML() {
-		if ($GLOBALS['TSFE'] === null) {
-			$TTclassName = t3lib_div::makeInstanceClassName('t3lib_timeTrack');
-			$TSFEclassName = t3lib_div::makeInstanceClassName('tslib_fe');
-			$id = isset($HTTP_GET_VARS['id'])?$HTTP_GET_VARS['id']:0;
-
-			$GLOBALS['TT'] = new $TTclassName();
-			$GLOBALS['TT']->start();
-
-			$GLOBALS['TSFE'] = new $TSFEclassName($TYPO3_CONF_VARS, $id, '0', 1, '',
-			'','','');
-			$GLOBALS['TSFE']->connectToMySQL();
-			$GLOBALS['TSFE']->initFEuser();
-			$GLOBALS['TSFE']->fetch_the_id();
-			$GLOBALS['TSFE']->getPageAndRootline();
-			$GLOBALS['TSFE']->initTemplate();
-			$GLOBALS['TSFE']->tmpl->getFileName_backPath = PATH_site;
-			$GLOBALS['TSFE']->forceTemplateParsing = 1;
-			$GLOBALS['TSFE']->getConfigArray();
-		}
-
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
-		$cObj->start(array(),'');
 
 		$absFile = t3lib_div::getFileAbsFileName($this->xml_template);
 		if(is_file($absFile)) {
@@ -173,7 +186,7 @@ class Bekendmaking {
 			die('FATAL: could not read template: ' . $absFile);
 		}
 		//$templateCode = $cObj->fileResource($this->xml_template);
-		$localTemplateCode = $cObj->getSubpart($templateCode, '###XML###');
+		$localTemplateCode = t3lib_parsehtml::getSubpart($templateCode, '###XML###');
 
 		$localMarkerArray = array(
 			'###TRANSACTIETYPE###' => $this->data['transactiontype'],
@@ -204,7 +217,7 @@ class Bekendmaking {
 			'###LOCATIECOORDINATEN###' => ''
 		);
 
-		$temporalTemplateCode = $cObj->getSubpart($localTemplateCode, '###TEMPORAL###');
+		$temporalTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###TEMPORAL###');
 		if(!empty($this->data['validity_start'])) {
 			$temporalMarkerArray = array(
 				'###TEMPORAL_START###' => $this->data['validity_start']
@@ -218,71 +231,76 @@ class Bekendmaking {
 		$temporalSubpartArray = array(
 			'###TEMPORALEND###' => ''
 		);
+		$validityEnd = $this->data['validity_end'];
 
-		if (!empty($this->data['validity_end'])) {
-			$temporalendTemplateCode = $cObj->getSubpart($temporalTemplateCode, '###TEMPORALEND###');
-			$temporalendMarkerArray = array(
-				'###TEMPORAL_END###' => $this->data['validity_end']
-			);
-
-			$temporalSubpartArray['###TEMPORALEND###'] = $cObj->substituteMarkerArrayCached($temporalendTemplateCode, $temporalendMarkerArray);
+		if(empty($validityEnd)) {
+			$validityEnd = $this->data['publishenddate'];
 		}
 
-		$localSubpartArray['###TEMPORAL###'] = $cObj->substituteMarkerArrayCached($temporalTemplateCode, $temporalMarkerArray, $temporalSubpartArray);
+		if (!empty($validityEnd)) {
+			$temporalendTemplateCode = t3lib_parsehtml::getSubpart($temporalTemplateCode, '###TEMPORALEND###');
+			$temporalendMarkerArray = array(
+				'###TEMPORAL_END###' => date('Y-m-d', $validityEnd)
+			);
+
+			$temporalSubpartArray['###TEMPORALEND###'] = $this->substituteMarkerArrayCached($temporalendTemplateCode, $temporalendMarkerArray);
+		}
+
+		$localSubpartArray['###TEMPORAL###'] = $this->substituteMarkerArrayCached($temporalTemplateCode, $temporalMarkerArray, $temporalSubpartArray);
 
 		if (!empty($this->data['publication'])) {
-			$publicatieTemplateCode = $cObj->getSubpart($localTemplateCode, '###PUBLICATIEBLOCK###');
+			$publicatieTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###PUBLICATIEBLOCK###');
 			$publicatieMarkerArray = array(
 				'###PUBLICATIE###' => $this->data['publication']
 			);
-			$localSubpartArray['###PUBLICATIEBLOCK###'] = $cObj->substituteMarkerArrayCached($publicatieTemplateCode, $publicatieMarkerArray);
+			$localSubpartArray['###PUBLICATIEBLOCK###'] = $this->substituteMarkerArrayCached($publicatieTemplateCode, $publicatieMarkerArray);
 		}
 
 		if (!empty($this->data['casereference_pub'])) {
-			$zaakTemplateCode = $cObj->getSubpart($localTemplateCode, '###ZAAK###');
+			$zaakTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###ZAAK###');
 			$zaakMarkerArray = array(
 				'###ZAAKNUMMER###' => $this->data['casereference_pub'],
 				'###ZAAKURL###' => $this->data['caseurl']
 			);
-			$localSubpartArray['###ZAAK###'] = $cObj->substituteMarkerArrayCached($zaakTemplateCode, $zaakMarkerArray);
+			$localSubpartArray['###ZAAK###'] = $this->substituteMarkerArrayCached($zaakTemplateCode, $zaakMarkerArray);
 		}
 
 		if (!empty($this->data['termtype_start']) || !empty($this->data['termtype_end'])) {
-			$termijnTemplateCode = $cObj->getSubpart($localTemplateCode, '###TERMIJN###');
+			$termijnTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###TERMIJN###');
 			$termijnSubpartArray = array(
 				'###STARTTERMIJN###' => '',
 				'###EINDTERMIJN###' => ''
 			);
 
 			if (!empty($this->data['termtype_start'])) {
-				$startTermijnTemplateCode = $cObj->getSubpart($termijnTemplateCode, '###STARTTERMIJN###');
+				$startTermijnTemplateCode = t3lib_parsehtml::getSubpart($termijnTemplateCode, '###STARTTERMIJN###');
 				$startTermijnMarkerArray = array(
 					'###STARTDATUMTERMIJN###' => $this->data['termtype_start']
 				);
-				$termijnSubpartArray['###STARTTERMIJN###'] = $cObj->substituteMarkerArrayCached($startTermijnTemplateCode, $startTermijnMarkerArray);
+				$termijnSubpartArray['###STARTTERMIJN###'] = $this->substituteMarkerArrayCached($startTermijnTemplateCode, $startTermijnMarkerArray);
 			}
 
 			if (!empty($this->data['termtype_end'])) {
-				$eindTermijnTemplateCode = $cObj->getSubpart($termijnTemplateCode, '###EINDTERMIJN###');
+				$eindTermijnTemplateCode = t3lib_parsehtml::getSubpart($termijnTemplateCode, '###EINDTERMIJN###');
 				$eindTermijnMarkerArray = array(
 					'###EINDDATUMTERMIJN###' => $this->data['termtype_end']
 				);
-				$termijnSubpartArray['###EINDTERMIJN###'] = $cObj->substituteMarkerArrayCached($eindTermijnTemplateCode, $eindTermijnMarkerArray);
+				$termijnSubpartArray['###EINDTERMIJN###'] = $this->substituteMarkerArrayCached($eindTermijnTemplateCode, $eindTermijnMarkerArray);
 			}
 
-			$localSubpartArray['###TERMIJN###'] = $cObj->substituteMarkerArrayCached($termijnTemplateCode, null, $termijnSubpartArray);
+			$localSubpartArray['###TERMIJN###'] = $this->substituteMarkerArrayCached($termijnTemplateCode, null, $termijnSubpartArray);
 		}
 
 		if (!empty($this->data['objectreference'])) {
-			$referentienummerTemplateCode = $cObj->getSubpart($localTemplateCode, '###REFERENTIENUMMERBLOCK###');
+			$referentienummerTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###REFERENTIENUMMERBLOCK###');
 			$referentienummerMarkerArray = array(
 				'###REFERENTIENUMMER###' => $this->data['objectreference']
 			);
-			$localSubpartArray['###REFERENTIENUMMERBLOCK###'] = $cObj->substituteMarkerArrayCached($referentienummerTemplateCode, $referentienummerMarkerArray);
+			$localSubpartArray['###REFERENTIENUMMERBLOCK###'] = $this->substituteMarkerArrayCached($referentienummerTemplateCode, $referentienummerMarkerArray);
 		}
 
 		foreach ($this->data['addresses'] as $address) {
-			$adresTemplateCode = $cObj->getSubpart($localTemplateCode, '###LOCATIEADRES###');
+			$adresTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###LOCATIEADRES###');
 			$adresSubpartArray = array(
 				'###POSTCODEHUISNUMMER###' => '',
 				'###GEMEENTEBLOCK###' => '',
@@ -290,7 +308,7 @@ class Bekendmaking {
 			);
 
 			if (!empty($address['zipcode'])) {
-				$postcodehuisnummerTemplateCode = $cObj->getSubpart($adresTemplateCode, '###POSTCODEHUISNUMMER###');
+				$postcodehuisnummerTemplateCode = t3lib_parsehtml::getSubpart($adresTemplateCode, '###POSTCODEHUISNUMMER###');
 				$postcodehuisnummerMarkerArray = array(
 					'###POSTCODE###' => $address['zipcode']
 				);
@@ -301,65 +319,69 @@ class Bekendmaking {
 				);
 
 				if (!empty($address['addressnumber'])) {
-					$huisnummerTemplateCode = $cObj->getSubpart($postcodehuisnummerTemplateCode, '###HUISNUMMERBLOCK###');
+					$huisnummerTemplateCode = t3lib_parsehtml::getSubpart($postcodehuisnummerTemplateCode, '###HUISNUMMERBLOCK###');
 					$huisnummerMarkerArray = array(
 						'###HUISNUMMER###' => $address['addressnumber']
 					);
-					$postcodehuisnummerSubpartArray['###HUISNUMMERBLOCK###'] = $cObj->substituteMarkerArrayCached($huisnummerTemplateCode, $huisnummerMarkerArray);
+					$postcodehuisnummerSubpartArray['###HUISNUMMERBLOCK###'] = $this->substituteMarkerArrayCached($huisnummerTemplateCode, $huisnummerMarkerArray);
 				}
 
 				if (!empty($address['addressnumberadditional'])) {
-					$huisnummertoevoegingTemplateCode = $cObj->getSubpart($postcodehuisnummerTemplateCode, '###HUISNUMMERTOEVOEGINGBLOCK###');
+					$huisnummertoevoegingTemplateCode = t3lib_parsehtml::getSubpart($postcodehuisnummerTemplateCode, '###HUISNUMMERTOEVOEGINGBLOCK###');
 					$huisnummertoevoegingMarkerArray = array(
-						'###HUISNUMMERTOEVOEGINGBLOCK###' => $addresss['addressnumberadditional']
+						'###HUISNUMMERTOEVOEGINGBLOCK###' => $address['addressnumberadditional']
 					);
-					$postcodehuisnummerSubpartArray['###HUISNUMMERTOEVOEGING###'] = $cObj->substituteMarkerArrayCached($huisnummertoevoegingTemplateCode, $huisnummertoevoegingMarkerArray);
+					$postcodehuisnummerSubpartArray['###HUISNUMMERTOEVOEGING###'] = $this->substituteMarkerArrayCached($huisnummertoevoegingTemplateCode, $huisnummertoevoegingMarkerArray);
 				}
 
-				$adresSubpartArray['###POSTCODEHUISNUMMER###'] = $cObj->substituteMarkerArrayCached($postcodehuisnummerTemplateCode, $postcodehuisnummerMarkerArray, $postcodehuisnummerSubpartArray);
+				$adresSubpartArray['###POSTCODEHUISNUMMER###'] = $this->substituteMarkerArrayCached($postcodehuisnummerTemplateCode, $postcodehuisnummerMarkerArray, $postcodehuisnummerSubpartArray);
 			}
 
 			if (!empty($address['municipality'])) {
-				$gemeenteTemplateCode = $cObj->getSubpart($adresTemplateCode, '###GEMEENTEBLOCK###');
+				$gemeenteTemplateCode = t3lib_parsehtml::getSubpart($adresTemplateCode, '###GEMEENTEBLOCK###');
 				$gemeenteMarkerArray = array(
 					'###GEMEENTE###' => $address['municipality']
 				);
-				$adresSubpartArray['###GEMEENTEBLOCK###'] = $cObj->substituteMarkerArrayCached($gemeenteTemplateCode, $gemeenteMarkerArray);
+				$adresSubpartArray['###GEMEENTEBLOCK###'] = $this->substituteMarkerArrayCached($gemeenteTemplateCode, $gemeenteMarkerArray);
 			}
 
 			if (!empty($address['province'])) {
-				$provincieTemplateCode = $cObj->getSubpart($adresTemplateCode, '###PROVINCIEBLOCK###');
+				$provincieTemplateCode = t3lib_parsehtml::getSubpart($adresTemplateCode, '###PROVINCIEBLOCK###');
 				$provincieMarkerArray = array(
 					'###PROVINCIE###' => $address['province']
 				);
-				$adresSubpartArray['###PROVINCIEBLOCK###'] = $cObj->substituteMarkerArrayCached($provincieTemplateCode, $provincieMarkerArray);
+				$adresSubpartArray['###PROVINCIEBLOCK###'] = $this->substituteMarkerArrayCached($provincieTemplateCode, $provincieMarkerArray);
 			}
 
-			$localSubpartArray['###LOCATIEADRES###'] .= $cObj->substituteMarkerArrayCached($adresTemplateCode, null, $adresSubpartArray);
+			$localSubpartArray['###LOCATIEADRES###'] .= $this->substituteMarkerArrayCached($adresTemplateCode, null, $adresSubpartArray);
 		}
 
 		foreach ($this->data['parcels'] as $parcel) {
-			$perceelTemplateCode = $cObj->getSubpart($localTemplateCode, '###LOCATIEPERCEEL###');
+			$perceelTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###LOCATIEPERCEEL###');
 			$perceelMarkerArray = array(
 				'###KADASTRALEGEMEENTE###' => $parcel['cadastremunicipality'],
 				'###SECTIE###' => $parcel['section'],
 				'###NUMMER###' => $parcel['number']
 			);
-			$localSubpartArray['###LOCATIEPERCEEL###'] .= $cObj->substituteMarkerArrayCached($perceelTemplateCode, $perceelMarkerArray);
+			$localSubpartArray['###LOCATIEPERCEEL###'] .= $this->substituteMarkerArrayCached($perceelTemplateCode, $perceelMarkerArray);
 		}
 
 		foreach ($this->data['coordinates'] as $coordinates) {
-			$coordinatenTemplateCode = $cObj->getSubpart($localTemplateCode, '###LOCATIECOORDINATEN###');
+			$coordinatenTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###LOCATIECOORDINATEN###');
 			$coordinatenMarkerArray = array(
 				'###XWAARDE###' => $coordinates['coordinatex'],
 				'###YWAARDE###' => $coordinates['coordinatey']
 			);
-			$localSubpartArray['###LOCATIECOORDINATEN###'] .= $cObj->substituteMarkerArrayCached($coordinatenTemplateCode, $coordinatenMarkerArray);
+			$localSubpartArray['###LOCATIECOORDINATEN###'] .= $this->substituteMarkerArrayCached($coordinatenTemplateCode, $coordinatenMarkerArray);
 		}
 
-		$this->xml = $cObj->substituteMarkerArrayCached($localTemplateCode, $localMarkerArray, $localSubpartArray);
+		$this->xml = $this->substituteMarkerArrayCached($localTemplateCode, $localMarkerArray, $localSubpartArray);
 	}
 
+	/**
+	 * Pushes xml to government
+	 * @return string the result
+	 */
 	function pushXML() {
 		$url = $this->test ? $this->testurl : $this->url;
 		$username = $this->test ? $this->testuser : $this->user;
@@ -369,6 +391,14 @@ class Bekendmaking {
 		return $content;
 	}
 
+	/**
+	 * Pushes data using sockets
+	 * @param type $url
+	 * @param type $username
+	 * @param type $password
+	 * @param type $xml
+	 * @return type
+	 */
 	function fputsRequest($url, $username, $password, $xml) {
 		$url = parse_url($url);
 		$host = $url['host'];
@@ -401,6 +431,14 @@ class Bekendmaking {
 		return $content;
 	}
 
+	/**
+	 * Pushes data using curl
+	 * @param string $url
+	 * @param string $username
+	 * @param string $password
+	 * @param string $xml
+	 * @return string the response
+	 */
 	function curlRequest($url, $username, $password, $xml) {
 		$resource = curl_init();
 
@@ -457,5 +495,127 @@ class Bekendmaking {
 		$this->data = array();
 		$this->xml = '';
 	}
+
+	/**
+	 * COPIED so we're not dependant on TSFE for this work
+	 *
+	 * Multi substitution function with caching.
+	 *
+	 * This function should be a one-stop substitution function for working
+	 * with HTML-template. It does not substitute by str_replace but by
+	 * splitting. This secures that the value inserted does not themselves
+	 * contain markers or subparts.
+	 *
+	 * Note that the "caching" won't cache the content of the substition,
+	 * but only the splitting of the template in various parts. So if you
+	 * want only one cache-entry per template, make sure you always pass the
+	 * exact same set of marker/subpart keys. Else you will be flooding the
+	 * users cache table.
+	 *
+	 * This function takes three kinds of substitutions in one:
+	 * $markContentArray is a regular marker-array where the 'keys' are
+	 * substituted in $content with their values
+	 *
+	 * $subpartContentArray works exactly like markContentArray only is whole
+	 * subparts substituted and not only a single marker.
+	 *
+	 * $wrappedSubpartContentArray is an array of arrays with 0/1 keys where
+	 * the subparts pointed to by the main key is wrapped with the 0/1 value
+	 * alternating.
+	 *
+	 * @param	string		The content stream, typically HTML template content.
+	 * @param	array		Regular marker-array where the 'keys' are substituted in $content with their values
+	 * @param	array		Exactly like markContentArray only is whole subparts substituted and not only a single marker.
+	 * @param	array		An array of arrays with 0/1 keys where the subparts pointed to by the main key is wrapped with the 0/1 value alternating.
+	 * @return	string		The output content stream
+	 * @see substituteSubpart(), substituteMarker(), substituteMarkerInObject(), TEMPLATE()
+	 */
+	public function substituteMarkerArrayCached($content, array $markContentArray = NULL, array $subpartContentArray = NULL, array $wrappedSubpartContentArray = NULL) {
+
+			// If not arrays then set them
+		if (is_null($markContentArray))
+			$markContentArray = array(); // Plain markers
+		if (is_null($subpartContentArray))
+			$subpartContentArray = array(); // Subparts being directly substituted
+		if (is_null($wrappedSubpartContentArray))
+			$wrappedSubpartContentArray = array(); // Subparts being wrapped
+			// Finding keys and check hash:
+		$sPkeys = array_keys($subpartContentArray);
+		$wPkeys = array_keys($wrappedSubpartContentArray);
+		$aKeys = array_merge(array_keys($markContentArray), $sPkeys, $wPkeys);
+		if (!count($aKeys)) {
+			return $content;
+		}
+		asort($aKeys);
+		$storeKey = md5('substituteMarkerArrayCached_storeKey:' . serialize(array(
+			$content, $aKeys
+		)));
+		if ($this->substMarkerCache[$storeKey]) {
+			$storeArr = $this->substMarkerCache[$storeKey];
+			//$GLOBALS['TT']->setTSlogMessage('Cached', 0);
+		} else {
+			//$storeArrDat = $GLOBALS['TSFE']->sys_page->getHash($storeKey);
+			//if (!isset($storeArrDat)) {
+					// Initialize storeArr
+				$storeArr = array();
+
+					// Finding subparts and substituting them with the subpart as a marker
+				foreach ($sPkeys as $sPK) {
+					$content = t3lib_parsehtml::substituteSubpart($content, $sPK, $sPK);
+				}
+
+					// Finding subparts and wrapping them with markers
+				foreach ($wPkeys as $wPK) {
+					$content = t3lib_parsehtml::substituteSubpart($content, $wPK, array(
+						$wPK, $wPK
+					));
+				}
+
+					// traverse keys and quote them for reg ex.
+				foreach ($aKeys as $tK => $tV) {
+					$aKeys[$tK] = preg_quote($tV, '/');
+				}
+				$regex = '/' . implode('|', $aKeys) . '/';
+					// Doing regex's
+				$storeArr['c'] = preg_split($regex, $content);
+				preg_match_all($regex, $content, $keyList);
+				$storeArr['k'] = $keyList[0];
+					// Setting cache:
+				$this->substMarkerCache[$storeKey] = $storeArr;
+
+					// Storing the cached data:
+				//$GLOBALS['TSFE']->sys_page->storeHash($storeKey, serialize($storeArr), 'substMarkArrayCached');
+
+				//$GLOBALS['TT']->setTSlogMessage('Parsing', 0);
+			/*} else {
+					// Unserializing
+				$storeArr = unserialize($storeArrDat);
+					// Setting cache:
+				$this->substMarkerCache[$storeKey] = $storeArr;
+				$GLOBALS['TT']->setTSlogMessage('Cached from DB', 0);
+			}*/
+		}
+
+			// Substitution/Merging:
+			// Merging content types together, resetting
+		$valueArr = array_merge($markContentArray, $subpartContentArray, $wrappedSubpartContentArray);
+
+		$wSCA_reg = array();
+		$content = '';
+			// traversing the keyList array and merging the static and dynamic content
+		foreach ($storeArr['k'] as $n => $keyN) {
+			$content .= $storeArr['c'][$n];
+			if (!is_array($valueArr[$keyN])) {
+				$content .= $valueArr[$keyN];
+			} else {
+				$content .= $valueArr[$keyN][(intval($wSCA_reg[$keyN]) % 2)];
+				$wSCA_reg[$keyN]++;
+			}
+		}
+		$content .= $storeArr['c'][count($storeArr['k'])];
+
+		return $content;
+	}
+
 }
 ?>
