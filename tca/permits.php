@@ -69,6 +69,16 @@ $TCA[$_TABLENAME] = array (
 				'eval' => 'date,required',
 			)
 		),
+		'publishenddate' => array (
+			'exclude' => 0,
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.publishenddate',
+			'config' => array (
+				'type' => 'input',
+				'size' => '12',
+				'max' => '20',
+				'eval' => 'date,required',
+			)
+		),
 		'language' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.language',
@@ -404,7 +414,7 @@ $TCA[$_TABLENAME] = array (
 	),
 	'types' => array (
 		'0' => array('showitem' => ''),
-		'1' => array('showitem' => 'type, hidden, publishdate, producttype, language, title, description;;9;richtext:rte_transform[flag=rte_enabled|mode=ts_css];3-3-3, link, objectaddresses, related'),
+		'1' => array('showitem' => 'type, hidden, publishdate, publishenddate, producttype, language, title, description;;9;richtext:rte_transform[flag=rte_enabled|mode=ts_css];3-3-3, link, objectaddresses, related'),
 		'2' => array('showitem' => 'type'),
 	),
 	'palettes' => array (

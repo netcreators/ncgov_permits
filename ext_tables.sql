@@ -67,12 +67,13 @@ CREATE TABLE tx_ncgovpermits_permits (
 	lots blob,
 	coordinates blob,
 	related blob,
-	
+
 	title text NOT NULL,
 	publishdate int(11) DEFAULT '0' NOT NULL,
+	publishenddate int(11) DEFAULT '0' NOT NULL,
 	link text NOT NULL,
 	publicationbody text NOT NULL,
-	
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -96,7 +97,7 @@ CREATE TABLE tx_ncgovpermits_addresses (
 	city text NOT NULL,
 	municipality text NOT NULL,
 	province text NOT NULL,
-	
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -116,7 +117,7 @@ CREATE TABLE tx_ncgovpermits_lots (
 	cadastremunicipality text NOT NULL,
 	section text NOT NULL,
 	number text NOT NULL,
-	
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -132,11 +133,11 @@ CREATE TABLE tx_ncgovpermits_coordinates (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
-	
+
 	coordinatex text NOT NULL,
 	coordinatey text NOT NULL,
 	coordinatez text NOT NULL,
-	
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
