@@ -1,3 +1,10 @@
+2014-01-14 0.5.6 Frans van der Veen <frans@netcreators.com>
+
+        * Added publication end date
+        * Fixed publication xml publication system, no longer dependant on TSFE (which was causing problems)
+        * added changes to changelog
+        * updated version number to reflect changes
+
 2013-07-06 0.5.5 Jordi Bakker <jordi@netcreators.com>
         * bug in IE 8 jquery not:first doesnt work there - so we set the class in the view
         * added changes to changelog
