@@ -1,7 +1,12 @@
-2014-01-14 0.5.6 Frans van der Veen <frans@netcreators.com>
+2014-01-14 0.5.7 Frans van der Veen <frans@netcreators.com>
 
         * Added publication end date
         * Fixed publication xml publication system, no longer dependant on TSFE (which was causing problems)
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2013-11-08 0.5.6 Jordi Bakker <jordi@netcreators.com>
+        * Changes orderby on permitsfiltered
         * added changes to changelog
         * updated version number to reflect changes
 
