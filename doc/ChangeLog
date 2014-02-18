@@ -1,3 +1,9 @@
+2014-02-18 0.5.8 Jordi Bakker<jordi@netcreators.nl>
+
+        * fix bug in filesize
+        * added changes to changelog
+        * updated version number to reflect changes
+
 2014-01-14 0.5.7 Frans van der Veen <frans@netcreators.com>
 
         * Added publication end date

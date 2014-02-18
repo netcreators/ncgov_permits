@@ -804,10 +804,17 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 								'documents', $document
 							)." _blank"
 						);                                        
-                                        //echo $document . '<br>';
-                                        //t3lib_div::getHostname();
-                                        $lengthstrhostname = strlen(t3lib_div::getHostname());
-                                        $file = substr($document, $lengthstrhostname+2);
+                                    $lengthstrhostname = strlen(t3lib_div::getHostname());
+                                    $file = substr($document, $lengthstrhostname+6);
+
+                                    $findleiden = 999;
+                                    $findleiden = strpos(t3lib_div::getHostname(),'gemeente.leiden.nl');
+
+                                    if ($findleiden == 0){
+                                        // import document path http://www.leiden.nl/fileadmin/vergunningen/...
+                                        // domain website http://gemeente.leiden.nl/
+                                        $file = substr($document, $lengthstrhostname+3);
+                                    }
 
                                         $search_string ='%20';
                                         $file = str_replace($search_string, ' ', $file);
@@ -819,11 +826,16 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                                                 $filename = substr($filename,$pos_underscore+1);
                                         }
 
-                                        $file_size = filesize($file);
+                                        if (file_exists($file)) {
+                                            $file_size = filesize($file);
 
-                                         if ($file_size < 1024) $file_size.' B';
+                                        if ($file_size < 1024) $file_size.' B';
                                             elseif ($file_size < 1048576) $file_size = round($file_size / 1024, 2).' KB';
                                             elseif ($file_size < 1073741824) $file_size = round($file_size / 1048576, 2).' MB';
+
+                                        }else{
+                                            $file_size = '';
+                                        }
 
                                         $file_extension = strtoupper(substr(strrchr(basename($file),'.'),1));
                                            
