@@ -1,3 +1,9 @@
+2014-02-21 0.5.9 Jordi Bakker<jordi@netcreators.nl>
+
+        * Publish Publications - add publish end data when it's empty - default 2 months
+        * added changes to changelog
+        * updated version number to reflect changes
+
 2014-02-18 0.5.8 Jordi Bakker<jordi@netcreators.nl>
 
         * fix bug in filesize
