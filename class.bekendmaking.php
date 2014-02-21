@@ -235,6 +235,10 @@ class Bekendmaking {
 
 		if(empty($validityEnd)) {
 			$validityEnd = $this->data['publishenddate'];
+            if (empty($validityEnd)){
+                // 5184000 -> 60 dagen (2 maanden ongeveer)
+                $validityEnd = time() + 5184000;
+            }
 		}
 
 		if (!empty($validityEnd)) {
