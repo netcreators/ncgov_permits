@@ -165,9 +165,9 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 							$title = ucfirst($this->controller->permitsModel->getField('title')) . '<br />';
 						}
                                                 
-                                                // link the publication to permit (field related) 
-                                                if ($record['related']){ 
-                                                    $link = $this->controller->getHtmlCompliantLinkToController(false,
+                           // link the publication to permit (field related)
+                           /* if ($record['related']){
+                            $link = $this->controller->getHtmlCompliantLinkToController(false,
 							$this->controller->configModel->get('permitPage'),
 							array('id' => $record['related']),
 							false
@@ -178,12 +178,12 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 							array('id' => $record['uid']),
 							false
                                                     );
-                                                }                                                
-						/*$link = $this->controller->getHtmlCompliantLinkToController(false,
+                            }  */
+						$link = $this->controller->getHtmlCompliantLinkToController(false,
 							$this->controller->configModel->get('displayPage'),
 							array('id' => $record['uid']),
 							false
-						);*/
+						);
 						$title = sprintf("<a href='%s'>%s</a>", $link, $title);
 						$this->map->addMarkerByAddress(
 							$address['address'] . ' ' . $address['addressnumber'] . $address['addressnumberadditional'],
@@ -375,16 +375,16 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 					false
 				);
                                 
-                               if($this->controller->getPluginMode() == 'permitsall') {
+                               //if($this->controller->getPluginMode() == 'permitsall') {
                                    $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));    
-                                }else{
+                               // }else{
                                    // link the publication to permit (field related) 
-                                   if ($record['related']){ 
-                                      $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResultPublication(array('id' => $record['related']));    
-                                   }else{
-                                       $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));    
-                                   }
-                                }
+                               //    if ($record['related']){
+                               //       $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResultPublication(array('id' => $record['related']));
+                               //    }else{
+                               //        $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));
+                               //    }
+                               // }
                                 $permit['FIELD_WEEK'] =  date('W', $this->controller->permitsModel->getField('publishdate', true));
                                                           
 				if($this->addAddressMarkersForRecord($record)) {
@@ -760,6 +760,10 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			}
 			$permit['LABEL_FIELDHEADER_'.strtoupper($field)] = $this->getTranslatedLabel('label_fieldheader_' . $field) . $helpText;
 		}
+
+        $permit['LABEL_FIELDHEADER_PERMIT'] = $this->getTranslatedLabel('label_fieldheader_permit');
+        $permit['LABEL_FIELDHEADER_PERMIT_CLICK'] = $this->getTranslatedLabel('label_fieldheader_permit_click');
+
 		$permitIndex = 0;
 		if($this->controller->permitsModel->isLoaded()) {
 			$record = $this->controller->permitsModel->getRecord();
@@ -926,7 +930,9 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 				false
 			);
 
-			if($this->hasGoogleMapsEnabled()) {
+            $permit['FIELD_RELATED'] = $this->controller->getURLToFilteredResultPublication(array('id' => $record['related']));
+
+            if($this->hasGoogleMapsEnabled()) {
 				// google maps stuff
 				$permit['GOOGLE_MAPS'] = $this->map->drawMap();
 				$permit['GOOGLE_MAPS'] = $this->fixIssuesWithMap($permit['GOOGLE_MAPS']);

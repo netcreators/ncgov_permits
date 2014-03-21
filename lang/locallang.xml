@@ -87,6 +87,8 @@
 			<label index="label_fieldheader_imported">Geimporteerd</label>
 			<label index="label_fieldheader_session_number">Sessie nummer</label>
 			<label index="label_return">Terug naar overzicht</label>
+            <label index="label_fieldheader_permit">Vergunning</label>
+            <label index="label_fieldheader_permit_click">details van de vergunning</label>
 
 			<!-- error handling -->
 			<label index="no_records_available">Er zijn voor de door u geselecteerde maand en type geen gegevens aanwezig.</label>
