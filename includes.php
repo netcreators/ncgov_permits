@@ -30,7 +30,7 @@ if(!defined('PATH_tslib')) {
 		print('Error: tslib not found in ' . $_EXTKEY);
 	}
 }
-require_once(PATH_tslib . 'class.tslib_pibase.php');
+//require_once(PATH_tslib . 'class.tslib_pibase.php');
 
 $currentPath = t3lib_extMgm::extPath($_EXTKEY);
 
