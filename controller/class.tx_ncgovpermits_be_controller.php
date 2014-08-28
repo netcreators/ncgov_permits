@@ -25,9 +25,9 @@
 $sCurrentDir = dirname(__FILE__) . '/';
 require_once($sCurrentDir . '../includes.php');
 
-if(!class_exists('tslib_cObj')) {
+/*if(!class_exists('tslib_cObj')) {
 	require_once(PATH_tslib . 'class.tslib_content.php');
-}
+}*/
 
 /**
  * Backend controller(helper) class for 'nc_products' extension.
@@ -41,7 +41,7 @@ class tx_ncgovpermits_be_controller {
 
 	public function initialize() {
 		try {
-			$cObj = t3lib_div::makeInstance('tslib_cObj');
+			$cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tslib_cObj');
 			$this->controller = t3lib_div::makeInstance('tx_ncgovpermits_controller');
 			$this->controller->initialize(array());
 			$this->controller->cObj = $cObj;

@@ -23,15 +23,15 @@ if(t3lib_extMgm::isLoaded('wec_map')) {
 }
 
 // check if tslib is included
-if(!defined('PATH_tslib')) {
+/*if(!defined('PATH_tslib')) {
 	if (@is_dir(PATH_site.'typo3/sysext/cms/tslib/')) {
 		define('PATH_tslib', PATH_site.'typo3/sysext/cms/tslib/');	// other includes
 	} else {
 		print('Error: tslib not found in ' . $_EXTKEY);
 	}
 }
-//require_once(PATH_tslib . 'class.tslib_pibase.php');
-
+require_once(PATH_tslib . 'class.tslib_pibase.php');
+*/
 $currentPath = t3lib_extMgm::extPath($_EXTKEY);
 
 // all included files can now safely rely on $_EXTKEY and $_EXTKEYSHORT to be set!

@@ -57,8 +57,9 @@ class tx_ncgovpermits_wizicon {
 	 * @return	The array with language labels
 	 */
 	function includeLocalLang()	{
-		$llFile = t3lib_extMgm::extPath($this->extKey).'lang/locallang_wizicon.xml';
-		$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
+		$LOCAL_LANG = \TYPO3\CMS\Core\Utility\GeneralUtility::readLLfile(
+    		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ncgov_permits') . 'lang/locallang_wizicon.xml',
+    		$GLOBALS['LANG']->lang);
 		
 		return $LOCAL_LANG;
 	}
