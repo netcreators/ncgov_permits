@@ -103,16 +103,16 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 		// call parent
 		parent::initialize($configuration);
 		// for configuration values, see the config model for this plugin
-		$this->configModel = $this->makeInstance($this->extKeyShort . '_config_model');
+		$this->configModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_config_model');
 		$this->configModel->initialize($this, $configuration);
 
-		$this->logModel = $this->makeInstance($this->extKeyShort . '_log_model');
+		$this->logModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_log_model');
 		$this->logModel->initialize($this);
 
-		$this->xmlModel = $this->makeInstance($this->extKeyShort . '_xml_model');
+		$this->xmlModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_xml_model');
 		$this->xmlModel->initialize($this);
 
-		$this->permitsModel = $this->makeInstance($this->extKeyShort . '_permits_model');
+		$this->permitsModel = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permits_model');
 		$this->permitsModel->initialize($this);
 		if(strpos($this->getPluginMode(), 'permit') !== FALSE) {
 			$this->permitsModel->setModelType(tx_ncgovpermits_permits_model::TYPE_PERMIT);
@@ -313,7 +313,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	 * @return string
 	 */
 	public function getLatestList() {
-		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permit_view');
 		$view->initialize($this, 'latest_list');
 		$end = time();
 		$start = $end - $this->configModel->get('latestDateOffset');
@@ -326,7 +326,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	 * @return string
 	 */
 	public function getList() {
-		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permit_view');
 		$view->initialize($this, 'list');
 		$this->prepareDateFilter();
 		$this->prepareProductTypeFilter();
@@ -343,7 +343,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	 * @return string
 	 */
 	public function getListAll() {
-		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permit_view');
 		$view->initialize($this, 'list');
 		$this->prepareDateFilterAll();
 		$this->prepareProductTypeFilter();
@@ -360,7 +360,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	 * @return string
 	 */
 	public function getDetails() {
-		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permit_view');
 		$view->initialize($this, 'details');
 		$this->permitsModel->loadRecordById(
 			$this->getPiVar('id')
@@ -379,7 +379,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	 * @return string
 	 */
 	public function getDetailsAll() {
-		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permit_view');
 		$view->initialize($this, 'details');
 		$this->permitsModel->loadRecordById(
 			$this->getPiVar('id')
@@ -399,7 +399,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	 * @return string
 	 */
 	public function getDocument() {
-		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permit_view');
 		$view->initialize($this, 'document');
 		$this->permitsModel->loadRecordById(
 			$this->getPiVar('id')
@@ -414,7 +414,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	 * @return string
 	 */
 	public function getDocumentAll() {
-		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permit_view');
 		$view->initialize($this, 'document');
 		$this->permitsModel->loadRecordById(
 			$this->getPiVar('id')
@@ -428,7 +428,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	 * @return log
 	 */
 	public function getPublishPermits() {
-		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permit_view');
 		$view->initialize($this, 'publish');
 		$log = array();
 		$log[] = 'Publishing records ' . date($this->configModel->get('config.dateFormat') . ' H:i:s');
@@ -473,7 +473,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	}
 
 	public function getPublishPublications() {
-		$view = $this->makeInstance($this->extKeyShort . '_permit_view');
+		$view = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_permit_view');
 		$view->initialize($this, 'publish');
 		$this->permitsModel->loadPublishablePublications();
 		$content = $view->getPublicationList();
@@ -804,7 +804,7 @@ class tx_ncgovpermits_controller extends tx_ncgovpermits_base_controller {
 	 */
 	function getException(&$exception) {
 		try {
-			$exceptionView = $this->makeInstance($this->extKeyShort . '_exception_view');
+			$exceptionView = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($this->extKeyShort . '_exception_view');
 			$exceptionView->initialize($this);
 			$content = $exceptionView->getContent($exception);
 		} catch(Exception $critical) {
