@@ -22,11 +22,10 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-$currentDir = dirname(__FILE__) . '/';
-require_once($currentDir . '../includes.php');
+namespace Netcreators\NcgovPermits\Domain\Model;
 
-class tx_ncgovpermits_config_model extends tx_nclib_config_model {
-	function initialize(&$controller, $typoScript) {
+class Config extends \tx_nclib_config_model {
+	function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller, $typoScript) {
 		parent::initialize($controller, $typoScript);
 
 		// Local configuration defaults for this plugin
@@ -36,7 +35,7 @@ class tx_ncgovpermits_config_model extends tx_nclib_config_model {
 		$defaults = array (
 			'templates.' => array(
 				// the exceptionview has the path hardcoded, since an exception can occur in the config model
-				'permitView' => 'EXT:' . $controller->extKey . '/templates/permit_view.html',
+				'permitView' => 'EXT:' . $controller->extKey . '/Resources/Private/Templates/Permit.html',
 			),
 			// should wrap content in baseclass?
 			'wrapInBaseClass' => '0',
@@ -61,7 +60,7 @@ class tx_ncgovpermits_config_model extends tx_nclib_config_model {
 			// debug mode on?
 			'debugMode' => false,
 			// base images folder
-			'imagesBasePath' => t3lib_extMgm::siteRelPath($this->controller->extKey) . 'res/images/',
+			'imagesBasePath' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->controller->extKey) . 'res/images/',
 			// the css file to use
 			'includeCssFile' => 'res/css/style.css',
 			// is the cssFile relative to the extension?
@@ -179,7 +178,4 @@ class tx_ncgovpermits_config_model extends tx_nclib_config_model {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_config_model.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_config_model.php']);
-}
 ?>

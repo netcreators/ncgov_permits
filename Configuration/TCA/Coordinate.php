@@ -14,7 +14,7 @@ $TCA[$_TABLENAME] = array (
 	'columns' => array (
 		'coordinatex' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.coordinatex',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.coordinatex',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -23,7 +23,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'coordinatey' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.coordinatey',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.coordinatey',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -32,7 +32,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'coordinatez' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.coordinatez',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.coordinatez',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',

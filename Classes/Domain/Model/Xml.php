@@ -22,11 +22,10 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-$currentDir = dirname(__FILE__) . '/';
-require_once($currentDir . '../includes.php');
+namespace Netcreators\NcgovPermits\Domain\Model;
 
-class tx_ncgovpermits_xml_model extends tx_nclib_xml_model {
-	function initialize(&$controller) {
+class Xml extends \tx_nclib_xml_model {
+	function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller) {
 		parent::initialize($controller);
 	}
 
@@ -34,11 +33,12 @@ class tx_ncgovpermits_xml_model extends tx_nclib_xml_model {
 	 * Reads gov xml file, returns valuelist
 	 * @param $file
 	 * @param $topicanaidAsValue
-	 * @return unknown_type
+	 * @throws \Exception
+	 * @return array
 	 */
 	public function getGovXmlValueList($file, $topicanaidAsValue) {
 		if(!$this->loadXMLFromFile($file)) {
-			$result = false;
+			throw new \Exception('Could not load XML file: ' . $file);
 		} else {
 			$this->xmlRoot->registerXPathNameSpace('ns', 'http://standaarden.overheid.nl/owms/terms');
 			$items = $this->xmlRoot->xpath('/ns:cv');
@@ -58,28 +58,25 @@ class tx_ncgovpermits_xml_model extends tx_nclib_xml_model {
 	/**
 	 * Reads gov txt file, returns valuelist
 	 * @param $file
-	 * @param $topicanaidAsValue
-	 * @return unknown_type
+	 * @return array
 	 */
 	public function getGovTxtValueList($file) {
-		$absFile = t3lib_div::getFileAbsFileName($file);
+		$absFile = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($file);
 		$lines = file($absFile, FILE_IGNORE_NEW_LINES);
-		if(!$lines) {
-			$result = false;
-		} else {
-			$result = array();
-			foreach($lines as $index=>$line) {
-				$line = trim($line);
-				if($index == 0
-					||$line[0] == '#'
-					|| empty($line)) {
-					// skip comments, empty lines
-					// and the first line (which for some reason is a comment, but does not start with #)
-					continue;
-				}
-				$result[$line] = $line;
+		$result = array();
+
+		foreach($lines as $index=>$line) {
+			$line = trim($line);
+			if($index == 0
+				||$line[0] == '#'
+				|| empty($line)) {
+				// skip comments, empty lines
+				// and the first line (which for some reason is a comment, but does not start with #)
+				continue;
 			}
+			$result[$line] = $line;
 		}
+
 		return $result;
 	}
 
@@ -95,10 +92,6 @@ class tx_ncgovpermits_xml_model extends tx_nclib_xml_model {
 	public final function onRecordIndexChange() {
 		$this->setRecord($this->getCurrentRecord(), true);
 	}
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_xml_model.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_xml_model.php']);
 }
 
 ?>

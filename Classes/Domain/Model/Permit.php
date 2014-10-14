@@ -23,17 +23,23 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-$currentDir = dirname(__FILE__) . '/';
-require_once($currentDir . '../includes.php');
+namespace Netcreators\NcgovPermits\Domain\Model;
 
-class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
+use Netcreators\NcgovPermits\Controller\PermitController;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+class Permit extends Base {
+	/**
+	 * @var array
+	 */
+	protected $publications = array();
 	private $transactionId;
 	protected $addresses, $coordinates, $lots;
 	protected $modelType;
 	const TYPE_PERMIT = 0;
 	const TYPE_PUBLICATION = 1;
 
-	function initialize(&$controller) {
+	function initialize(PermitController &$controller) {
 		parent::initialize($controller);
 		$this->addresses = false;
 		$this->lots = false;
@@ -59,7 +65,8 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 	/**
 	 * Loads all permit records.
 	 *
-	 * @return boolean true if succesful, false otherwise.
+	 * @throws \tx_nclib_exception
+	 * @return boolean true if successful, false otherwise.
 	 */
 	public function loadPermits() {
 		$pageIds = $this->database->getPageIdsRecursive(
@@ -67,7 +74,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = '*';
 		$where = array(
@@ -81,7 +88,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 		$this->database->clear();
 		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$this->setIterationArray($records);
@@ -91,8 +98,9 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 	/**
 	 * Loads records for the specified page.
 	 *
-	 * @param inteager $iPageId	the parent pageid
-	 * @return boolean true if succesful, false otherwise.
+	 * @throws \tx_nclib_exception
+	 * @internal param int $iPageId the parent pageid
+	 * @return boolean true if successful, false otherwise.
 	 */
 	public function loadPublishablePermits() {
 		$pageIds = $this->database->getPageIdsRecursive(
@@ -100,7 +108,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = '*';
 		$where = array(
@@ -118,7 +126,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 		$this->database->clear();
 		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy, $limit);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$this->setIterationArray($records);
@@ -128,7 +136,8 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 	/**
 	 * Loads records for the configured page.
 	 *
-	 * @return boolean true if succesful, false otherwise.
+	 * @throws \tx_nclib_exception
+	 * @return boolean true if successful, false otherwise.
 	 */
 	public function loadPublishablePublications() {
 		$pageIds = $this->database->getPageIdsRecursive(
@@ -136,7 +145,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = '*';
 		$where = array(
@@ -153,7 +162,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 		$this->database->clear();
 		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$this->setIterationArray($records);
@@ -178,6 +187,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 	/**
 	 * Loads the time range for the permits (oldest-newest)
+	 * @throws \tx_nclib_exception
 	 * @return array [startTime], [endTime]
 	 */
 	public function getTimeRange() {
@@ -186,7 +196,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = 'MIN(publishdate) as startTime, MAX(publishdate) as endTime';
 		$where = array(
@@ -203,7 +213,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 		$this->database->clear();
 
 		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$result = array(
@@ -215,8 +225,9 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 	/**
 	 * Loads items for a certain daterange
-	 * @param integer $iStartTime
-	 * @param integer $iEndTime
+	 * @param integer $startTime
+	 * @param integer $endTime
+	 * @throws \tx_nclib_exception
 	 * @return boolean
 	 */
 	public function loadPermitsForRange($startTime, $endTime) {
@@ -225,7 +236,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = '*';
 		if($endTime > time()) {
@@ -245,7 +256,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 		$this->database->clear();
 		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			$this->setIterationArray(array());	// don't exactly know why...
 			return false;
 		}
@@ -255,6 +266,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 	/**
 	 * Loads items filtered by year/month, fulltext search phrase, productType and phase
+	 * @throws \tx_nclib_exception
 	 * @return boolean
 	 */
 	public function loadPermitsFiltered() {
@@ -270,7 +282,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 		$termType = $this->controller->getPiVar('termType');
 		$phaseList = array();
 		$phases = $this->controller->getPiVar('phase');
-		if(tx_nclib::isLoopable($phases)) {
+		if(\tx_nclib::isLoopable($phases)) {
 			foreach($phases as $key => $phase) {
 				if($phase) {
 					$phaseList[] = $this->controller->phaseFilter[$key];
@@ -288,7 +300,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = 'permits.*';
 		/*if($endTime > time()) {
@@ -358,12 +370,13 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			if (count($arrReq) > 1) {
 				$skipRegionSearch = false;
 				try {
-					$client = new SoapClient("http://api.pro6pp.nl/v1/soap/api.wsdl");
+					$client = new \SoapClient("http://api.pro6pp.nl/v1/soap/api.wsdl");
 					$result = $client->autocomplete($arrReq); 
-				} catch (Exception $e) {
+				} catch (\Exception $e) {
 					$skipRegionSearch = true;
 				}
 				if(!$skipRegionSearch) {
+					/** @var object $result */
 					$arrRes = get_object_vars($result->results->result);
 
 					$rEarth = 6371;
@@ -384,14 +397,14 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 					$coordinatesWhere = $this->database->getWhere($coordinatesWhere);
 					$coordinatesRecords = $this->database->getQueryRecords($coordinatesTable, 'uid', $coordinatesWhere);		
 
-					if(!$coordinatesRecords || !tx_nclib::isLoopable($coordinatesRecords)) {
+					if(!$coordinatesRecords || !\tx_nclib::isLoopable($coordinatesRecords)) {
 						//$where[] = '1=0';
 					}
 					else {
 						foreach($coordinatesRecords as $record) {
 							$coordinatesIds[] = $record['uid'];
 						}
-						$this->setIterationArray($records);
+						$this->setIterationArray($coordinatesRecords);
 						$where[] = sprintf('permits.coordinates in (%s)', implode(',', $coordinatesIds));
 					}
 				}
@@ -405,7 +418,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			);
 			$addressWhere = $this->database->getWhere($addressWhere);
 			$addressRecords = $this->database->getQueryRecords($addressTable, 'uid', $addressWhere);
-			if(tx_nclib::isLoopable($addressRecords)) {
+			if(\tx_nclib::isLoopable($addressRecords)) {
 				foreach($addressRecords as $record) {
 					$addressIds[] = $record['uid'];
 				}
@@ -427,7 +440,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 		$this->database->clear();
 		$records = $this->database->getQueryRecords($table, $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			$this->setIterationArray(array());
 			return false;
 		}
@@ -468,7 +481,6 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 	 * @return string
 	 */
 	public function getTitle() {
-		$result = false;
 		if($this->isPermit()) {
 			$addresses = $this->getField('objectaddresses');
 			if($addresses != false) {
@@ -497,7 +509,8 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 	/**
 	 * Returns the type of spatial information
-	 * @return 'PostcodeHuisnummer', 'Gemeente', 'Provincie', 'Waterschap' or false if none set
+	 * @param int $index
+	 * @return bool|string 'PostcodeHuisnummer', 'Gemeente', 'Provincie', 'Waterschap' or false if none set
 	 */
 	public function getOwmsSpatialType($index=0) {
 		$result = false;
@@ -518,6 +531,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 	/**
 	 * Returns the address.
+	 * @param int $index
 	 * @return string
 	 */
 	public function getAddress($index=0) {
@@ -555,6 +569,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 	/**
 	 * Loads the product types for the permits
+	 * @throws \tx_nclib_exception
 	 * @return array
 	 */
 	public function getProductTypes() {
@@ -563,7 +578,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = 'DISTINCT producttype as productType';
 		$startTime = $this->controller->dateFilter['iStartTime'];
@@ -584,7 +599,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 		$this->database->clear();
 
 		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$result = array();
@@ -596,6 +611,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 	/**
 	 * Loads the phases for the permits
+	 * @throws \tx_nclib_exception
 	 * @return array
 	 */
 	public function getPhases() {
@@ -604,7 +620,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = 'DISTINCT phase';
 		$startTime = $this->controller->dateFilter['iStartTime'];
@@ -625,7 +641,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 		$this->database->clear();
 
 		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$result = array();
@@ -637,6 +653,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 	/**
 	 * Loads the term types for the permits
+	 * @throws \tx_nclib_exception
 	 * @return array
 	 */
 	public function getTermTypes() {
@@ -645,7 +662,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = 'DISTINCT termtype';
 		$startTime = $this->controller->dateFilter['iStartTime'];
@@ -666,7 +683,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 		$this->database->clear();
 
 		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$result = array();
@@ -675,9 +692,10 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 		}
 		return $result;
 	}
-	
+
 	/**
 	 * Returns the spacial value
+	 * @param int $index
 	 * @return string
 	 */
 	public function getOwmsSpatialValue($index=0) {
@@ -731,13 +749,13 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 		if(empty($list)) {
 			$list = false;
 		} else {
-			$list = t3lib_div::trimExplode(',', $list);
+			$list = GeneralUtility::trimExplode(',', $list);
 		}
 		return $list;
 	}
 	protected function _getField_getDocumentTypes($field) {
 		$list = $this->getField($field, true);
-		$list = t3lib_div::trimExplode(',', $list);
+		$list = GeneralUtility::trimExplode(',', $list);
 		return $list;
 	}
 	protected function _getField_getCreationDate($field) {
@@ -789,7 +807,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = '*';
 		$addressIds = $this->getField('objectaddresses', true);
@@ -808,7 +826,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 		$this->database->clear();
 		$records = $this->database->getQueryRecords($this->controller->extKeyShort . '_addresses', $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$this->addresses = $records;
@@ -823,7 +841,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = '*';
 		$addressIds = $this->getField('lots', true);
@@ -842,7 +860,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 		$this->database->clear();
 		$records = $this->database->getQueryRecords($this->controller->extKeyShort . '_lots', $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$this->lots = $records;
@@ -857,7 +875,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = '*';
 		$addressIds = $this->getField('coordinates', true);
@@ -876,14 +894,14 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 		$this->database->clear();
 		$records = $this->database->getQueryRecords($this->controller->extKeyShort . '_coordinates', $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$this->coordinates = $records;
 		return $records;
 	}
 	protected function _getField_getPublications() {
-		if($this->publications !== false) {
+		if($this->publications) {
 			return $this->publications;
 		}
 		$pageIds = $this->database->getPageIdsRecursive(
@@ -891,15 +909,15 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {
-			throw new tx_nclib_exception('label_error_no_pages_found', $this->controller);
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = '*';
-		$casereference = $this->getField('casereference', true);
-		if(empty($casereference)) {
+		$caeseReference = $this->getField('casereference', true);
+		if(empty($caeseReference)) {
 			return false;
 		}
 		$where = array(
-			'casereference_pub = ' . $casereference,
+			'casereference_pub = ' . $caeseReference,
 			'type=' . self::TYPE_PUBLICATION,
 			'hidden=0',
 			'deleted=0',
@@ -911,7 +929,7 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 		$this->database->clear();
 		$records = $this->database->getQueryRecords($this->controller->extKeyShort . '_permits', $fields, $where, $groupBy, $orderBy);
-		if(!$records || !tx_nclib::isLoopable($records)) {
+		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
 		$this->publications = $records;
@@ -955,13 +973,13 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 
 	/**
 	 * Returns the filetype of the document, deduced from the extension.
-	 * @param $index		the index of the document being investigated
-	 * @return unknown_type
+	 * @param int $index		the index of the document being investigated
+	 * @return string
 	 */
 	public function getFileTypeFromDocument($index) {
 		$documents = $this->getField('documents');
 		$document = $documents[$index];
-		$result = t3lib_div::split_fileref($document);
+		$result = GeneralUtility::split_fileref($document);
 		$ext = strtolower($result['realFileext']);
 		if(empty($ext)) {
 			$ext = strtolower($result['fileext']);
@@ -1027,10 +1045,6 @@ class tx_ncgovpermits_permits_model extends tx_ncgovpermits_base_model {
 			$this->addresses = false;
 		}
 	}
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_owms_model.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_owms_model.php']);
 }
 
 ?>

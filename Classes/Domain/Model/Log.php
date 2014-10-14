@@ -22,13 +22,12 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-$currentDir = dirname(__FILE__) . '/';
-require_once($currentDir . '../includes.php');
+namespace Netcreators\NcgovPermits\Domain\Model;
 
-class tx_ncgovpermits_log_model extends tx_ncgovpermits_base_model {
+class Log extends Base {
 	private $messageNumber;
 
-	function initialize(&$controller) {
+	function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller) {
 		parent::initialize($controller);
 		$this->messageNumber = 0;
 	}
@@ -37,14 +36,15 @@ class tx_ncgovpermits_log_model extends tx_ncgovpermits_base_model {
 	 * Writes a log message with a certain type
 	 *
 	 * @param string $message the log message.
+	 * @param array $variables
 	 * @param string $type the type of the message
-	 * @return boolean true when succesful
-	 * @throws tx_nclib_exception if a query error occurs
+	 * @param bool $timestamp
+	 * @return boolean true when successful
 	 */
-	public function log($message, $variables = false, $type = 'message', $timestamp = false) {
+	public function log($message, $variables = array(), $type = 'message', $timestamp = false) {
 		$this->messageNumber++;
-		if($variables !== false && tx_nclib::isLoopable($variables)) {
-			$messages .= ' (';
+		if($variables !== false && \tx_nclib::isLoopable($variables)) {
+			$message .= ' (';
 			$index = 0;
 			foreach($variables as $key=>$value) {
 				if($index > 0) {
@@ -56,7 +56,7 @@ class tx_ncgovpermits_log_model extends tx_ncgovpermits_base_model {
 			$message .= ')';
 		}
 		if($this->controller->configModel->get('logFolder') === false) {
-			$pageId = tx_nclib_tsfe_model::getPageId();
+			$pageId = \tx_nclib_tsfe_model::getPageId();
 		} else {
 			$pageId = $this->controller->configModel->get('logFolder');
 		}
@@ -87,10 +87,6 @@ class tx_ncgovpermits_log_model extends tx_ncgovpermits_base_model {
 	public final function onRecordIndexChange() {
 		$this->setRecord($this->getCurrentRecord(), true);
 	}
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_log_model.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_log_model.php']);
 }
 
 ?>

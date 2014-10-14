@@ -23,14 +23,15 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-$currentDir = dirname(__FILE__) . '/';
-require_once($currentDir . '../includes.php');
+namespace Netcreators\NcgovPermits\View;
 
-class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+class PermitView extends BaseView {
 
 	/**
 	 * WecMap Google Map API object
-	 * @var tx_wecmap_map_google
+	 * @var \tx_wecmap_map_google
 	 */
 	protected $map;
 
@@ -42,11 +43,17 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	protected $googleMapsEnabled = 0;
 
 	/**
+	 * @var array
+	 */
+	protected $conversionMap;
+
+	/**
 	 * Initializes the class.
 	 *
-	 * @param object $controller the controller object
+	 * @param \Netcreators\NcgovPermits\View\PermitView $controller the controller object
+	 * @param string $mode
 	 */
-	public function initialize(&$controller, $mode) {
+	public function initialize(\Netcreators\NcgovPermits\View\PermitView &$controller, $mode) {
 		parent::initialize($controller);
 		$this->addCssIncludeToHeader(
 			$this->controller->configModel->get('includeCssFile'),
@@ -119,8 +126,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		if(mb_check_encoding($input,'UTF-8')) {
 			$result = $input; // no need for the rest if it's all valid UTF-8 already
 		} else {
-			$result='';
-			$char='';
+			$output = '';
 			$rest='';
 			while((strlen($input))>0){
 				if(preg_match($normalCharacterRegularExpression, $input, $match) == 1) {
@@ -147,9 +153,9 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	 */
 	function addAddressMarkersForRecord($record) {
 		$addressesAdded = false;
-		if(tx_nclib::isLoopable($record['objectaddresses'])) {
-			foreach($record['objectaddresses'] as $index => $address) {
-				if(tx_nclib::isLoopable($address)) {
+		if(\tx_nclib::isLoopable($record['objectaddresses'])) {
+			foreach($record['objectaddresses'] as $address) {
+				if(\tx_nclib::isLoopable($address)) {
 					if($this->hasGoogleMapsEnabled() && (!empty($address['address']) || !empty($address['municipality']))) {
 						$addressesAdded = true;
 						$city = $address['city'];
@@ -321,39 +327,39 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                 
 
 		$permitIndex = 0;
-                $firsttime = true;
-                $previousweeknumber = 0;
+		$firsttime = true;
+		$previousweeknumber = 0;
 		if($this->controller->permitsModel->getCount() > 0) {
 			$addressesAdded = false;
 			while ($this->controller->permitsModel->hasNextRecord()) {
 				$record = $this->controller->permitsModel->getRecord();    
                                
-                               //$weeknumber = (int)date('W', $this->controller->permitsModel->getField('publishdate', true));                              
-                               $weeknumber = (int)date('oW', $this->controller->permitsModel->getField('publishdate', true));                              
-                               $strweeknumber = date('W', $this->controller->permitsModel->getField('publishdate', true));
-                               //$year = date('Y', $this->controller->permitsModel->getField('publishdate', true));                                         
-                               $year = date('o', $this->controller->permitsModel->getField('publishdate', true)); 
-                               $weeknumberyear=$weeknumber.$year;
-                               //$weeknumberindex = $weeknumber+$year;
-                               //$weeknumberyear =  $weeknumber.$year;
-                               //$weeknumberyearstr = strval($weeknumber.$year);                       
-                                //if ($previousweeknumber != $weeknumber)
-                               if ($previousweeknumber != $weeknumberyear)
-                                {
-                                   $permitIndex = 0; 
-                                   $permitweek['WEEKNUMBER'] = 'wk'.$strweeknumber;
-                                   $permitweek['WEEKNUMBERSTRING'] = 'Week '.$strweeknumber.' '.$year;
-                                   if ($firsttime == true){
-                                       $permitweek['CLASS'] = 'class=active';
-                                       $permitweek['PERMITSRESULTCLASS'] = 'permit-result-active';
-                                       $firsttime = false;
-                                   }else{
-                                       $permitweek['CLASS'] = 'class=not-active';
-                                       $permitweek['PERMITSRESULTCLASS'] = 'permit-result-not-active';
-                                   }                                       
-                                   
-                                   $subparts['RECORDS'][$weeknumberyear] = $permitweek;                                               
-                                }                                   
+			    //$weeknumber = (int)date('W', $this->controller->permitsModel->getField('publishdate', true));
+			    $weeknumber = (int)date('oW', $this->controller->permitsModel->getField('publishdate', true));
+			    $strweeknumber = date('W', $this->controller->permitsModel->getField('publishdate', true));
+			    //$year = date('Y', $this->controller->permitsModel->getField('publishdate', true));
+			    $year = date('o', $this->controller->permitsModel->getField('publishdate', true));
+			    $weeknumberyear=$weeknumber.$year;
+			    //$weeknumberindex = $weeknumber+$year;
+			    //$weeknumberyear =  $weeknumber.$year;
+			    //$weeknumberyearstr = strval($weeknumber.$year);
+				//if ($previousweeknumber != $weeknumber)
+			    if ($previousweeknumber != $weeknumberyear)
+				{
+				   $permitIndex = 0;
+				   $permitweek['WEEKNUMBER'] = 'wk'.$strweeknumber;
+				   $permitweek['WEEKNUMBERSTRING'] = 'Week '.$strweeknumber.' '.$year;
+				   if ($firsttime == true){
+					   $permitweek['CLASS'] = 'class=active';
+					   $permitweek['PERMITSRESULTCLASS'] = 'permit-result-active';
+					   $firsttime = false;
+				   }else{
+					   $permitweek['CLASS'] = 'class=not-active';
+					   $permitweek['PERMITSRESULTCLASS'] = 'permit-result-not-active';
+				   }
+
+				   $subparts['RECORDS'][$weeknumberyear] = $permitweek;
+				}
 				foreach($permitFields as $field) {
 					$content = $this->getFieldWrap(
 						$configBasePath,
@@ -375,17 +381,17 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 					false
 				);
                                 
-                               //if($this->controller->getPluginMode() == 'permitsall') {
-                                   $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));    
-                               // }else{
-                                   // link the publication to permit (field related) 
-                               //    if ($record['related']){
-                               //       $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResultPublication(array('id' => $record['related']));
-                               //    }else{
-                               //        $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));
-                               //    }
-                               // }
-                                $permit['FIELD_WEEK'] =  date('W', $this->controller->permitsModel->getField('publishdate', true));
+				//if($this->controller->getPluginMode() == 'permitsall') {
+				$permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));
+				// }else{
+				// link the publication to permit (field related)
+				//    if ($record['related']){
+				//       $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResultPublication(array('id' => $record['related']));
+				//    }else{
+				//        $permit['FIELD_LINK'] = $this->controller->getURLToFilteredResult(array('id' => $record['uid']));
+				//    }
+				// }
+				$permit['FIELD_WEEK'] =  date('W', $this->controller->permitsModel->getField('publishdate', true));
                                                           
 				if($this->addAddressMarkersForRecord($record)) {
 					$addressesAdded = true;
@@ -398,7 +404,6 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 				$this->controller->permitsModel->moveToNextRecord();
 			}
                         
-                        //var_dump( $subparts['RECORDS']);
 			if($addressesAdded === false) {
 				$subparts['HAS_MAPS'] = array();
 				$this->disableGoogleMaps();
@@ -410,19 +415,19 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			} else {
 				$subparts['GOOGLE_MAPS'] = '';
 			}
-			
-		} else {
-			$subparts['RECORDS_AVAILABLE'] = array(
+
+			} else {
+				$subparts['RECORDS_AVAILABLE'] = array(
 				$this->getTranslatedLabel('no_records_available')
 			);
 			$subparts['HAS_MAPS'] = array();
 		}
-                $subparts['PATH']= '/typo3conf/ext/ncgov_permits'; 
+		$subparts['PATH']= '/typo3conf/ext/ncgov_permits';
                 
 		$subparts['DATE_FILTER'] = $this->getDateFilterAll();
 		$subparts['FULLTEXT_FILTER'] = $this->getFulltextFilter();
-                $subparts['MONTH_FILTER'] = $this->getMonthFilter();
-                $subparts['YEAR_FILTER'] = $this->getYearFilter();                
+		$subparts['MONTH_FILTER'] = $this->getMonthFilter();
+		$subparts['YEAR_FILTER'] = $this->getYearFilter();
 		$subparts['PRODUCT_TYPE_FILTER'] = $this->getProductTypeFilter();
 		$subparts['PHASE_FILTER'] = $this->getPhaseFilter();
 		$subparts['TERMTYPE_FILTER'] = $this->getTermTypeFilter();
@@ -549,7 +554,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			);
 		}
 		if($this->controller->configModel->get('showDetailsFieldList') != FALSE) {
-			$permitFields = t3lib_div::trimExplode(',', $this->controller->configModel->get('showDetailsFieldList'));
+			$permitFields = GeneralUtility::trimExplode(',', $this->controller->configModel->get('showDetailsFieldList'));
 		}
 		foreach($permitFields as $field) {
 			$helpText = '';
@@ -561,7 +566,6 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			}
 			$permit['LABEL_FIELDHEADER_'.strtoupper($field)] = $this->getTranslatedLabel('label_fieldheader_' . $field) . $helpText;
 		}
-		$permitIndex = 0;
 		if($this->controller->permitsModel->isLoaded()) {
 			$record = $this->controller->permitsModel->getRecord();
 			$permit['FIELD_ADDRESS'] = $this->controller->permitsModel->getAddress();
@@ -590,7 +594,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 					}
 				}
 			}
-			if(tx_nclib::isLoopable($record['documents'])) {
+			if(\tx_nclib::isLoopable($record['documents'])) {
 				foreach($record['documents'] as $index => $document) {
 					$doctype = $record['documenttypes'][$index];
 
@@ -614,9 +618,9 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			$addressesAdded = $this->addAddressMarkersForRecord($record);
 			
 			$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
-			if(tx_nclib::isLoopable($record['objectaddresses'])) {
+			if(\tx_nclib::isLoopable($record['objectaddresses'])) {
 				foreach($record['objectaddresses'] as $index => $address) {
-					if(tx_nclib::isLoopable($address)) {
+					if(\tx_nclib::isLoopable($address)) {
 						foreach($address as $key=>$value) {
 							if(array_search($key, $skipFields) === false) {
 								$permit['ADDRESSES'][$index]['LABEL_FIELDHEADER_'.strtoupper($key)] =
@@ -639,9 +643,9 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 				$this->disableGoogleMaps();
 			}
 			$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
-			if(tx_nclib::isLoopable($record['lots'])) {
+			if(\tx_nclib::isLoopable($record['lots'])) {
 				foreach($record['lots'] as $index => $lot) {
-					if(tx_nclib::isLoopable($lot)) {
+					if(\tx_nclib::isLoopable($lot)) {
 						foreach($lot as $key=>$value) {
 							if(array_search($key, $skipFields) === false) {
 								$permit['LOTS'][$index]['LABEL_FIELDHEADER_'.strtoupper($key)] =
@@ -659,8 +663,8 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			} else {
 				$permit['LOTS'] = array();
 			}
-			$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
-			if(tx_nclib::isLoopable($record['coordinates'])) {
+			//$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
+			if(\tx_nclib::isLoopable($record['coordinates'])) {
 				foreach($record['coordinates'] as $index => $coordinates) {
 					$permit['COORDINATES'][$index]['LABEL_FIELDHEADER_COORDINATES'] =
 						$this->getTranslatedLabel('label_fieldheader_coordinates') . ' (x, y, z)';
@@ -748,7 +752,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			);
 		}
 		if($this->controller->configModel->get('showDetailsFieldList') != FALSE) {
-			$permitFields = t3lib_div::trimExplode(',', $this->controller->configModel->get('showDetailsFieldList'));
+			$permitFields = GeneralUtility::trimExplode(',', $this->controller->configModel->get('showDetailsFieldList'));
 		}
 		foreach($permitFields as $field) {
 			$helpText = '';
@@ -764,7 +768,6 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
         $permit['LABEL_FIELDHEADER_PERMIT'] = $this->getTranslatedLabel('label_fieldheader_permit');
         $permit['LABEL_FIELDHEADER_PERMIT_CLICK'] = $this->getTranslatedLabel('label_fieldheader_permit_click');
 
-		$permitIndex = 0;
 		if($this->controller->permitsModel->isLoaded()) {
 			$record = $this->controller->permitsModel->getRecord();
 			$permit['FIELD_ADDRESS'] = $this->controller->permitsModel->getAddress();
@@ -793,7 +796,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 					}
 				}
 			}
-			if(tx_nclib::isLoopable($record['documents'])) {
+			if(\tx_nclib::isLoopable($record['documents'])) {
 				foreach($record['documents'] as $index => $document) {
 					$doctype = $record['documenttypes'][$index];
                                         $filename = basename($document);
@@ -802,50 +805,49 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 					);
 					$permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTTYPE'] = $doctype;
                                         
-                                        $permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = $this->controller->getLinkToFile(
-							'Download',
-							$this->controller->getLinkToItemFileUrl(
-								'documents', $document
-							)." _blank"
-						);                                        
-                                    $lengthstrhostname = strlen(t3lib_div::getHostname());
-                                    $file = substr($document, $lengthstrhostname+6);
+					$permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = $this->controller->getLinkToFile(
+						'Download',
+						$this->controller->getLinkToItemFileUrl(
+							'documents', $document
+						)." _blank"
+					);
+				$lengthstrhostname = strlen(GeneralUtility::getHostname());
+				$file = substr($document, $lengthstrhostname+6);
 
-                                    $findleiden = 999;
-                                    $findleiden = strpos(t3lib_div::getHostname(),'gemeente.leiden.nl');
+				$findleiden = strpos(GeneralUtility::getHostname(),'gemeente.leiden.nl');
 
-                                    if ($findleiden == 0){
-                                        // import document path http://www.leiden.nl/fileadmin/vergunningen/...
-                                        // domain website http://gemeente.leiden.nl/
-                                        $file = substr($document, $lengthstrhostname+3);
-                                    }
+				if ($findleiden == 0){
+					// import document path http://www.leiden.nl/fileadmin/vergunningen/...
+					// domain website http://gemeente.leiden.nl/
+					$file = substr($document, $lengthstrhostname+3);
+				}
 
-                                        $search_string ='%20';
-                                        $file = str_replace($search_string, ' ', $file);
+					$search_string ='%20';
+					$file = str_replace($search_string, ' ', $file);
 
-                                        $filename = substr(basename($file),0,strrpos(basename($file), '.'));
-                                        // strip filename
-                                        if (strrpos($filename, '_') > 0 ){
-                                            $pos_underscore = strrpos($filename, '_');  
-                                                $filename = substr($filename,$pos_underscore+1);
-                                        }
+					$filename = substr(basename($file),0,strrpos(basename($file), '.'));
+					// strip filename
+					if (strrpos($filename, '_') > 0 ){
+						$pos_underscore = strrpos($filename, '_');
+							$filename = substr($filename,$pos_underscore+1);
+					}
 
-                                        if (file_exists($file)) {
-                                            $file_size = filesize($file);
+					if (file_exists($file)) {
+						$file_size = filesize($file);
 
-                                        if ($file_size < 1024) $file_size.' B';
-                                            elseif ($file_size < 1048576) $file_size = round($file_size / 1024, 2).' KB';
-                                            elseif ($file_size < 1073741824) $file_size = round($file_size / 1048576, 2).' MB';
+					if ($file_size < 1024) $file_size = $file_size . ' B';
+						elseif ($file_size < 1048576) $file_size = round($file_size / 1024, 2).' KB';
+						elseif ($file_size < 1073741824) $file_size = round($file_size / 1048576, 2).' MB';
 
-                                        }else{
-                                            $file_size = '';
-                                        }
+					}else{
+						$file_size = '';
+					}
 
-                                        $file_extension = strtoupper(substr(strrchr(basename($file),'.'),1));
-                                           
-                                         $permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTFILESIZE'] =  $file_extension.' / '. $file_size;
-                                         $permit['DOCUMENTS'][$index]['PERMIT_FILENAME'] = $filename;
-                                        //$permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = $document;
+					$file_extension = strtoupper(substr(strrchr(basename($file),'.'),1));
+
+					 $permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTFILESIZE'] =  $file_extension.' / '. $file_size;
+					 $permit['DOCUMENTS'][$index]['PERMIT_FILENAME'] = $filename;
+					//$permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = $document;
 				}
 			} else {
 				$permit['HAS_DOCUMENTS'] = array();
@@ -854,9 +856,9 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			$addressesAdded = $this->addAddressMarkersForRecord($record);
 			
 			$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
-			if(tx_nclib::isLoopable($record['objectaddresses'])) {
+			if(\tx_nclib::isLoopable($record['objectaddresses'])) {
 				foreach($record['objectaddresses'] as $index => $address) {
-					if(tx_nclib::isLoopable($address)) {
+					if(\tx_nclib::isLoopable($address)) {
 						foreach($address as $key=>$value) {
 							if(array_search($key, $skipFields) === false) {
 								$permit['ADDRESSES'][$index]['LABEL_FIELDHEADER_'.strtoupper($key)] =
@@ -879,9 +881,9 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 				$this->disableGoogleMaps();
 			}
 			$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
-			if(tx_nclib::isLoopable($record['lots'])) {
+			if(\tx_nclib::isLoopable($record['lots'])) {
 				foreach($record['lots'] as $index => $lot) {
-					if(tx_nclib::isLoopable($lot)) {
+					if(\tx_nclib::isLoopable($lot)) {
 						foreach($lot as $key=>$value) {
 							if(array_search($key, $skipFields) === false) {
 								$permit['LOTS'][$index]['LABEL_FIELDHEADER_'.strtoupper($key)] =
@@ -899,8 +901,8 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			} else {
 				$permit['LOTS'] = array();
 			}
-			$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
-			if(tx_nclib::isLoopable($record['coordinates'])) {
+			//$skipFields = array('uid', 'crdate', 'tstamp', 'hidden', 'pid', 'cruser_id', 'deleted');
+			if(\tx_nclib::isLoopable($record['coordinates'])) {
 				foreach($record['coordinates'] as $index => $coordinates) {
 					$permit['COORDINATES'][$index]['LABEL_FIELDHEADER_COORDINATES'] =
 						$this->getTranslatedLabel('label_fieldheader_coordinates') . ' (x, y, z)';
@@ -980,12 +982,13 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 
 	/**
 	 * Initializes Google maps if available.
+	 * @param string $mode
 	 * @return void
 	 */
 	protected function initializeGoogleMaps($mode='default') {
 		if($this->hasGoogleMapsEnabled()) {
 			// google maps stuff
-			$this->map = t3lib_div::makeInstance(
+			$this->map = GeneralUtility::makeInstance(
 				'tx_wecmap_map_google',
 				$this->controller->configModel->get('googleMaps.apiKey'),
 				$this->controller->configModel->get('googleMaps.width'),
@@ -994,7 +997,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			$this->map->mapName = 'map_txncgovpermits_' . $mode;
 			$controls = $this->controller->configModel->get('googleMaps.controls');
 			if(!empty($controls)) {
-				$controls = t3lib_div::trimExplode(',', $controls);
+				$controls = GeneralUtility::trimExplode(',', $controls);
 				foreach($controls as $control) {
 					$this->map->addControl($control);
 				}
@@ -1081,7 +1084,6 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			$this->addTranslationLabel('label_fieldheader_' . $field);
 		}
 		$configBasePath = 'viewPermitDocument.';
-		$permitIndex = 0;
 		$currentDocument = false;
 		$record = $this->controller->permitsModel->getRecord();
 		if($record !== false) {
@@ -1096,7 +1098,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 				$permit['PERMIT_' . strtoupper($field)] = $content;
 			}
 			$permit['PERMIT_LOCATION'] = $this->controller->permitsModel->getAddress();
-			if(tx_nclib::isLoopable($record['documents'])) {
+			if(\tx_nclib::isLoopable($record['documents'])) {
 				foreach($record['documents'] as $index => $document) {
 					if($this->controller->getPiVar('doc') === md5($document)) {
 						$currentDocument = $document;
@@ -1160,7 +1162,6 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			$this->addTranslationLabel('label_fieldheader_' . $field);
 		}
 		$configBasePath = 'viewPermitDocument.';
-		$permitIndex = 0;
 		$currentDocument = false;
 		$record = $this->controller->permitsModel->getRecord();
 		if($record !== false) {
@@ -1175,8 +1176,8 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 				$permit['PERMIT_' . strtoupper($field)] = $content;
 			}
 			$permit['PERMIT_LOCATION'] = $this->controller->permitsModel->getAddress();
-			if(tx_nclib::isLoopable($record['documents'])) {
-				foreach($record['documents'] as $index => $document) {
+			if(\tx_nclib::isLoopable($record['documents'])) {
+				foreach($record['documents'] as $document) {
 					if($this->controller->getPiVar('doc') === md5($document)) {
 						$currentDocument = $document;
 						//$doctype = $record['documenttypes'][$index];
@@ -1188,7 +1189,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 							)." _blank"
 						);
 
-                                                //echo t3lib_div::getFileAbsFileName($document);
+                                                //echo \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($document);
                                                 //echo basename($document);
                                                 $permit['PERMIT_FILENAME'] = basename($document);
                                                 
@@ -1275,7 +1276,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		$aMonths = range(1, 12);
 		$aWeeks = range($aData['iStartWeek'], $aData['iEndWeek']);
 
-		if(tx_nclib::isLoopable($aYears)) {
+		if(\tx_nclib::isLoopable($aYears)) {
 			foreach($aYears as $iIndex=>$iYear) {
 				if($iYear == $aData['iActiveYear']) {
 					$aResult['YEARS'][$iIndex]['YEAR'] = $iYear;
@@ -1290,7 +1291,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			$aResult['YEARS'] = array();
 		}
 
-		if(tx_nclib::isLoopable($aMonths)) {
+		if(\tx_nclib::isLoopable($aMonths)) {
 			foreach($aMonths as $iIndex=>$iMonth) {
 				$sMonth = $this->getTranslatedLabel('label_month_' . $iMonth);
 				if($iMonth == $aData['iActiveMonth']) {
@@ -1312,7 +1313,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			$aResult['MONTHS'] = array();
 		}
 
-		if(tx_nclib::isLoopable($aWeeks)) {
+		if(\tx_nclib::isLoopable($aWeeks)) {
 			foreach($aWeeks as $iIndex=>$iWeek) {
 				$sWeek = $this->getTranslatedLabel('label_week') . ' ' . $iWeek;
 				if($iWeek == $aData['iActiveWeek']) {
@@ -1346,7 +1347,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		$aWeeks = range($aData['iStartWeek'], $aData['iEndWeek']);
 
 
-		if(tx_nclib::isLoopable($aWeeks)) {
+		if(\tx_nclib::isLoopable($aWeeks)) {
 			foreach($aWeeks as $iIndex=>$iWeek) {
 				$sWeek = $this->getTranslatedLabel('label_week') . ' ' . $iWeek;
 				if($iWeek == $aData['iActiveWeek']) {
@@ -1379,34 +1380,34 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		$aResult = array();
 
 		$aMonths = range(1, 13);                
-                $count = 1;
-                
-                
-                if($this->controller->getPiVar('activeYear')!=9999)
-                {
-                    if($this->controller->getPiVar('activeMonth') != '') {
-                            $actMonth = $this->controller->getPiVar('activeMonth');
-                    }  else {
-                            $actMonth = $aData['iActiveMonth'];
-                    }  
-                }else{
-                   $actMonth = 13; 
-                }
-                
-                if(tx_nclib::isLoopable($aMonths)) {
+		$count = 1;
+
+
+		if($this->controller->getPiVar('activeYear')!=9999)
+		{
+			if($this->controller->getPiVar('activeMonth') != '') {
+					$actMonth = $this->controller->getPiVar('activeMonth');
+			}  else {
+					$actMonth = $aData['iActiveMonth'];
+			}
+		}else{
+		   $actMonth = 13;
+		}
+
+		if(\tx_nclib::isLoopable($aMonths)) {
 			foreach($aMonths as $iIndex=>$iMonth) {
 				$sMonth = $this->getTranslatedLabel('label_month_' . $iMonth);
-    				//$aResult['MONTHS'][$iIndex]['TITLE'] =
-						//$this->controller->getLinkToFilteredResult($sMonth, array('activeYear' => $aData['iActiveYear'], 'activeMonth' => $iMonth));
-                                $aResult['MONTHS'][$iIndex]['TITLE'] = $sMonth;
-                                $aResult['MONTHS'][$iIndex]['VALUE'] = $count;	
-                                $aResult['MONTHS'][$iIndex]['SELECTED'] = $actMonth == $iMonth ? ' selected="selected"' : '';	
-                                //$aResult['MONTHS'][$iIndex]['SELECTED'] = $iMonth ? ' selected="selected"' : '';
-                                $count++;
-                                
-                                if($productTypes[$index] == '')
-                                    $result['PRODUCT_TYPES'][$index]['TITLE'] = htmlentities($this->getTranslatedLabel('label_type_'.
-					($this->controller->permitsModel->getModelType() ==  tx_ncgovpermits_permits_model::TYPE_PERMIT ? 'permit' : 'publication')
+				//$aResult['MONTHS'][$iIndex]['TITLE'] =
+				//$this->controller->getLinkToFilteredResult($sMonth, array('activeYear' => $aData['iActiveYear'], 'activeMonth' => $iMonth));
+				$aResult['MONTHS'][$iIndex]['TITLE'] = $sMonth;
+				$aResult['MONTHS'][$iIndex]['VALUE'] = $count;
+				$aResult['MONTHS'][$iIndex]['SELECTED'] = $actMonth == $iMonth ? ' selected="selected"' : '';
+				//$aResult['MONTHS'][$iIndex]['SELECTED'] = $iMonth ? ' selected="selected"' : '';
+				$count++;
+
+				if($productTypes[$index] == '') // WTF?
+					$result['PRODUCT_TYPES'][$index]['TITLE'] = htmlentities($this->getTranslatedLabel('label_type_'.
+					($this->controller->permitsModel->getModelType() ==  \Netcreators\NcgovPermits\Domain\Model\Permit::TYPE_PERMIT ? 'permit' : 'publication')
 				));                                
 			}
 		} else {
@@ -1438,7 +1439,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
                 }
                    
                 
-		if(tx_nclib::isLoopable($aYears)) {
+		if(\tx_nclib::isLoopable($aYears)) {
 			foreach($aYears as $iIndex=>$iYear) {
                                 if ($iYear == 9999)
                                 {
@@ -1489,7 +1490,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 
 			if($productTypes[$index] == '')
 				$result['PRODUCT_TYPES'][$index]['TITLE'] = htmlentities($this->getTranslatedLabel('label_type_'.
-					($this->controller->permitsModel->getModelType() ==  tx_ncgovpermits_permits_model::TYPE_PERMIT ? 'permit' : 'publication')
+					($this->controller->permitsModel->getModelType() ==  \Netcreators\NcgovPermits\Domain\Model\Permit::TYPE_PERMIT ? 'permit' : 'publication')
 				));
 		}
 		return $result;
@@ -1560,7 +1561,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			if (empty($radiusOptions)) {
 				$radiusOptions = '5';
 			}
-			$arrOptions = t3lib_div::trimExplode(',', $radiusOptions);
+			$arrOptions = GeneralUtility::trimExplode(',', $radiusOptions);
 			$optionsIndex = 0;
 			foreach ($arrOptions as $valOption) {
 				$option['OPTION_VALUE'] = $valOption;
@@ -1591,9 +1592,6 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	protected function addMetaDataToPageHeader($lines) {
 		foreach($lines as $line) {
 			if($line['meta'] !== false) {
-				$name = '';
-				$content = '';
-				$scheme = '';
 				list($name, $content, $scheme) = $line['meta'];
 				$this->addDublinCoreMetaDataHeaderLine($name, $content, $scheme);
 			}
@@ -1602,13 +1600,15 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 
 	/**
 	 * Adds owms data to the page header, for the detail view of a document
-	 * @return void
+	 * @param bool $isDocument
+	 * @return array
 	 */
 	public function getMetaDataRecord($isDocument=false) {
 		$lines = array();
+		$link = '';
 		if($this->controller->permitsModel->isPermit() || empty($link)) {
 			$link = $this->getDublinCoreMetaData('identifier',
-				tx_nclib_tsfe_model::getBaseUrl() .
+				\tx_nclib_tsfe_model::getBaseUrl() .
 				$this->controller->getLinkToController(
 					false,
 					$this->controller->configModel->get('displayPage'),
@@ -1619,7 +1619,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		} else {
 			$link = $this->controller->getLinkToController(false, $link);
 			if(strpos($link, 'http://') === false) {
-				$link = tx_nclib_tsfe_model::getBaseUrl() .
+				$link = \tx_nclib_tsfe_model::getBaseUrl() .
 					$this->controller->getLinkToController(false, $link);
 			}
 			$lines[] = $this->getDublinCoreMetaData('identifier', $link);
@@ -1653,12 +1653,12 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			$lines[] = $this->getDublinCoreMetaData('references', $this->controller->permitsModel->getField('casereference'));
 			$documents = $this->controller->permitsModel->getField('documents');
 			$types = $this->controller->permitsModel->getField('documenttypes');
-			if(tx_nclib::isLoopable($documents)) {
+			if(\tx_nclib::isLoopable($documents)) {
 				foreach($documents as $index=>$document) {
 					$lines[] = $this->getDublinCoreMetaData(
 						'hasPart',
 						$types[$index],
-						tx_nclib_tsfe_model::getBaseUrl()
+						\tx_nclib_tsfe_model::getBaseUrl()
 						. $this->controller->getLinkToController(
 							false,
 							$this->controller->configModel->get('displayPage'),
@@ -1669,12 +1669,12 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			}
 			
 			$publications = $this->controller->permitsModel->getField('publications');
-			if (tx_nclib::isLoopable($publications)) {
+			if (\tx_nclib::isLoopable($publications)) {
 				foreach($publications as $publication) {
 					$lines[] = $this->getDublinCoreMetaData(
 						'hasPart', 
 						$publication['title'],
-						tx_nclib_tsfe_model::getBaseUrl()
+						\tx_nclib_tsfe_model::getBaseUrl()
 						. $this->controller->getLinkToController(
 							false,
 							$this->controller->configModel->get('publicationsDisplayPage'),
@@ -1686,7 +1686,6 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		}
 		$lines[] = $this->getDublinCoreMetaData('description', $this->controller->permitsModel->getField('description'));
 		$lines[] = $this->getDublinCoreMetaData('format', 'text/html');
-		$link = $this->controller->permitsModel->getField('link');
 		if(!$this->controller->permitsModel->isPermit()) {
 			$lines[] = $this->getDublinCoreMetaData(
 				'pbinformatietype',
@@ -1703,7 +1702,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		$lines[] = $this->getDublinCoreMetaData('modified', $this->controller->permitsModel->getField('tstamp', true));
 		// references ???
 		$addresses = $this->controller->permitsModel->getField('objectaddresses');
-		if(tx_nclib::isLoopable($addresses)) {
+		if(\tx_nclib::isLoopable($addresses)) {
 			foreach($addresses as $index => $address) {
 				$spatialType = $this->controller->permitsModel->getOwmsSpatialType($index);
 				if($spatialType !== false) {
@@ -1764,7 +1763,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		$lines = $this->getMetaDataRecord();
 		$lines = array_merge_recursive($lines, $this->getDublinCoreMetaData(
 			'isPartOf',
-			tx_nclib_tsfe_model::getBaseUrl() .
+			\tx_nclib_tsfe_model::getBaseUrl() .
 			$this->controller->getLinkToController(
 				false,
 				$this->controller->configModel->get('displayPage'),
@@ -1773,7 +1772,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		));
 		$lines = array_merge_recursive($lines, $this->getDublinCoreMetaData(
 			'hasPart',
-			tx_nclib_tsfe_model::getBaseUrl() .
+			\tx_nclib_tsfe_model::getBaseUrl() .
 			$this->controller->getLinkToController(
 				false,
 				$this->controller->getLinkToItemFileUrl(
@@ -1789,7 +1788,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	 * @param $field
 	 * @param $value
 	 * @param $schemeValue
-	 * @return void
+	 * @return array
 	 */
 	public function getDublinCoreMetaData($field, $value, $schemeValue=false) {
 		// %s = fieldtitle
@@ -1912,7 +1911,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
         $publishPermitDocuments = $this->controller->configModel->get('publishPermitDocuments');
         if ($publishPermitDocuments == true){
             $documents = $this->controller->permitsModel->getField('documents');
-            if(tx_nclib::isLoopable($documents)) {
+            if(\tx_nclib::isLoopable($documents)) {
                 foreach($documents as $index => $document) {
                     $xmls[$this->controller->getCaseFileName($index)] = $this->getPermitDocumentXml($index+1);
                 }
@@ -1923,11 +1922,11 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 
 	/**
 	 * Returns permit document xml info
-	 * @param $document	the document being generated
-	 * @param $index	the index of the document in the current record
+	 * @param int $index	the index of the document in the current record
 	 * @return string	the xml
 	 */
 	public function getPermitDocumentXml($index) {
+		/** @var \DOMDocument $dom */
 		list($dom, $permitmeta, $mantle) = $this->getPermitXmlCaseHeader(
 			'vergunningdocument',
 			'http://standaarden.overheid.nl/vergunningen/4.0/document',
@@ -1935,6 +1934,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			true
 		);
 		$filetype = $this->controller->permitsModel->getFileTypeFromDocument($index-1);
+		/** @var \DOMElement $mantle */
 		$mantle->appendChild(
 			$dom->createElement('dcterms:format', $filetype)
 		);
@@ -1945,7 +1945,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			'resourceIdentifier',
 			str_replace(
 				'&', '&amp;',
-				tx_nclib_tsfe_model::getBaseUrl() . $this->controller->getLinkToController(
+				\tx_nclib_tsfe_model::getBaseUrl() . $this->controller->getLinkToController(
 					false,
 					$this->controller->configModel->get('displayPage'),
 					array('id' => $this->controller->permitsModel->getId())
@@ -1956,6 +1956,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		$documenttypes = $this->controller->permitsModel->getField('documenttypes');
 		$dt = $dom->createElement('documenttype', $documenttypes[$index-1]);
 		$dt->setAttribute('scheme', 'overheidvg:Documenttype');
+		/** @var \DOMElement $permitmeta */
 		$permitmeta->appendChild(
 			$dt
 		);
@@ -1968,10 +1969,10 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	 * @param $namespace
 	 * @param $index
 	 * @param $isDocument
-	 * @return unknown_type
+	 * @return array
 	 */
 	protected function getPermitXmlCaseHeader($type, $namespace, $index, $isDocument = false) {
-		$dom = new DOMDocument('1.0', 'UTF-8');
+		$dom = new \DOMDocument('1.0', 'UTF-8');
 		$dom->formatOutput = true;
 		$message = $dom->createElementNS('http://standaarden.overheid.nl/vergunningen/4.0/', 'message');
 		// set all relevant namespaces
@@ -2036,8 +2037,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 		$permitmeta = $dom->createElement('vergunningenmeta', '');
 		$meta->appendChild($permitmeta);
 		$lines = $this->getMetaDataRecord($isDocument);
-		foreach($lines as $key => $line) {
-			$name = $vlaue = $scheme = $type = '';
+		foreach($lines as $line) {
 			list($name, $value, $scheme, $type) = $line['xml'];
 			if($name == 'dcterms:creator' && $isDocument) {
 				$scheme = 'overheid:'.ucfirst($value = $this->controller->configModel->get('owmsDefaults.creatorType'));
@@ -2045,7 +2045,7 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			}
 			if($name == 'dcterms:identifier' && $isDocument) {
 				$documents = $this->controller->permitsModel->getField('documents');
-				$value = tx_nclib_tsfe_model::getBaseUrl() . $this->controller->getLinkToController(
+				$value = \tx_nclib_tsfe_model::getBaseUrl() . $this->controller->getLinkToController(
 					false,
 					$this->controller->configModel->get('displayPage'),
 					array('id' => $this->controller->permitsModel->getId(), 'doc' => md5($documents[$index-1]))
@@ -2130,21 +2130,23 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	 * @return string	the xml
 	 */
 	public function getPermitXml($index) {
+		/** @var \DOMDocument $dom */
 		list($dom, $permitmeta, $mantle) = $this->getPermitXmlCaseHeader(
 			'vergunningzaak',
 			'http://standaarden.overheid.nl/vergunningen/4.0/zaak',
 			$index
 		);
 		$product = $dom->createElement('product', '');
+		/** @var \DOMElement $permitmeta */
 		$permitmeta->appendChild($product);
 		$child = $dom->createElement('producttype', $this->controller->permitsModel->getField('producttype'));
 		$child->setAttribute('scheme', 'overheidvg:Product');
 		$product->appendChild($child);
 		$activities = $this->controller->permitsModel->getField('productactivities');
 		if(!empty($activities)) {
-			$activities = t3lib_div::trimExplode(',', $activities);
-			if(tx_nclib::isLoopable($activities)) {
-				foreach($activities as $index=>$type) {
+			$activities = GeneralUtility::trimExplode(',', $activities);
+			if(\tx_nclib::isLoopable($activities)) {
+				foreach($activities as $type) {
 					$child = $dom->createElement('activiteit', $type);
 					$child->setAttribute('scheme', 'overheidvg:Activiteit');
 					$product->appendChild($child);
@@ -2215,9 +2217,8 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			$child = $dom->createElement('referentienummer', $this->controller->permitsModel->getField('objectreference'));
 			$object->appendChild($child);
 		}
-		$appendAddress = false;
 		$addresses = $this->controller->permitsModel->getField('objectaddresses');
-		if(tx_nclib::isLoopable($addresses)) {
+		if(\tx_nclib::isLoopable($addresses)) {
 			foreach($addresses as $adresIndex=>$adres) {
 				$address = $dom->createElement('adres', '');
 				$addresses[$adresIndex]['zipcode'] = trim($addresses[$adresIndex]['zipcode']);
@@ -2265,8 +2266,8 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			}
 		}
 		$lots = $this->controller->permitsModel->getField('lots');
-		if(tx_nclib::isLoopable($lots)) {
-			foreach($lots as $lotIndex=>$lot) {
+		if(\tx_nclib::isLoopable($lots)) {
+			foreach($lots as $lot) {
 				$lotXml = $dom->createElement('perceel');
 				$child = $dom->createElement(
 					'kadastralegemeente',
@@ -2288,8 +2289,8 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 			}
 		}
 		$coordinates = $this->controller->permitsModel->getField('coordinates');
-		if(tx_nclib::isLoopable($coordinates)) {
-			foreach($coordinates as $coordinateIndex=>$coordinate) {
+		if(\tx_nclib::isLoopable($coordinates)) {
+			foreach($coordinates as $coordinate) {
 				$child = $dom->createElement(
 					'coordinaten',
 					''
@@ -2315,7 +2316,4 @@ class tx_ncgovpermits_permit_view extends tx_ncgovpermits_base_view {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/view/class.tx_ncgovpermits_permit_view.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/view/class.tx_ncgovpermits_permit_view.php']);
-}
 ?>

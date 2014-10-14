@@ -7,8 +7,6 @@ $_TABLENAME = $_EXTKEYSHORT . '_permits';
 $_MAX_ALLOWED_FILESIZE = 51200;
 $_ALLOWED_FILETYPES = 'doc,pdf,ppt,xls,zip';
 
-require_once(t3lib_extMgm::extPath($_EXTKEY).'controller/class.'.$_EXTKEYSHORT.'_be_controller.php');
-
 $TCA[$_TABLENAME] = array (
 	'ctrl' => $TCA[$_TABLENAME]['ctrl'],
 	'interface' => array (
@@ -26,13 +24,13 @@ $TCA[$_TABLENAME] = array (
 		),
 		'type' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.type',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.type',
 			'config' => array (
 				'type' => 'select',
 				'items' => array (
-					array('LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.type.I.0', '0'),
-					array('LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.type.I.1', '1'),
-					array('LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.type.I.2', '2'),
+					array('LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.type.I.0', '0'),
+					array('LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.type.I.1', '1'),
+					array('LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.type.I.2', '2'),
 					),
 				'default' => '2',
 				'size' => 1,
@@ -41,7 +39,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		/*'modified' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.modified',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.modified',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -51,7 +49,7 @@ $TCA[$_TABLENAME] = array (
 		),*/
 		'lastpublished' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.lastpublished',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.lastpublished',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -61,7 +59,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'publishdate' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.publishdate',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.publishdate',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -71,7 +69,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'publishenddate' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.publishenddate',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.publishenddate',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -81,7 +79,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'language' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.language',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.language',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -91,7 +89,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'title' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.title',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.title',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -100,7 +98,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'description' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.description',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.description',
 			'config' => array (
 				'type' => 'text',
 				'cols' => '30',
@@ -110,7 +108,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'publicationbody' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.publicationbody',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.publicationbody',
 			'config' => array (
 				'type' => 'text',
 				'cols' => '30',
@@ -120,7 +118,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'producttype' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.producttype',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.producttype',
 			'config' => array (
 				'type' => 'select',
 				'items' => array (
@@ -128,12 +126,12 @@ $TCA[$_TABLENAME] = array (
 				),
 				'size' => 1,
 				'maxitems' => 1,
-				'itemsProcFunc' => 'tx_ncgovpermits_be_controller->user_getProductTypes',
+				'itemsProcFunc' => 'Netcreators\\NcgovPermits\\Controller\\BackendController->user_getProductTypes',
 			)
 		),
 		'productactivities' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.productactivities',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.productactivities',
 			'config' => array (
 				'type' => 'select',
 				'items' => array (
@@ -142,12 +140,12 @@ $TCA[$_TABLENAME] = array (
 				'multiple' => false,
 				'size' => 10,
 				'maxitems' => 999,
-				'itemsProcFunc' => 'tx_ncgovpermits_be_controller->user_getProductActivities',
+				'itemsProcFunc' => 'Netcreators\\NcgovPermits\\Controller\\BackendController->user_getProductActivities',
 			)
 		),
 		'publication' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.publication',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.publication',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -155,7 +153,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'documents' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.documents',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.documents',
 			'config' => array (
 				'type' => 'group',
 				'internal_type' => 'file',
@@ -169,7 +167,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'documenttypes' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.documenttypes',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.documenttypes',
 			'config' => array (
 				'type' => 'select',
 				'items' => array (
@@ -178,12 +176,12 @@ $TCA[$_TABLENAME] = array (
 				'multiple' => true,
 				'size' => 10,
 				'maxitems' => 999,
-				'itemsProcFunc' => 'tx_ncgovpermits_be_controller->user_getDocumentTypes',
+				'itemsProcFunc' => 'Netcreators\\NcgovPermits\\Controller\\BackendController->user_getDocumentTypes',
 			)
 		),
 		'casereference' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.casereference',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.casereference',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -193,7 +191,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'casereference_pub' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.casereference_pub',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.casereference_pub',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -202,7 +200,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'validity_start' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.validity_start',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.validity_start',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -212,7 +210,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'validity_end' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.validity_end',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.validity_end',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -222,36 +220,36 @@ $TCA[$_TABLENAME] = array (
 		),
 		'phase' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.phase',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.phase',
 			'config' => array (
 				'type' => 'select',
 				'items' => array (
-					array('LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.phase.I.0', ''),
+					array('LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.phase.I.0', ''),
 				),
 				'multiple' => false,
 				'size' => 1,
 				'minitems' => 1,
 				'maxitems' => 1,
-				'itemsProcFunc' => 'tx_ncgovpermits_be_controller->user_getPhases',
+				'itemsProcFunc' => 'Netcreators\\NcgovPermits\\Controller\\BackendController->user_getPhases',
 			)
 		),
 		'termtype' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.termtype',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.termtype',
 			'config' => array (
 				'type' => 'select',
 				'items' => array (
-					array('LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.termtype.I.0', ''),
+					array('LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.termtype.I.0', ''),
 				),
 				'multiple' => false,
 				'size' => 1,
 				'maxitems' => 1,
-				'itemsProcFunc' => 'tx_ncgovpermits_be_controller->user_getTermTypes',
+				'itemsProcFunc' => 'Netcreators\\NcgovPermits\\Controller\\BackendController->user_getTermTypes',
 			)
 		),
 		'termtype_start' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.termtype_start',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.termtype_start',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -261,7 +259,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'termtype_end' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.termtype_end',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.termtype_end',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -271,7 +269,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'company' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.company',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.company',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -280,7 +278,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'companynumber' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.companynumber',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.companynumber',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -289,7 +287,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'companyaddress' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.companyaddress',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.companyaddress',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -298,7 +296,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'companyaddressnumber' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.companyaddressnumber',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.companyaddressnumber',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -307,7 +305,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'companyzipcode' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.companyzipcode',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.companyzipcode',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
@@ -316,7 +314,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'objectreference' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.objectreference',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.objectreference',
 			'config' => array (
 				'type' => 'input',
 				'size' => '40',
@@ -325,7 +323,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'objectaddresses' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_EXTKEYSHORT . '_addresses',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_EXTKEYSHORT . '_addresses',
 			'config' => array (
 				'type' => 'inline',
 				'foreign_table' => $_EXTKEYSHORT . '_addresses',
@@ -340,7 +338,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'lots' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_EXTKEYSHORT . '_lots',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_EXTKEYSHORT . '_lots',
 			'config' => array (
 				'type' => 'inline',
 				'foreign_table' => $_EXTKEYSHORT . '_lots',
@@ -355,7 +353,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'coordinates' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_EXTKEYSHORT . '_coordinates',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_EXTKEYSHORT . '_coordinates',
 			'config' => array (
 				'type' => 'inline',
 				'foreign_table' => $_EXTKEYSHORT . '_coordinates',
@@ -370,7 +368,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'link' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.link',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.link',
 			'config' => array (
 				'type'     => 'input',
 				'size'     => '15',
@@ -391,7 +389,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'related' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.related',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.related',
 			'config' => array (
 				'type' => 'group',
 				'internal_type' => 'db',
@@ -402,7 +400,7 @@ $TCA[$_TABLENAME] = array (
 					'_PADDING' => 2,
 					'edit' => array(
 						'type' => 'popup',
-						'title' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.edit_related',
+						'title' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.edit_related',
 						'script' => 'wizard_edit.php',
 						'icon' => 'edit2.gif',
 						'popup_onlyOpenIfSelected' => 1,

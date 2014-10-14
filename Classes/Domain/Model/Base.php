@@ -22,30 +22,30 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-$sCurrentDir = dirname(__FILE__) . '/';
-require_once($sCurrentDir . '../includes.php');
+namespace Netcreators\NcgovPermits\Domain\Model;
 
-class tx_ncgovpermits_base_model extends tx_nclib_base_model {
-	function __construct() {
-		parent::__construct();
-	}
+class Base extends \tx_nclib_base_model {
+	/**
+	 * @var \Netcreators\NcgovPermits\Controller\PermitController
+	 */
+	protected $controller;
 
-	function initialize(&$oController) {
-		parent::initialize($oController);
+	/**
+	 * @param \Netcreators\NcgovPermits\Controller\PermitController $controller
+	 */
+	function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller) {
+		parent::initialize($controller);
 	}
 
 	/**
 	 * Applies pi_RTEcssText to the RTE field.
+	 * @param string $field
 	 */
 	protected function _getField_rteField($field) {
 		// getrecord will cause an infinite loop
 		// getfield (<one of the rte fields>, false) also
 		return $this->controller->pi_RTEcssText($this->getField($field, true));
 	}
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_base_model.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/model/class.tx_ncgovpermits_base_model.php']);
 }
 
 ?>

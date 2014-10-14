@@ -22,39 +22,40 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-$currentDir = dirname(__FILE__) . '/';
-require_once($currentDir . '../includes.php');
+namespace Netcreators\NcgovPermits\View;
 
-class tx_ncgovpermits_exception_view extends tx_ncgovpermits_base_view {
+class ExceptionView extends BaseView {
 	/**
 	 * Initializes the class.
 	 *
-	 * @param object $oController the controller object
+	 * @param \tx_nclib_base_controller $controller
+	 * @internal param object $oController the controller object
 	 */
 	public function initialize(&$controller) {
 		$this->setAutoDetermineTemplate(false);
 		parent::initialize($controller);
-		$this->setTemplateFile('EXT:' . $controller->extKey . '/templates/exception_view.html');
+		$this->setTemplateFile('EXT:' . $controller->extKey . '/Resources/Private/Templates/Exception.html');
 	}
 
 	/**
 	 * Returns the rendered view.
 	 *
-	 * @return string	the content
+	 * @param \Exception $exception
+	 * @return string    the content
 	 */
-	public function getContent($exception) {
+	public function getContent(\Exception $exception) {
 		$subparts = array();
 
-		if(get_class($exception) == 'tx_nclib_exception') {
+		if($exception instanceof \tx_nclib_exception) {
 			$subparts['ERROR_MESSAGE'] = $exception->getErrorMessage();
 		} else {
 			$subparts['ERROR_MESSAGE'] = $exception->getMessage();
 		}
 		$fields = array('file', 'line', 'class', 'function');
 		$trace = $exception->getTrace();
-		if(tx_nclib::isLoopable($trace)) {
+		if(\tx_nclib::isLoopable($trace)) {
 			foreach($trace as $index=>$traceStep) {
-				if(tx_nclib::isLoopable($fields)) {
+				if(\tx_nclib::isLoopable($fields)) {
 					foreach($fields as $key) {
 						$subparts['TRACE'][$index][strtoupper($key)] = $traceStep[$key];
 					}
@@ -67,7 +68,4 @@ class tx_ncgovpermits_exception_view extends tx_ncgovpermits_base_view {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/view/class.tx_ncgovpermits_exception_view.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/view/class.tx_ncgovpermits_exception_view.php']);
-}
 ?>

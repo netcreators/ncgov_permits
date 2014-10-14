@@ -22,6 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+namespace Netcreators\NcgovPermits\Service\BackendFormEngine;
+
 /**
  * tce forms helper
  *
@@ -29,7 +31,7 @@
  * @copyright Netcreators
  * @package NcgovPermits
  */
-class tx_ncgovpermits_tceforms_process {
+class GetMainFieldsHook {
 
 	protected $table = '';
 	protected $row = '';
@@ -52,7 +54,7 @@ class tx_ncgovpermits_tceforms_process {
 	 * @param $table
 	 * @param $row
 	 * @param $parent
-	 * @return unknown_type
+	 * @return void
 	 */
 	function getMainFields_preProcess($table,&$row,&$parent) {
 		$this->initialize();
@@ -76,24 +78,23 @@ class tx_ncgovpermits_tceforms_process {
 	protected function preProcessPermits() {
 
 		if($this->row['type'] == 1) {
-			if ($this->extensionConfiguration['enableAdditionalBekendmakingElements']) {
+			if ($this->extensionConfiguration['enableAdditionalPublicationElements']) {
 				// prevent the record from being saved
 				$this->addFieldsAndMakePhaseNotRequired($this->table);
 			}
 
-			if ($this->extensionConfiguration['enableCoordinatesForBekendmakingen']) {
+			if ($this->extensionConfiguration['enableCoordinatesForPublications']) {
 				$this->enableCoordinatesField();
 			}
 		}
 	}
 
 	/**
-	 * Makes the phase field not required for bekendmakingen
+	 * Makes the phase field not required for Publications
 	 * 
 	 * @param string $table tablename
 	 */
 	protected function addFieldsAndMakePhaseNotRequired($table) {
-		t3lib_div::loadTCA($this->table);
 		$_EXTKEY = 'ncgov_permits';
 		$GLOBALS['TCA'][$table]['columns']['phase']['config']['minitems'] = 0;
 		$GLOBALS['TCA'][$table]['columns']['phase']['label'] = 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $table . '.phase_not_required';
@@ -101,10 +102,9 @@ class tx_ncgovpermits_tceforms_process {
 	}
 	
 	/**
-	 * Enables the coordinates field for bekendmakingen
+	 * Enables the coordinates field for Publications
 	 */
 	protected function enableCoordinatesField() {
-		t3lib_div::loadTCA($this->table);
 		$GLOBALS['TCA'][$this->table]['types']['1']['showitem'] = str_replace('objectaddresses,', 'objectaddresses,coordinates,', $GLOBALS['TCA'][$this->table]['types']['1']['showitem']);
 	}
 }

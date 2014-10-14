@@ -1,3 +1,236 @@
+2014-10-05 1.0.0 Klaus Bitto <klaus@netcreators.nl>
+
+	* Version for TYPO3 6.2.
+	* Re-structured directories.
+	* Introduced namespaces.
+	* Removed cruft code.
+
 2014-08-26 0.7.0-dev Tania Morales <extensions@netcreators.nl>
 
 	* Compatibility for 6.2
+
+2014-03-21 0.6 Jordi Bakker<jordi@netcreators.nl>
+
+        * Comment link publication to permit
+        * Publication detail add link to permit
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2014-02-21 0.5.9 Jordi Bakker<jordi@netcreators.nl>
+
+        * Publish Publications - add publish end data when it's empty - default 2 months
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2014-02-18 0.5.8 Jordi Bakker<jordi@netcreators.nl>
+
+        * fix bug in filesize
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2014-01-14 0.5.7 Frans van der Veen <frans@netcreators.com>
+
+        * Added publication end date
+        * Fixed publication xml publication system, no longer dependant on TSFE (which was causing problems)
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2013-11-08 0.5.6 Jordi Bakker <jordi@netcreators.com>
+        * Changes orderby on permitsfiltered
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2013-07-06 0.5.5 Jordi Bakker <jordi@netcreators.com>
+        * bug in IE 8 jquery not:first doesnt work there - so we set the class in the view
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2013-05-31 0.5.4 Jordi Bakker <jordi@netcreators.com>
+        * bug in PHP MKTIME before 1910 doesn't work - change in 1920
+        http://php.bugs.free-usenet.eu/-48917-[NEW]-MKTIME-before-1910-doesn't-work_T27213681_S1
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2013-05-29 0.5.3 Jordi Bakker <jordi@netcreators.com>
+        * change css class week - active / not-active
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2013-03-19 0.5.2 Jordi Bakker <jordi@netcreators.com>
+        * Extra setting publish permits documents by default do not
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2013-03-13 0.5.1 Jordi Bakker <jordi@netcreators.com>
+
+        * Added extra functionality to show filename detail view old design
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2013-02-25 0.5.0 Jordi Bakker <jordi@netcreators.com>
+
+        * Add config limit for latest view - latestlimit
+        * added changes to changelog
+        * updated version number to reflect changes
+
+2013-01-07 0.4.9 Jordi Bakker <jordi@netcreators.com>
+
+	* Bug weeknumbers 31 dec 2012 -> wk1 from 2013
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-12-19 0.4.8 Jordi Bakker <jordi@netcreators.com>
+
+	* Bug search all months
+        * Weeknumber convert to int
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-12-19 0.4.7 Jordi Bakker <jordi@netcreators.com>
+
+	* Link Publicaction to Permit
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-12-12 0.4.6 Jordi Bakker <jordi@netcreators.com>
+
+	* Implemented new Interface for publications
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-12-03 0.4.5 Jordi Bakker <extensions@netcreators.com>
+
+	* Implemented new Interface
+	* Change Search fields - option all months
+	* Change Search fields - option all years
+        * Added direct link - download attachment
+	* added changes to changelog
+	* updated version number to reflect changes
+
+
+2012-11-27 0.4.4 Frans van der Veen <extensions@netcreators.com>
+	* fixed doing bekendmakingen publication to https url
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-06-28 0.4.3 Frans van der Veen <extensions@netcreators.com>
+
+	* made showing permits published in the future optional (through configuration - dontShowRecordsPublishedInTheFuture)
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-06-04 0.4.1 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed publication issues bekendmakingen
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-04-25 0.4.1 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed webrichtlijnen issues (validation, maps)
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2012-03-20 0.4.0 Frans van der Veen <extensions@netcreators.com>
+
+	* updated bekendmakingen publisher test url, removed default pass and username
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2011-12-14 0.3.9 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed linking to detail page in google maps description page.stdWrap_HTMLparser was deforming the link
+	* added changes to changelog
+	* updated version number to reflect changes
+
+2011-12-14 0.3.8 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed linking to files which are not in the upload folder but a fully qualified url
+	* fixed linking to files, now uses type as link text (which is better presentable)
+	* added some labels which gave an error
+
+2011-12-14 0.3.7 Frans van der Veen <extensions@netcreators.com>
+
+	* changed template: added FIELD_ADDRESS for detail view
+
+2011-11-09 0.3.6 Frans van der Veen <extensions@netcreators.com>
+
+	* changed template: HAS_MAPS moved outside of AVAILABLE_RECORDS subpart so it can be moved more freely.
+
+2011-11-09 0.3.5 Frans van der Veen <extensions@netcreators.com>
+
+	* improved html template
+
+2011-08-23 0.3.4 Frans van der Veen <extensions@netcreators.com>
+
+	* improved html template
+
+2011-06-22 0.3.4 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed warnings (flooding the error log)
+
+2011-06-21 0.3.3 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed fieldwraps, now working (correctly)
+	* added show field list for detail page (to be able to show additional fields)
+	* added support for publication push ipm 4
+	* added additional fields for bekendmakingen (configurable)
+
+2009-11-10 0.1.9 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed broken xml generation, now converts (mixed) latin characters to utf-8
+
+2009-11-10 0.1.8 Frans van der Veen <extensions@netcreators.com>
+
+	* Links for attachments being generated correctly now
+	* Changed default message when no records are found
+
+2009-11-02 0.1.7 Frans van der Veen <extensions@netcreators.com>
+
+	* fixed hasPart not being generated correctly
+	* fixed company name not being generated correctly
+
+2009-11-02 0.1.6 Frans van der Veen <extensions@netcreators.com>
+
+	* updated spatial generation
+	* updated maps generation
+	* fixed description breaking owms validation when contained special chars
+
+2009-10-13 0.1.4 Frans van der Veen <extensions@netcreators.com>
+
+	* added last modified date in permit view
+
+2009-10-06 0.1.4 Frans van der Veen <extensions@netcreators.com>
+
+	* generation of xml messages validates in the OWMS validator
+	* created list view for permits to be spidered
+	* minor fixes (correct address display in list view, description RTE rendered correctly)
+
+2009-09-14 0.1.3 Frans van der Veen <extensions@netcreators.com>
+
+	* all fields not correctly showing date & time
+	* time now empty when not set, so being omitted in view
+	* title being shown for publications
+
+2009-09-10 0.1.1 Frans van der Veen <extensions@netcreators.com>
+
+	* improved Google Maps positioning
+	* improved description at marker
+	* minor bugfixes
+	* added improved css, templates
+
+2009-07-20 0.1.0 Frans van der Veen <extensions@netcreators.com>
+
+	* Added Google Maps
+	* Added realurl autoconfiguration
+	* Fixed list view not showing description, showing title + publication date
+	* Rearranged address record, made zipcode + number compulsory, changed fields for Google Maps only
+	* Improved check for wec_map presence
+
+2009-06-11 0.0.5 Frans van der Veen <extensions@netcreators.com>
+
+	* Alpha version release
+
+2009-05-11 Frans van der Veen <extensions@netcreators.com>
+
+	* Initial version

@@ -1,14 +1,10 @@
 <?php
 
-require_once(PATH_tslib.'class.tslib_fe.php');
-require_once(PATH_t3lib.'class.t3lib_userauth.php');
-require_once(PATH_tslib.'class.tslib_feuserauth.php');
-require_once(PATH_t3lib.'class.t3lib_cs.php');
-require_once(PATH_tslib.'class.tslib_content.php');
-require_once(PATH_t3lib.'class.t3lib_tstemplate.php');
-require_once(PATH_t3lib.'class.t3lib_page.php');
+namespace Netcreators\NcgovPermits\Service\Publication;
 
-class Bekendmaking {
+use TYPO3\CMS\Core\Html\HtmlParser;
+
+class PublicationPushService {
 	var $xml_template;
 	var $user;
 	var $pass;
@@ -24,13 +20,18 @@ class Bekendmaking {
 	var $testurl;
 
 	/**
+	 * @var array
+	 */
+	var $substMarkerCache = array();
+
+	/**
 	 * Constructor
 	 * @param string $xml_template
 	 * @param string $user
 	 * @param string $pass
 	 * @param boolean $test
 	 */
-	function Bekendmaking($xml_template, $user, $pass, $test = 0) {
+	function __construct($xml_template, $user, $pass, $test = 0) {
 		$this->xml_template = $xml_template;
 		$this->user = $user;
 		$this->pass = $pass;
@@ -155,7 +156,7 @@ class Bekendmaking {
 	}
 
 	/**
-	 * Processes the given bekendmaking and pushes it to government
+	 * Processes the given Publication and pushes it to government
 	 * @return string error
 	 */
 	function process() {
@@ -175,18 +176,18 @@ class Bekendmaking {
 	}
 
 	/**
-	 * Creates xml for bekendmaking
+	 * Creates xml for Publication
 	 */
 	function buildXML() {
 
-		$absFile = t3lib_div::getFileAbsFileName($this->xml_template);
+		$absFile = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->xml_template);
 		if(is_file($absFile)) {
 			$templateCode = file_get_contents($absFile);
 		} else {
 			die('FATAL: could not read template: ' . $absFile);
 		}
 		//$templateCode = $cObj->fileResource($this->xml_template);
-		$localTemplateCode = t3lib_parsehtml::getSubpart($templateCode, '###XML###');
+		$localTemplateCode = HtmlParser::getSubpart($templateCode, '###XML###');
 
 		$localMarkerArray = array(
 			'###TRANSACTIETYPE###' => $this->data['transactiontype'],
@@ -217,7 +218,7 @@ class Bekendmaking {
 			'###LOCATIECOORDINATEN###' => ''
 		);
 
-		$temporalTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###TEMPORAL###');
+		$temporalTemplateCode = HtmlParser::getSubpart($localTemplateCode, '###TEMPORAL###');
 		if(!empty($this->data['validity_start'])) {
 			$temporalMarkerArray = array(
 				'###TEMPORAL_START###' => $this->data['validity_start']
@@ -242,7 +243,7 @@ class Bekendmaking {
 		}
 
 		if (!empty($validityEnd)) {
-			$temporalendTemplateCode = t3lib_parsehtml::getSubpart($temporalTemplateCode, '###TEMPORALEND###');
+			$temporalendTemplateCode = HtmlParser::getSubpart($temporalTemplateCode, '###TEMPORALEND###');
 			$temporalendMarkerArray = array(
 				'###TEMPORAL_END###' => date('Y-m-d', $validityEnd)
 			);
@@ -253,7 +254,7 @@ class Bekendmaking {
 		$localSubpartArray['###TEMPORAL###'] = $this->substituteMarkerArrayCached($temporalTemplateCode, $temporalMarkerArray, $temporalSubpartArray);
 
 		if (!empty($this->data['publication'])) {
-			$publicatieTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###PUBLICATIEBLOCK###');
+			$publicatieTemplateCode = HtmlParser::getSubpart($localTemplateCode, '###PUBLICATIEBLOCK###');
 			$publicatieMarkerArray = array(
 				'###PUBLICATIE###' => $this->data['publication']
 			);
@@ -261,7 +262,7 @@ class Bekendmaking {
 		}
 
 		if (!empty($this->data['casereference_pub'])) {
-			$zaakTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###ZAAK###');
+			$zaakTemplateCode = HtmlParser::getSubpart($localTemplateCode, '###ZAAK###');
 			$zaakMarkerArray = array(
 				'###ZAAKNUMMER###' => $this->data['casereference_pub'],
 				'###ZAAKURL###' => $this->data['caseurl']
@@ -270,14 +271,14 @@ class Bekendmaking {
 		}
 
 		if (!empty($this->data['termtype_start']) || !empty($this->data['termtype_end'])) {
-			$termijnTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###TERMIJN###');
+			$termijnTemplateCode = HtmlParser::getSubpart($localTemplateCode, '###TERMIJN###');
 			$termijnSubpartArray = array(
 				'###STARTTERMIJN###' => '',
 				'###EINDTERMIJN###' => ''
 			);
 
 			if (!empty($this->data['termtype_start'])) {
-				$startTermijnTemplateCode = t3lib_parsehtml::getSubpart($termijnTemplateCode, '###STARTTERMIJN###');
+				$startTermijnTemplateCode = HtmlParser::getSubpart($termijnTemplateCode, '###STARTTERMIJN###');
 				$startTermijnMarkerArray = array(
 					'###STARTDATUMTERMIJN###' => $this->data['termtype_start']
 				);
@@ -285,7 +286,7 @@ class Bekendmaking {
 			}
 
 			if (!empty($this->data['termtype_end'])) {
-				$eindTermijnTemplateCode = t3lib_parsehtml::getSubpart($termijnTemplateCode, '###EINDTERMIJN###');
+				$eindTermijnTemplateCode = HtmlParser::getSubpart($termijnTemplateCode, '###EINDTERMIJN###');
 				$eindTermijnMarkerArray = array(
 					'###EINDDATUMTERMIJN###' => $this->data['termtype_end']
 				);
@@ -296,7 +297,7 @@ class Bekendmaking {
 		}
 
 		if (!empty($this->data['objectreference'])) {
-			$referentienummerTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###REFERENTIENUMMERBLOCK###');
+			$referentienummerTemplateCode = HtmlParser::getSubpart($localTemplateCode, '###REFERENTIENUMMERBLOCK###');
 			$referentienummerMarkerArray = array(
 				'###REFERENTIENUMMER###' => $this->data['objectreference']
 			);
@@ -304,7 +305,7 @@ class Bekendmaking {
 		}
 
 		foreach ($this->data['addresses'] as $address) {
-			$adresTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###LOCATIEADRES###');
+			$adresTemplateCode = HtmlParser::getSubpart($localTemplateCode, '###LOCATIEADRES###');
 			$adresSubpartArray = array(
 				'###POSTCODEHUISNUMMER###' => '',
 				'###GEMEENTEBLOCK###' => '',
@@ -312,7 +313,7 @@ class Bekendmaking {
 			);
 
 			if (!empty($address['zipcode'])) {
-				$postcodehuisnummerTemplateCode = t3lib_parsehtml::getSubpart($adresTemplateCode, '###POSTCODEHUISNUMMER###');
+				$postcodehuisnummerTemplateCode = HtmlParser::getSubpart($adresTemplateCode, '###POSTCODEHUISNUMMER###');
 				$postcodehuisnummerMarkerArray = array(
 					'###POSTCODE###' => $address['zipcode']
 				);
@@ -323,7 +324,7 @@ class Bekendmaking {
 				);
 
 				if (!empty($address['addressnumber'])) {
-					$huisnummerTemplateCode = t3lib_parsehtml::getSubpart($postcodehuisnummerTemplateCode, '###HUISNUMMERBLOCK###');
+					$huisnummerTemplateCode = HtmlParser::getSubpart($postcodehuisnummerTemplateCode, '###HUISNUMMERBLOCK###');
 					$huisnummerMarkerArray = array(
 						'###HUISNUMMER###' => $address['addressnumber']
 					);
@@ -331,7 +332,7 @@ class Bekendmaking {
 				}
 
 				if (!empty($address['addressnumberadditional'])) {
-					$huisnummertoevoegingTemplateCode = t3lib_parsehtml::getSubpart($postcodehuisnummerTemplateCode, '###HUISNUMMERTOEVOEGINGBLOCK###');
+					$huisnummertoevoegingTemplateCode = HtmlParser::getSubpart($postcodehuisnummerTemplateCode, '###HUISNUMMERTOEVOEGINGBLOCK###');
 					$huisnummertoevoegingMarkerArray = array(
 						'###HUISNUMMERTOEVOEGINGBLOCK###' => $address['addressnumberadditional']
 					);
@@ -342,7 +343,7 @@ class Bekendmaking {
 			}
 
 			if (!empty($address['municipality'])) {
-				$gemeenteTemplateCode = t3lib_parsehtml::getSubpart($adresTemplateCode, '###GEMEENTEBLOCK###');
+				$gemeenteTemplateCode = HtmlParser::getSubpart($adresTemplateCode, '###GEMEENTEBLOCK###');
 				$gemeenteMarkerArray = array(
 					'###GEMEENTE###' => $address['municipality']
 				);
@@ -350,7 +351,7 @@ class Bekendmaking {
 			}
 
 			if (!empty($address['province'])) {
-				$provincieTemplateCode = t3lib_parsehtml::getSubpart($adresTemplateCode, '###PROVINCIEBLOCK###');
+				$provincieTemplateCode = HtmlParser::getSubpart($adresTemplateCode, '###PROVINCIEBLOCK###');
 				$provincieMarkerArray = array(
 					'###PROVINCIE###' => $address['province']
 				);
@@ -361,7 +362,7 @@ class Bekendmaking {
 		}
 
 		foreach ($this->data['parcels'] as $parcel) {
-			$perceelTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###LOCATIEPERCEEL###');
+			$perceelTemplateCode = HtmlParser::getSubpart($localTemplateCode, '###LOCATIEPERCEEL###');
 			$perceelMarkerArray = array(
 				'###KADASTRALEGEMEENTE###' => $parcel['cadastremunicipality'],
 				'###SECTIE###' => $parcel['section'],
@@ -371,7 +372,7 @@ class Bekendmaking {
 		}
 
 		foreach ($this->data['coordinates'] as $coordinates) {
-			$coordinatenTemplateCode = t3lib_parsehtml::getSubpart($localTemplateCode, '###LOCATIECOORDINATEN###');
+			$coordinatenTemplateCode = HtmlParser::getSubpart($localTemplateCode, '###LOCATIECOORDINATEN###');
 			$coordinatenMarkerArray = array(
 				'###XWAARDE###' => $coordinates['coordinatex'],
 				'###YWAARDE###' => $coordinates['coordinatey']
@@ -397,11 +398,11 @@ class Bekendmaking {
 
 	/**
 	 * Pushes data using sockets
-	 * @param type $url
-	 * @param type $username
-	 * @param type $password
-	 * @param type $xml
-	 * @return type
+	 * @param string $url
+	 * @param string $username
+	 * @param string $password
+	 * @param string $xml
+	 * @return string
 	 */
 	function fputsRequest($url, $username, $password, $xml) {
 		$url = parse_url($url);
@@ -418,7 +419,7 @@ class Bekendmaking {
 		fputs($fp, "Authorization: Basic " . base64_encode($username . ':' . $password) . "\r\n");
 		fputs($fp, "Host: " . $host . "\r\n");
 		fputs($fp, "Content-type: application/xml; charset=UTF-8\r\n");
-		fputs($fp, "Content-length: " . strlen($this->xml) . "\r\n");
+		fputs($fp, "Content-length: " . strlen($xml) . "\r\n");
 		fputs($fp, "Connection: close\r\n\r\n");
 		fputs($fp, $this->xml);
 
@@ -565,12 +566,12 @@ class Bekendmaking {
 
 					// Finding subparts and substituting them with the subpart as a marker
 				foreach ($sPkeys as $sPK) {
-					$content = t3lib_parsehtml::substituteSubpart($content, $sPK, $sPK);
+					$content = HtmlParser::substituteSubpart($content, $sPK, $sPK);
 				}
 
 					// Finding subparts and wrapping them with markers
 				foreach ($wPkeys as $wPK) {
-					$content = t3lib_parsehtml::substituteSubpart($content, $wPK, array(
+					$content = HtmlParser::substituteSubpart($content, $wPK, array(
 						$wPK, $wPK
 					));
 				}

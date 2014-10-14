@@ -1,15 +1,17 @@
 <?php
 
-class tx_ncgovpermits_realurl_configuration {
+namespace Netcreators\NcgovPermits\Service\RealUrl;
+
+class RealUrlAutoConfigurationService {
 
 	/**
 	 * Generates additional RealURL configuration and merges it with provided configuration
 	 *
-	 * @param array $paramsDefault configuration
-	 * @param tx_realurl_autoconfgen $pObjParent object
+	 * @param array $params configuration
+	 * @param \tx_realurl_autoconfgen $realUrlAutoConfigurationGenerator object
 	 * @return array Updated configuration
 	 */
-	function addNcGovPermitsRealurlConfig($params, &$pObj) {
+	function addNcGovPermitsRealUrlConfiguration($params, \tx_realurl_autoconfgen &$realUrlAutoConfigurationGenerator) {
 		return array_merge_recursive(
 			$params['config'],
 			array(
@@ -39,10 +41,6 @@ class tx_ncgovpermits_realurl_configuration {
 			)
 		);
 	}
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/controller/class.tx_ncgovpermits_realurl_configuration.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/controller/class.tx_ncgovpermits_realurl_configuration.php']);
 }
 
 ?>

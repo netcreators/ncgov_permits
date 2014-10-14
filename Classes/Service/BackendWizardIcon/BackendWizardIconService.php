@@ -21,6 +21,8 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class that adds the wizard icon.
@@ -34,7 +36,7 @@ class tx_ncgovpermits_wizicon {
 	 * Processing the wizard items array
 	 *
 	 * @param	array		$wizardItems: The wizard items
-	 * @return	Modified array with wizard items
+	 * @return	array Modified array with wizard items
 	 */
 	function proc($wizardItems)	{
 		global $LANG;
@@ -43,7 +45,7 @@ class tx_ncgovpermits_wizicon {
 		$LL = $this->includeLocalLang();
 
 		$wizardItems['plugins_'.$this->extKeyShort.'_controller'] = array(
-			'icon'=>t3lib_extMgm::extRelPath($this->extKey).'res/icons/ce_wiz.gif',
+			'icon'=> ExtensionManagementUtility::extRelPath($this->extKey).'res/icons/ce_wiz.gif',
 			'title'=>$LANG->getLLL('wizicon_title',$LL),
 			'description'=>$LANG->getLLL('wizicon_description',$LL),
 			'params'=>'&defVals[tt_content][CType]=list&defVals[tt_content][list_type]='.$this->extKey.'_controller'
@@ -57,8 +59,8 @@ class tx_ncgovpermits_wizicon {
 	 * @return	The array with language labels
 	 */
 	function includeLocalLang()	{
-		$LOCAL_LANG = \TYPO3\CMS\Core\Utility\GeneralUtility::readLLfile(
-    		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ncgov_permits') . 'lang/locallang_wizicon.xml',
+		$LOCAL_LANG = GeneralUtility::readLLfile(
+    		ExtensionManagementUtility::extPath('ncgov_permits') . 'lang/locallang_wizicon.xml',
     		$GLOBALS['LANG']->lang);
 		
 		return $LOCAL_LANG;
@@ -68,10 +70,6 @@ class tx_ncgovpermits_wizicon {
 		$this->extKey='ncgov_permits';
 		$this->extKeyShort='tx_ncfeurnavision';
 	}
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/controller/class.tx_ncgovpermits_wizicon.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/controller/class.tx_ncgovpermits_wizicon.php']);
 }
 
 ?>

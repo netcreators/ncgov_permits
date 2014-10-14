@@ -22,7 +22,7 @@ $TCA[$_TABLENAME] = array (
         ),
         'message' => array (
             'exclude' => 1,
-            'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.message',
+            'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.message',
             'config' => Array (
                 'type' => 'text',
                 'cols' => '30',
@@ -31,7 +31,7 @@ $TCA[$_TABLENAME] = array (
         ),
 		'messagenumber' => array (
             'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.messagenumber',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.messagenumber',
             'config' => array (
                 'type'     => 'input',
                 'size'     => '4',
@@ -43,7 +43,7 @@ $TCA[$_TABLENAME] = array (
 		),
         'logtype' => Array (
             'exclude' => 1,
-            'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.logtype',
+            'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.logtype',
             'config' => Array (
                 'type' => 'input',
                 'size' => '10',
@@ -53,7 +53,7 @@ $TCA[$_TABLENAME] = array (
         ),
 		'smscount' => array (
             'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.smscount',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.smscount',
             'config' => array (
                 'type'     => 'input',
                 'eval'     => 'int',
@@ -62,7 +62,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'emailcount' => array (
             'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.emailcount',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.emailcount',
             'config' => array (
                 'type'     => 'input',
                 'eval'     => 'int',

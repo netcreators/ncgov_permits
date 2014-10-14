@@ -22,20 +22,26 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-$sCurrentDir = dirname(__FILE__) . '/';
-require_once($sCurrentDir . '../includes.php');
+namespace Netcreators\NcgovPermits\Controller;
 
-class tx_ncgovpermits_base_controller extends tx_nclib_base_controller {
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+class BaseController extends \tx_nclib_base_controller {
+
+	// NOTE the false path helps the pibase class find the locallang.xml
+	// Not used elsewhere
+	// Path to this script relative to the extension dir.
+	public $scriptRelPath = 'Resources/Private/Language/';
+
 	function __construct() {
 	}
 	
 	function initialize($configuration) {
+		if(!$this->cObj) {
+			$this->cObj = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
+		}
 		parent::initialize($configuration);	
 	}
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/controller/class.tx_ncgovpermits_base_controller.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/controller/class.tx_ncgovpermits_base_controller.php']);
 }
 
 ?>

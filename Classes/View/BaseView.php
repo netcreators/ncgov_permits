@@ -22,10 +22,13 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-$currentDir = dirname(__FILE__) . '/';
-require_once($currentDir . '../includes.php');
+namespace Netcreators\NcgovPermits\View;
 
-class tx_ncgovpermits_base_view extends tx_nclib_base_view {
+class BaseView extends \tx_nclib_base_view {
+	/**
+	 * @var \Netcreators\NcgovPermits\Controller\PermitController
+	 */
+	protected $controller;
 
 	/**
 	 * Returns a content object rendered. Needs the config path where the id of the content object is stored.
@@ -37,7 +40,7 @@ class tx_ncgovpermits_base_view extends tx_nclib_base_view {
 	public function getContentObject($configPath) {
 		$storageFolder = $this->controller->configModel->get('content.storageFolder');
 		if(empty($storageFolder) || $storageFolder === false) {
-			throw new tx_nclib_exception('label_error_content_elements_storage_folder_not_set', $this->controller);
+			throw new \tx_nclib_exception('label_error_content_elements_storage_folder_not_set', $this->controller);
 		}
 
 		$contentUid = $this->controller->configModel->get($configPath);
@@ -50,7 +53,7 @@ class tx_ncgovpermits_base_view extends tx_nclib_base_view {
 		);
 		$result = $this->controller->cObj->cObjGetSingle('CONTENT', $config);
 		if(empty($result)) {
-			throw new tx_nclib_exception(
+			throw new \tx_nclib_exception(
 				'label_error_content_object_not_found',
 				$this->controller,
 				array('path' => $configPath)
@@ -65,7 +68,7 @@ class tx_ncgovpermits_base_view extends tx_nclib_base_view {
 	 * @param array	$labels
 	 */
 	public function addTranslationLabels($labels) {
-		if(tx_nclib::isLoopable($labels)) {
+		if(\tx_nclib::isLoopable($labels)) {
 			foreach($labels as $label) {
 				$this->getTranslatedLabel($label);
 			}
@@ -91,7 +94,7 @@ class tx_ncgovpermits_base_view extends tx_nclib_base_view {
 
 	protected function getProductsNameList($products) {
 		$list = '';
-		if(tx_nclib::isLoopable($products)) {
+		if(\tx_nclib::isLoopable($products)) {
 			foreach($products as $index=>$product) {
 				if($index > 0) {
 					$list .= ', ';
@@ -118,7 +121,7 @@ class tx_ncgovpermits_base_view extends tx_nclib_base_view {
 
 	protected function getProductRequirements($products) {
 		$result = array();
-		if(tx_nclib::isLoopable($products)) {
+		if(\tx_nclib::isLoopable($products)) {
 			foreach($products as $index => $product) {
 				$this->addTranslationLabel('label_for_product', array('productName' => $product['name']));
 				$result[$index]['PRODUCT_NAME'] = $this->getTranslatedLabel('label_for_product');
@@ -129,7 +132,4 @@ class tx_ncgovpermits_base_view extends tx_nclib_base_view {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/view/class.tx_ncgovpermits_base_view.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/ncgov_permits/view/class.tx_ncgovpermits_base_view.php']);
-}
 ?>

@@ -22,30 +22,27 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-$sCurrentDir = dirname(__FILE__) . '/';
-require_once($sCurrentDir . '../includes.php');
-
-/*if(!class_exists('tslib_cObj')) {
-	require_once(PATH_tslib . 'class.tslib_content.php');
-}*/
+namespace Netcreators\NcgovPermits\Controller;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Backend controller(helper) class for 'nc_products' extension.
+ * Backend controller(helper) class for 'ncgov_permits' extension.
  *
  * @author	Frans van der Veen <extensions@netcreators.com>
  * @package	TYPO3
  * @subpackage	tx_ncproducts
  */
-class tx_ncgovpermits_be_controller {
+class BackendController {
+	/**
+	 * @var \Netcreators\NcgovPermits\Controller\PermitController
+	 */
 	protected $controller;
 
 	public function initialize() {
 		try {
-			$cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tslib_cObj');
-			$this->controller = t3lib_div::makeInstance('tx_ncgovpermits_controller');
+			$this->controller = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\Controller\\PermitController');
 			$this->controller->initialize(array());
-			$this->controller->cObj = $cObj;
-		} catch(tx_nclib_exception $exception) {
+		} catch(\tx_nclib_exception $exception) {
 			die('<strong>' .get_class($this) . '</strong> exception: ' . $exception->getErrorMessage());
 		}
 	}
@@ -60,14 +57,14 @@ class tx_ncgovpermits_be_controller {
 		$this->initialize();
 		$row = $config['row'];
 		try {
-			$list = tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
+			$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 				$this->controller->xmlModel->getGovXmlValueList(
 					$this->controller->configModel->getExtensionConfiguration('permitMunicipalityXmlFile'),
 					true
 				)
 			);
 			$config['items'] = $list;
-		} catch(Exception $exception) {
+		} catch(\Exception $exception) {
 			die($this->controller->getException($exception));
 		}
 		return $config;
@@ -90,17 +87,18 @@ class tx_ncgovpermits_be_controller {
 		$this->initialize();
 		try {
 			$row = $config['row'];
+			$list = array();
 			switch($row['type']) {
-				case tx_ncgovpermits_permits_model::TYPE_PERMIT:
-					$list = tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
+				case \Netcreators\NcgovPermits\Domain\Model\Permit::TYPE_PERMIT:
+					$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 						$this->controller->xmlModel->getGovXmlValueList(
 							$this->controller->configModel->getExtensionConfiguration('permitProductTypeXmlFile'),
 							true
 						)
 					);
 					break;
-				case tx_ncgovpermits_permits_model::TYPE_PUBLICATION:
-					$list = tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
+				case \Netcreators\NcgovPermits\Domain\Model\Permit::TYPE_PUBLICATION:
+					$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 						$this->controller->xmlModel->getGovTxtValueList(
 							$this->controller->configModel->getExtensionConfiguration('publicationProductTypeTxtFile')
 						)
@@ -108,7 +106,7 @@ class tx_ncgovpermits_be_controller {
 					break;
 			}
 			$config['items'] = $list;
-		} catch(Exception $exception) {
+		} catch(\Exception $exception) {
 			die($this->controller->getException($exception));
 		}
 		return $config;
@@ -123,14 +121,14 @@ class tx_ncgovpermits_be_controller {
 	function user_getProductActivities($config) {
 		$this->initialize();
 		try {
-			$list = tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
+			$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 				$this->controller->xmlModel->getGovXmlValueList(
 					$this->controller->configModel->getExtensionConfiguration('permitProductActivityXmlFile'),
 					true
 				)
 			);
 			$config['items'] = $list;
-		} catch(Exception $exception) {
+		} catch(\Exception $exception) {
 			die($this->controller->getException($exception));
 		}
 		return $config;
@@ -145,7 +143,7 @@ class tx_ncgovpermits_be_controller {
 	function user_getPhases($config) {
 		$this->initialize();
 		try {
-			$list = tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
+			$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 				$this->controller->xmlModel->getGovXmlValueList(
 					$this->controller->configModel->getExtensionConfiguration('permitPhaseXmlFile'),
 					true
@@ -154,7 +152,7 @@ class tx_ncgovpermits_be_controller {
 			// add the first 'select x' to the list
 			array_unshift($list, $config['items'][0]);
 			$config['items'] = $list;
-		} catch(Exception $exception) {
+		} catch(\Exception $exception) {
 			die($this->controller->getException($exception));
 		}
 		return $config;
@@ -169,7 +167,7 @@ class tx_ncgovpermits_be_controller {
 	function user_getTermTypes($config) {
 		$this->initialize();
 		try {
-			$list = tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
+			$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 				$this->controller->xmlModel->getGovXmlValueList(
 					$this->controller->configModel->getExtensionConfiguration('permitTermTypeXmlFile'),
 					true
@@ -178,7 +176,7 @@ class tx_ncgovpermits_be_controller {
 			// add the first 'select x' to the list
 			array_unshift($list, $config['items'][0]);
 			$config['items'] = $list;
-		} catch(Exception $exception) {
+		} catch(\Exception $exception) {
 			die($this->controller->getException($exception));
 		}
 		return $config;
@@ -193,7 +191,7 @@ class tx_ncgovpermits_be_controller {
 	function user_getProvinces($config) {
 		$this->initialize();
 		try {
-			$list = tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
+			$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 				$this->controller->xmlModel->getGovXmlValueList(
 					$this->controller->configModel->getExtensionConfiguration('permitProvinceXmlFile'),
 					true
@@ -202,7 +200,7 @@ class tx_ncgovpermits_be_controller {
 			// add the first 'select x' to the list
 			array_unshift($list, $config['items'][0]);
 			$config['items'] = $list;
-		} catch(Exception $exception) {
+		} catch(\Exception $exception) {
 			die($this->controller->getException($exception));
 		}
 		return $config;
@@ -217,7 +215,7 @@ class tx_ncgovpermits_be_controller {
 	function user_getCadastreMunicipalities($config) {
 		$this->initialize();
 		try {
-			$list = tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
+			$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 				$this->controller->xmlModel->getGovXmlValueList(
 					$this->controller->configModel->getExtensionConfiguration('permitCadastreMunicipalityXmlFile'),
 					true
@@ -226,7 +224,7 @@ class tx_ncgovpermits_be_controller {
 			// add the first 'select x' to the list
 			array_unshift($list, $config['items'][0]);
 			$config['items'] = $list;
-		} catch(Exception $exception) {
+		} catch(\Exception $exception) {
 			die($this->controller->getException($exception));
 		}
 		return $config;
@@ -241,36 +239,19 @@ class tx_ncgovpermits_be_controller {
 	function user_getDocumentTypes($config) {
 		$this->initialize();
 		try {
-			$list = tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
+			$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 				$this->controller->xmlModel->getGovXmlValueList(
 					$this->controller->configModel->getExtensionConfiguration('permitDocumentTypeXmlFile'),
 					true
 				)
 			);
 			$config['items'] = $list;
-		} catch(Exception $exception) {
+		} catch(\Exception $exception) {
 			die($this->controller->getException($exception));
 		}
 		return $config;
 	}
 
-	/**
-	 * BE form rendering stuff
-	 * @param $table	table
-	 * @param $row	record
-	 * @param $parent	$this
-	 * @return void
-	 */
-	function getMainFields_preProcess($table, $row, $parent) {
-		//print("table:$table");
-		//debug($row);
-		//debug($parent);
-	}
-}
-
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/nc_permits/controller/class.tx_ncgovpermits_be_controller.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/nc_permits/controller/class.tx_ncgovpermits_be_controller.php']);
 }
 
 ?>

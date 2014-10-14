@@ -7,8 +7,6 @@ $_TABLENAME = $_EXTKEYSHORT . '_lots';
 $_MAX_ALLOWED_FILESIZE = 51200;
 $_ALLOWED_FILETYPES = 'doc,pdf,ppt,xls,zip';
 
-require_once(t3lib_extMgm::extPath($_EXTKEY).'controller/class.'.$_EXTKEYSHORT.'_be_controller.php');
-
 $TCA[$_TABLENAME] = array (
 	'ctrl' => $TCA[$_TABLENAME]['ctrl'],
 	'interface' => array (
@@ -18,20 +16,20 @@ $TCA[$_TABLENAME] = array (
 	'columns' => array (
 		'cadastremunicipality' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.cadastremunicipality',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.cadastremunicipality',
 			'config' => array (
 				'type' => 'select',
 				'items' => array (
-					array('LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.cadastremunicipality.I.0', ''),
+					array('LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.cadastremunicipality.I.0', ''),
 				),
 				'size' => 1,
 				'maxitems' => 1,
-				'itemsProcFunc' => 'tx_ncgovpermits_be_controller->user_getCadastreMunicipalities',
+				'itemsProcFunc' => 'Netcreators\\NcgovPermits\\Controller\\BackendController->user_getCadastreMunicipalities',
 			)
 		),
 		'section' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.section',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.section',
 			'config' => array (
 				'type' => 'input',
 				'size' => '4',
@@ -40,7 +38,7 @@ $TCA[$_TABLENAME] = array (
 		),
 		'number' => array (
 			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/lang/locallang_tca.xml:' . $_TABLENAME . '.number',
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.number',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
