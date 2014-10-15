@@ -1,4 +1,8 @@
 
+2014-10-15 1.0.3 Klaus Bitto <klaus@netcreators.nl>
+
+	* Disabled cHash check.
+
 2014-10-15 1.0.2 Klaus Bitto <klaus@netcreators.nl>
 
 	* Fix: Quoting and escaping casereference_pub when preparing query in \Netcreators\NcgovPermits\Domain\Model\Permit::_getField_getPublications().

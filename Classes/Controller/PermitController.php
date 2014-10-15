@@ -41,7 +41,7 @@ class PermitController extends BaseController {
 	// same as $_EXTKEY and $_EXTKEYSHORT
 	public $extKey      = 'ncgov_permits';
 	public $extKeyShort = 'tx_ncgovpermits';
-	public $pi_checkCHash = true;
+	public $pi_checkCHash = false;
 
 	/**
 	 * @var \Netcreators\NcgovPermits\Domain\Model\Config
