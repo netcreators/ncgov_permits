@@ -902,6 +902,9 @@ class Permit extends Base {
 		return $records;
 	}
 	protected function _getField_getPublications() {
+		/** @var \TYPO3\CMS\Core\Database\DatabaseConnection $TYPO3_DB */
+		global $TYPO3_DB;
+
 		if($this->publications) {
 			return $this->publications;
 		}
@@ -918,7 +921,7 @@ class Permit extends Base {
 			return false;
 		}
 		$where = array(
-			'casereference_pub = ' . $caeseReference,
+			sprintf('casereference_pub = \'%s\'', $TYPO3_DB->getDatabaseHandle()->real_escape_string($caeseReference)),
 			'type=' . self::TYPE_PUBLICATION,
 			'hidden=0',
 			'deleted=0',

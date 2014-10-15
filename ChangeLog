@@ -1,4 +1,8 @@
 
+2014-10-15 1.0.2 Klaus Bitto <klaus@netcreators.nl>
+
+	* Fix: Quoting and escaping casereference_pub when preparing query in \Netcreators\NcgovPermits\Domain\Model\Permit::_getField_getPublications().
+
 2014-10-15 1.0.1 Klaus Bitto <klaus@netcreators.nl>
 
 	* Fixed language label loading (scriptRelPath needs dummy file - path alone is not enough.)
