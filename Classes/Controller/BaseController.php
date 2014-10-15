@@ -31,7 +31,7 @@ class BaseController extends \tx_nclib_base_controller {
 	// NOTE the false path helps the pibase class find the locallang.xml
 	// Not used elsewhere
 	// Path to this script relative to the extension dir.
-	public $scriptRelPath = 'Resources/Private/Language/';
+	public $scriptRelPath = 'Resources/Private/Language/BaseController';
 
 	function __construct() {
 	}

@@ -29,6 +29,7 @@ class Log extends Base {
 
 	function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller) {
 		parent::initialize($controller);
+		$this->setTableName('tx_ncgovpermits_log');
 		$this->messageNumber = 0;
 	}
 

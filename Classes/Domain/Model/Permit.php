@@ -41,6 +41,7 @@ class Permit extends Base {
 
 	function initialize(PermitController &$controller) {
 		parent::initialize($controller);
+		$this->setTableName('tx_ncgovpermits_permits');
 		$this->addresses = false;
 		$this->lots = false;
 		$this->coordinates = false;

@@ -1,3 +1,10 @@
+
+2014-10-15 1.0.1 Klaus Bitto <klaus@netcreators.nl>
+
+	* Fixed language label loading (scriptRelPath needs dummy file - path alone is not enough.)
+	* Manually setting table names for Domain Models since they cannot be auto-determined by use of the old strategy.
+	* Fixed argument type hint for PermitView::initialize().
+
 2014-10-05 1.0.0 Klaus Bitto <klaus@netcreators.nl>
 
 	* Version for TYPO3 6.2.

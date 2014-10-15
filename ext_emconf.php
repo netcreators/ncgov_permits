@@ -29,12 +29,12 @@ $EM_CONF[$_EXTKEY] = array(
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
 	'author_company' => 'Netcreators',
-	'version' => '1.0.0',
+	'version' => '1.0.1',
 	'constraints' => array(
 		'depends' => array(
 			'php' => '5.3.0-0.0.0',
 			'typo3' => '6.2.0-6.2.99',
-			'nc_lib' => '',
+			'nc_lib' => '2.0.3-2.0.99',
 		),
 		'conflicts' => array(
 		),

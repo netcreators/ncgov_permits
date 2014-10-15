@@ -50,10 +50,10 @@ class PermitView extends BaseView {
 	/**
 	 * Initializes the class.
 	 *
-	 * @param \Netcreators\NcgovPermits\View\PermitView $controller the controller object
+	 * @param \Netcreators\NcgovPermits\Controller\PermitController $controller the controller object
 	 * @param string $mode
 	 */
-	public function initialize(\Netcreators\NcgovPermits\View\PermitView &$controller, $mode) {
+	public function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller, $mode) {
 		parent::initialize($controller);
 		$this->addCssIncludeToHeader(
 			$this->controller->configModel->get('includeCssFile'),

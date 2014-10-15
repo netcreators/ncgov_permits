@@ -185,7 +185,7 @@ class PermitController extends BaseController {
 					$content = $this->getView();
 					break;
 				case 'permitsall':
-                                case 'publicationsall':
+                case 'publicationsall':
 					$content = $this->getViewAll();
 					break;                                    
 				case 'publish_permits':
@@ -311,6 +311,7 @@ class PermitController extends BaseController {
 	 * @return string
 	 */
 	public function getLatestList() {
+		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
 		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
 		$view->initialize($this, 'latest_list');
 		$end = time();
@@ -324,6 +325,7 @@ class PermitController extends BaseController {
 	 * @return string
 	 */
 	public function getList() {
+		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
 		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
 		$view->initialize($this, 'list');
 		$this->prepareDateFilter();
@@ -341,6 +343,7 @@ class PermitController extends BaseController {
 	 * @return string
 	 */
 	public function getListAll() {
+		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
 		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
 		$view->initialize($this, 'list');
 		$this->prepareDateFilterAll();
@@ -358,6 +361,7 @@ class PermitController extends BaseController {
 	 * @return string
 	 */
 	public function getDetails() {
+		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
 		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
 		$view->initialize($this, 'details');
 		$this->permitsModel->loadRecordById(
@@ -377,6 +381,7 @@ class PermitController extends BaseController {
 	 * @return string
 	 */
 	public function getDetailsAll() {
+		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
 		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
 		$view->initialize($this, 'details');
 		$this->permitsModel->loadRecordById(
@@ -397,6 +402,7 @@ class PermitController extends BaseController {
 	 * @return string
 	 */
 	public function getDocument() {
+		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
 		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
 		$view->initialize($this, 'document');
 		$this->permitsModel->loadRecordById(
