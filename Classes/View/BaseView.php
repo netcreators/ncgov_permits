@@ -130,6 +130,32 @@ class BaseView extends \tx_nclib_base_view {
 		}
 		return $result;
 	}
+
+	/**
+	 * Automatically determines the name of the template associated with this class
+	 * Gets the template from the config model, if defined & existent.
+	 *
+	 * @throws \tx_nclib_exception
+	 * @return void
+	 */
+	protected function autoDetermineTemplateForView() {
+		$classPath = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('\\', get_class($this));
+		$className = array_pop($classPath);
+		$viewName = lcfirst($className);
+
+		if(isset($this->controller->configModel) && is_object($this->controller->configModel)) {
+			$path = 'templates.';
+			if($this->controller->configModel->exists($path.$viewName)) {
+				$this->setTemplateFile($this->controller->configModel->get($path.$viewName));
+			} else {
+				throw new \tx_nclib_exception(
+					'tx_nclib_error_autodetermine_template_name_error',
+					$this->controller,
+					array('class'=>get_class($this), 'key'=>$path.$viewName)
+				);
+			}
+		} // skip otherwise
+	}
 }
 
 ?>
