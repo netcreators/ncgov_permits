@@ -368,7 +368,7 @@ class PermitView extends BaseView {
 						$this->controller->permitsModel->getTableName()
 					);
 					$permit['FIELD_' . strtoupper($field)] = $content;
-                              }
+                }
                                 
 				$permit['FIELD_ADDRESS'] = $this->controller->permitsModel->getAddress();
                                                                
@@ -397,10 +397,10 @@ class PermitView extends BaseView {
 					$addressesAdded = true;
 				}
                                                    
-                                $subparts['RECORDS'][$weeknumberyear]['SUBRECORDS'][$permitIndex] = $permit;      
+                $subparts['RECORDS'][$weeknumberyear]['SUBRECORDS'][$permitIndex] = $permit;
                                
 				$permitIndex++;                            
-                                $previousweeknumber = $weeknumberyear;
+                $previousweeknumber = $weeknumberyear;
 				$this->controller->permitsModel->moveToNextRecord();
 			}
                         
@@ -416,8 +416,8 @@ class PermitView extends BaseView {
 				$subparts['GOOGLE_MAPS'] = '';
 			}
 
-			} else {
-				$subparts['RECORDS_AVAILABLE'] = array(
+		} else {
+			$subparts['RECORDS_AVAILABLE'] = array(
 				$this->getTranslatedLabel('no_records_available')
 			);
 			$subparts['HAS_MAPS'] = array();
