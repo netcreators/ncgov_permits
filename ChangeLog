@@ -1,4 +1,11 @@
 
+2015-01-27 1.0.4 Klaus Bitto <klaus@netcreators.nl>
+
+	* Updated nc_lib dependency version.
+	* Increased maximum number of permits document files. (50 was not enough in the case of some imported permits.)
+	* Made publishenddate not required.
+	* Made publicationbody not required, since during export, if publicationbody is empty, the description field content is used.
+
 2014-10-15 1.0.3 Klaus Bitto <klaus@netcreators.nl>
 
 	* Disabled cHash check.

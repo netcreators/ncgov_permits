@@ -74,7 +74,7 @@ $TCA[$_TABLENAME] = array (
 				'type' => 'input',
 				'size' => '12',
 				'max' => '20',
-				'eval' => 'date,required',
+				'eval' => 'date',
 			)
 		),
 		'language' => array (
@@ -113,7 +113,6 @@ $TCA[$_TABLENAME] = array (
 				'type' => 'text',
 				'cols' => '30',
 				'rows' => '5',
-				'eval' => 'required',
 			)
 		),
 		'producttype' => array (
@@ -162,7 +161,7 @@ $TCA[$_TABLENAME] = array (
 				'uploadfolder' => 'uploads/' . $_EXTKEYSHORT . '/documents',
 				'size' => 10,
 				'minitems' => 0,
-				'maxitems' => 50,
+				'maxitems' => 500,
 			)
 		),
 		'documenttypes' => array (
