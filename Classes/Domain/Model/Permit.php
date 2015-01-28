@@ -116,8 +116,8 @@ class Permit extends Base {
 			'(lastpublished = 0 OR tstamp > lastpublished)',
 			'publishdate < ' . time(),
 			'type = ' . self::TYPE_PERMIT,	// make sure we get PERMIT records
-			//'hidden=0',
-			//'deleted=0',
+			'hidden=0',
+			'deleted=0',
 			sprintf('%s.pid in (%s)', $this->getTableName(), implode(',', $pageIds)),
 		);
 		$where = $this->database->getWhere($where);
@@ -961,7 +961,7 @@ class Permit extends Base {
 	public function skipThisUpdate() {
 		$result = false;
 		$d = $this->getField('deleted') == 1 || $this->getField('hidden') == 1;
-		if($d && $this->getField('tstamp', true) > $this->getField('lastpublished')) {
+		if($d && $this->getField('tstamp', true) > $this->getField('lastpublished')) { // This logic makes no sense to me whatsoever. This could be meant as a 'preview' function. (Selecting records which are newer than the last publish date, but (not yet un-) hidden. Never mind the deleted ones.) Why would you publish a preview in XML which you do not publish on the website?
 			$result = true;
 		}
 		return $result;
