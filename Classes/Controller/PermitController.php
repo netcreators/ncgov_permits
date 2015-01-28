@@ -438,12 +438,16 @@ class PermitController extends BaseController {
 		$log[] = 'Publishing records ' . date($this->configModel->get('config.dateFormat') . ' H:i:s');
 		$log[] = '______________________________________' . chr(10);
 		if($this->permitsModel->loadPublishablePermits()) {
+			$log[] = 'Loaded ' . $this->permitsModel->getCount() . ' publishable permits. (Limit: ' . $this->configModel->get('latestlimit') . ')';
 			while($this->permitsModel->hasNextRecord()) {
 				$this->cleanOldDocuments();
 				if($this->permitsModel->skipThisUpdate()) {
+					$log[] = '[-] Skipping publication of permit [' . $this->permitsModel->getId() . ']: ' . $this->permitsModel->getField('title');
 					$this->permitsModel->moveToNextRecord();
 					continue;
 				}
+
+				$log[] = '[+] Processing publication of permit [' . $this->permitsModel->getId() . ']: ' . $this->permitsModel->getField('title');
 				$successful = false;
 				$xmlData = $view->getPermitXmls();
 				foreach($xmlData as $file => $xml) {

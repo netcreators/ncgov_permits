@@ -25,7 +25,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 		return $GLOBALS['TYPO3_DB'];
 	}
 
-	function tx_ncgovpermits_cli() {
+	function __construct() {
 		parent::__construct();
 
 		$this->cli_help['name'] = '';
@@ -382,7 +382,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 	}
 }
 
-$startstopcache = GeneralUtility::makeInstance('tx_ncgovpermits_cli');
+$startstopcache = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\Controller\\CommandLineController');
 $startstopcache->cli_main($_SERVER['argv']);
 
 ?>
