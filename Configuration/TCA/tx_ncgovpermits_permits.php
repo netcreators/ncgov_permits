@@ -7,12 +7,29 @@ $_TABLENAME = $_EXTKEYSHORT . '_permits';
 $_MAX_ALLOWED_FILESIZE = 51200;
 $_ALLOWED_FILETYPES = 'doc,pdf,ppt,xls,zip';
 
-$TCA[$_TABLENAME] = array (
-	'ctrl' => $TCA[$_TABLENAME]['ctrl'],
+$tableDefinition = array (
+	'ctrl' => array (
+		'title'     => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_tableName,
+		'label'     => 'title',
+		'label_alt'     => 'description',
+		'tstamp'    => 'tstamp',
+		'crdate'    => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'default_sortby' => 'ORDER BY uid',
+		'delete' 	=> 'deleted',
+		'type' 		=> 'type',
+		'enablecolumns' => array (
+			'disabled' => 'hidden',
+		),
+		'dividers2tabs' => false,
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY).'Resources/Public/Icons/icon_' . $_tableName . '.gif',
+	),
 	'interface' => array (
 		'showRecordFieldList' => 'hidden,message,logtype'
 	),
-	'feInterface' => $TCA[$_TABLENAME]['feInterface'],
+	'feInterface' => array (
+		'fe_admin_fieldList' => 'hidden,name',
+	),
 	'columns' => array (
 		'hidden' => array (
 			'exclude' => 1,
@@ -420,7 +437,7 @@ $TCA[$_TABLENAME] = array (
 );
 
 $items = array();
-foreach($TCA[$_TABLENAME]['columns'] as $name => $data) {
+foreach($tableDefinition['columns'] as $name => $data) {
 	$name = trim($name);
 	if(array_search($name, array('publishdate', 'title', 'link', 'companyaddress'))) {
 		continue;
@@ -430,6 +447,8 @@ foreach($TCA[$_TABLENAME]['columns'] as $name => $data) {
 	}
 	$items[] = $name;
 }
-$TCA[$_TABLENAME]['types']['0']['showitem'] = implode(', ', $items);
+$tableDefinition['types']['0']['showitem'] = implode(', ', $items);
+
+return $tableDefinition;
 
 ?>

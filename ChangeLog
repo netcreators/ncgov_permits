@@ -1,4 +1,7 @@
 
+2015-01-29 1.0.6 Klaus Bitto <klaus@netcreators.nl>
+	* Adjusted TCA definitions to requirements of the new TCA handling of TYPO3 6.1.
+
 2015-01-28 1.0.5 Klaus Bitto <klaus@netcreators.nl>
 	* Fixed command line invocation. (Corrected class name.)
 	* Added log output to PermitController::getPublishPermits() to spy on cases where records are skipped for possibly no good reason.
