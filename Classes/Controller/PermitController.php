@@ -68,7 +68,13 @@ class PermitController extends BaseController {
 	 */
 	public $dateFilter;
 
+	/**
+	 * @var array
+	 */
+	protected $tableData;
+
 	public $productTypeFilter, $phaseFilter, $termTypeFilter;
+
 
 	private $knownParams = array(
 		'mode' => 'string',

@@ -27,6 +27,7 @@ namespace Netcreators\NcgovPermits\Domain\Model;
 
 use Netcreators\NcgovPermits\Controller\PermitController;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 class Permit extends Base {
 	/**
@@ -908,8 +909,11 @@ class Permit extends Base {
 		if($this->publications) {
 			return $this->publications;
 		}
+		$publicationsStorageFolder = MathUtility::canBeInterpretedAsInteger($this->controller->configModel->get('publicationsStorageFolder'))
+			? $this->controller->configModel->get('publicationsStorageFolder')
+			: $this->controller->configModel->get('storageFolder');
 		$pageIds = $this->database->getPageIdsRecursive(
-			$this->controller->configModel->get('publicationsStorageFolder'),
+			$publicationsStorageFolder,
 			$this->controller->configModel->get('recurseDepth')
 		);
 		if($pageIds === false) {

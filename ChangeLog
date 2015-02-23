@@ -1,4 +1,7 @@
 
+2015-02-23 1.0.7 Klaus Bitto <klaus@netcreators.nl>
+	* Falling back to storageFolder if publicationsStorageFolder is not set.
+
 2015-01-29 1.0.6 Klaus Bitto <klaus@netcreators.nl>
 	* Adjusted TCA definitions to requirements of the new TCA handling of TYPO3 6.1.
 
