@@ -805,14 +805,10 @@ class PermitView extends BaseView {
 					);
 					$permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTTYPE'] = $doctype;
                                         
-					$permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = $this->controller->getLinkToFile(
-						'Download',
-						$this->controller->getLinkToItemFileUrl(
-							'documents', $document
-						)." _blank"
-					);
 				$lengthstrhostname = strlen(GeneralUtility::getHostname());
 				$file = substr($document, $lengthstrhostname+6);
+
+                $document_length = strlen($document);
 
 				$findleiden = strpos(GeneralUtility::getHostname(),'gemeente.leiden.nl');
 
@@ -825,25 +821,63 @@ class PermitView extends BaseView {
 					$search_string ='%20';
 					$file = str_replace($search_string, ' ', $file);
 
+                    $extension_capital= strtoupper(pathinfo($file, PATHINFO_EXTENSION));
+                    $extension_small= strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+                    $file_length = strlen($file);
+                    $extension_length =  strlen($extension_small);
+
+                    $file = substr($file,0,$file_length-$extension_length);
+                    $file_small = $file.$extension_small;
+
+                    $file_capital = $file.$extension_capital;
+
+
 					$filename = substr(basename($file),0,strrpos(basename($file), '.'));
 					// strip filename
 					if (strrpos($filename, '_') > 0 ){
 						$pos_underscore = strrpos($filename, '_');
-							$filename = substr($filename,$pos_underscore+1);
+						$filename = substr($filename,$pos_underscore+1);
 					}
 
-					if (file_exists($file)) {
-						$file_size = filesize($file);
+					if (file_exists($file_small)) {
+						$file_size = filesize($file_small);
+
+                        $document = substr($document,0,$document_length-$extension_length) . $extension_small;
 
 					if ($file_size < 1024) $file_size = $file_size . ' B';
 						elseif ($file_size < 1048576) $file_size = round($file_size / 1024, 2).' KB';
 						elseif ($file_size < 1073741824) $file_size = round($file_size / 1048576, 2).' MB';
 
+					}elseif(file_exists($file_capital)){
+                        $file_size = filesize($file_capital);
+
+                        $document = substr($document,0,$document_length-$extension_length) . $extension_capital;
+
+                        if ($file_size < 1024) $file_size = $file_size . ' B';
+                        elseif ($file_size < 1048576) $file_size = round($file_size / 1024, 2).' KB';
+                        elseif ($file_size < 1073741824) $file_size = round($file_size / 1048576, 2).' MB';
+
+
 					}else{
-						$file_size = '';
-					}
+                        $file_size = '';
+                        $document = '';
+                    }
 
 					$file_extension = strtoupper(substr(strrchr(basename($file),'.'),1));
+
+
+                    if ($document != ''){
+                        $permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = $this->controller->getLinkToFile(
+                            'Download',
+                            $this->controller->getLinkToItemFileUrl(
+                                'documents', $document
+                            )." _blank"
+                        );
+                    }else{
+                        $permit['DOCUMENTS'][$index]['PERMIT_DOWNLOAD'] = 'Geen download';
+                    }
+
 
 					 $permit['DOCUMENTS'][$index]['PERMIT_DOCUMENTFILESIZE'] =  $file_extension.' / '. $file_size;
 					 $permit['DOCUMENTS'][$index]['PERMIT_FILENAME'] = $filename;

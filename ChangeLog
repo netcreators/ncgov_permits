@@ -1,3 +1,5 @@
+2015-10-21 1.0.8 Jordi Bakker <extensions@netcreators.nl>
+	* Check if file exist for Permit attachment and check capital extension
 
 2015-02-23 1.0.7 Klaus Bitto <klaus@netcreators.nl>
 	* Falling back to storageFolder if publicationsStorageFolder is not set.
