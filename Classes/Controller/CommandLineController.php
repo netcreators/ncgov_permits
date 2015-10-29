@@ -377,7 +377,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 			echo($message . "\n\n");
 		}
 
-		echo("Usage: cli_dispatch.phpsh ncgov_permits base=[www.example.com] pid=[Pid] page=[singleUid] casepage=[case singleUid] user=[Username] pass=[Password] creator=[Creator]\n");
+		echo("Usage: cli_dispatch.phpsh ncgov_permits base=[www.example.com] pid=[Pid] page=[singleUid] casepage=[case singleUid] user=[Username] pass=[Password] creator=[Creator] [test=1 for pushing to the acc server]\n");
 		exit;
 	}
 }
