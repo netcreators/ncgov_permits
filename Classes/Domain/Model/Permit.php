@@ -151,8 +151,8 @@ class Permit extends Base {
 		}
 		$fields = '*';
 		$where = array(
-			//'(lastpublished = 0 OR tstamp > lastpublished)',
-			//'publishdate < ' . time(),
+			'(lastpublished = 0 OR tstamp > lastpublished)',
+			'publishdate < ' . time(),
 			'type = ' . self::TYPE_PUBLICATION,	// make sure we get PUBLICATION records
 			'hidden=0',
 			'deleted=0',
