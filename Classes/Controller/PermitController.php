@@ -186,17 +186,16 @@ class PermitController extends BaseController {
 				case 'latest_publications':
 					$content = $this->getLatestView();
 					break;
-				case 'permits':
-				case 'publications':
-					$content = $this->getView();
-					break;
+
 				case 'permitsall':
                 case 'publicationsall':
 					$content = $this->getViewAll();
-					break;                                    
+					break;
+
 				case 'publish_permits':
 					$content = $this->getPublishPermits();
 					break;
+
 				default:
 					throw new \tx_nclib_exception(
 						'label_exception_invalid_mode',
@@ -214,48 +213,6 @@ class PermitController extends BaseController {
 		return $content;
 	}
 
-	public function getView() {
-		$this->setIncomingVariablesSanitization($this->knownParams);
-		$this->sanitizePiVars();
-
-		$content = '';
-
-		if(count($_POST)) {
-			# We requested fulltext or postcode filter.
-			# So let's forget about no_cache, add a nice valid cHash to make the page cachable and redirect using GET.
-			# Also, this prevents old values sitting in GET (e.g. old "fulltext" values) after a new one was sent by POST.
-			$newUrl = $this->getURLToFilteredResult();
-			header(sprintf('Location: %s', $newUrl[0] == '/' ? $newUrl : '/'.$newUrl));
-			exit();
-		}
-
-		$id = $this->getPiVar('id');
-		$doc = $this->getPiVar('doc');
-		$mode = $this->getPiVar('mode');
-		if(empty($id) || $mode === 'list') {
-			$content = $this->getList();
-		} else {
-			if(!empty($id)) {
-				$mode = 'details';
-			}
-			if(!empty($doc)) {
-				$mode = 'document';
-			}
-			switch($mode) {
-				case 'details':
-					$content = $this->getDetails();
-					break;
-				case 'document':
-					$content = $this->getDocument();
-					break;
-				case 'search':
-					break;
-				default:
-					throw new \tx_nclib_exception('label_error_unknown_submode', $this);
-			}
-		}
-		return $content;
-	}
 
 	// New Interface and search all months & all years
 	public function getViewAll() {
@@ -323,23 +280,6 @@ class PermitController extends BaseController {
 		return $view->getLatestList();
 	}
 
-	/**
-	 * Returns a list of permits.
-	 * @return string
-	 */
-	public function getList() {
-		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
-		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
-		$view->initialize($this, 'list');
-		$this->prepareDateFilter();
-		$this->prepareProductTypeFilter();
-		$this->preparePhaseFilter();
-		$this->prepareTermTypeFilter();
-		// filter the permits by the selected year/month, productType and phase
-		$this->permitsModel->loadPermitsFiltered();
-		$content = $view->getList();
-		return $content;
-	}
         
 	/**
 	 * Returns a list of permits all months/years - new interface
@@ -356,26 +296,6 @@ class PermitController extends BaseController {
 		// filter the permits by the selected year/month, productType and phase
 		$this->permitsModel->loadPermitsFiltered();
 		$content = $view->getListAll();
-		return $content;
-	}        
-
-	/**
-	 * Returns details of a permit.
-	 * @return string
-	 */
-	public function getDetails() {
-		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
-		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
-		$view->initialize($this, 'details');
-		$this->permitsModel->loadRecordById(
-			$this->getPiVar('id')
-		);
-		if($this->getPluginMode() == 'permits' && !$this->permitsModel->isPermit()
-			|| $this->getPluginMode() == 'publications' && $this->permitsModel->isPermit()
-		) {
-			$this->permitsModel->setRecord(false, true);
-		}
-		$content = $view->getDetails();
 		return $content;
 	}
         
@@ -398,22 +318,8 @@ class PermitController extends BaseController {
 		}
 		$content = $view->getDetailsAll();
 		return $content;
-	}        
-
-	/**
-	 * Returns details of a permit.
-	 * @return string
-	 */
-	public function getDocument() {
-		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
-		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
-		$view->initialize($this, 'document');
-		$this->permitsModel->loadRecordById(
-			$this->getPiVar('id')
-		);
-		$content = $view->getDocument();
-		return $content;
 	}
+
         
 	/**
 	 * Returns details of a permit for the new interface - all months/years.
