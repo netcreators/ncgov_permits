@@ -54,24 +54,26 @@ $tableDefinition = array (
 				'maxitems' => 1,
 			)
 		),
-		/*'modified' => array (
-			'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.modified',
-			'config' => array (
-				'type' => 'input',
-				'size' => '12',
-				'max' => '20',
-				'eval' => 'date',
-			)
-		),*/
 		'lastpublished' => array (
-			'exclude' => 0,
+			'exclude' => 1,
 			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.lastpublished',
 			'config' => array (
 				'type' => 'input',
 				'size' => '12',
 				'max' => '20',
-				'eval' => 'date',
+				'readOnly' => 1,
+				'eval' => 'datetime',
+			)
+		),
+		'lastmodified' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.lastmodified',
+			'config' => array (
+				'type' => 'input',
+				'size' => '12',
+				'max' => '20',
+				'readOnly' => 1,
+				'eval' => 'datetime',
 			)
 		),
 		'publishdate' => array (
@@ -428,7 +430,7 @@ $tableDefinition = array (
 	),
 	'types' => array (
 		'0' => array('showitem' => ''),
-		'1' => array('showitem' => 'type, hidden, publishdate, publishenddate, producttype, language, title, description;;9;richtext:rte_transform[flag=rte_enabled|mode=ts_css];3-3-3, link, objectaddresses, related'),
+		'1' => array('showitem' => 'type, hidden, lastpublished, lastmodified, publishdate, publishenddate, producttype, language, title, description;;9;richtext:rte_transform[flag=rte_enabled|mode=ts_css];3-3-3, link, objectaddresses, related'),
 		'2' => array('showitem' => 'type'),
 	),
 	'palettes' => array (

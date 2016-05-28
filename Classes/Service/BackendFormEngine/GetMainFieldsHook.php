@@ -23,6 +23,7 @@
 ***************************************************************/
 
 namespace Netcreators\NcgovPermits\Service\BackendFormEngine;
+use Netcreators\NcgovPermits\Domain\Model\Permit;
 
 /**
  * tce forms helper
@@ -77,7 +78,7 @@ class GetMainFieldsHook {
 	 */
 	protected function preProcessPermits() {
 
-		if($this->row['type'] == 1) {
+		if($this->row['type'] == Permit::TYPE_PUBLICATION) {
 			if ($this->extensionConfiguration['enableAdditionalPublicationElements']) {
 				// prevent the record from being saved
 				$this->addFieldsAndMakePhaseNotRequired($this->table);

@@ -540,7 +540,7 @@ class PermitView extends BaseView {
 			$main = 'PERMIT_DETAIL_VIEW';
 			$configBasePath = 'viewPermitDetails.';
 			$permitFields = $this->controller->permitsModel->getFieldList();
-			$removeFields = array(
+			$removeFields = array( // FIXME: Is lastmodified important here? And can we reduce this code duplication?
 				'uid', 'pid', 'cruser_id', 'deleted', 'hidden', 'documenttypes', 'municipality', 'lastpublished', 'language',
 				'type', 'title', 'publishdate', 'link', 'objectaddresses', 'coordinates', 'lots', 'related'
 			);
@@ -548,9 +548,9 @@ class PermitView extends BaseView {
 		} else {
 			$main = 'PUBLICATION_DETAIL_VIEW';
 			$configBasePath = 'viewPublicationDetails.';
-			$permitFields = array(
+			$permitFields = array( // FIXME: are lastpublished & lastmodified important here?
 				'publishdate', 'title', 'description', 'zipcode', 'address', 'addressnumber',
-				'addressnumberadditional', 'municipality', 'tstamp', 'related', 'link',
+				'addressnumberadditional', 'municipality', 'lastmodified', 'related', 'link',
 			);
 		}
 		if($this->controller->configModel->get('showDetailsFieldList') != FALSE) {
@@ -738,7 +738,7 @@ class PermitView extends BaseView {
 			$main = 'PERMIT_DETAIL_VIEW_ALL';
 			$configBasePath = 'viewPermitDetails.';
 			$permitFields = $this->controller->permitsModel->getFieldList();
-			$removeFields = array(
+			$removeFields = array( // FIXME: Is lastmodified important here? And can we reduce this code duplication?
 				'uid', 'pid', 'cruser_id', 'deleted', 'hidden', 'documenttypes', 'municipality', 'lastpublished', 'language',
 				'type', 'title', 'publishdate', 'link', 'objectaddresses', 'coordinates', 'lots', 'related'
 			);
@@ -746,9 +746,9 @@ class PermitView extends BaseView {
 		} else {
 			$main = 'PUBLICATION_DETAIL_VIEW_ALL';
 			$configBasePath = 'viewPublicationDetails.';
-			$permitFields = array(
+			$permitFields = array( // FIXME: are lastpublished & lastmodified important here?
 				'publishdate', 'title', 'description', 'zipcode', 'address', 'addressnumber',
-				'addressnumberadditional', 'municipality', 'tstamp', 'related', 'link',
+				'addressnumberadditional', 'municipality', 'lastmodified', 'related', 'link',
 			);
 		}
 		if($this->controller->configModel->get('showDetailsFieldList') != FALSE) {
@@ -1109,7 +1109,7 @@ class PermitView extends BaseView {
 		$subparts = array();
 		$main = 'PERMIT_DOCUMENT_VIEW';
 		$permitFields = $this->controller->permitsModel->getFieldList();
-		$removeFields = array(
+		$removeFields = array( // FIXME: Is lastmodified important here? And can we reduce this code duplication?
 			'uid', 'pid', 'cruser_id', 'deleted', 'hidden', 'documenttypes', 'municipality', 'lastpublished', 'language',
 			'type', 'link', 'objectaddresses', 'lots'
 		);
@@ -1187,7 +1187,7 @@ class PermitView extends BaseView {
 		$subparts = array();
 		$main = 'PERMIT_DOCUMENT_VIEW_ALL';
 		$permitFields = $this->controller->permitsModel->getFieldList();
-		$removeFields = array(
+		$removeFields = array( // FIXME: Is lastmodified important here? And can we reduce this code duplication?
 			'uid', 'pid', 'cruser_id', 'deleted', 'hidden', 'documenttypes', 'municipality', 'lastpublished', 'language',
 			'type', 'link', 'objectaddresses', 'lots'
 		);
@@ -1270,7 +1270,7 @@ class PermitView extends BaseView {
 			$permitIndex = 0;
 			while ($this->controller->permitsModel->hasNextRecord()) {
 				$permit = array();
-				$record = $this->controller->permitsModel->getRecord();
+				$record = $this->controller->permitsModel->getRecord(); // FIXME: $record fetched but not used. Is this anyway legacy code that can be removed?
 				$permit['FIELD_PUBLISHDATE'] = $this->controller->permitsModel->getField('publishdate');
 				$permit['FIELD_TITLE'] = $this->controller->permitsModel->getTitle();
 				$permit['FIELD_ADDRESS'] = $this->controller->permitsModel->getAddress();
@@ -1727,13 +1727,13 @@ class PermitView extends BaseView {
 			);
 			$lines[] = $this->getDublinCoreMetaData(
 				'publishdate',
-				date(
-					$this->controller->configModel->get('owmsDefaults.dateFormat'),
-					$this->controller->permitsModel->getField('publishdate', true)
-				)
+				$this->controller->permitsModel->getField('publishdate', true)
 			);
 		}
-		$lines[] = $this->getDublinCoreMetaData('modified', $this->controller->permitsModel->getField('tstamp', true));
+		$lines[] = $this->getDublinCoreMetaData(
+			'modified',
+			$this->controller->permitsModel->getField('lastmodified', true)
+		);
 		// references ???
 		$addresses = $this->controller->permitsModel->getField('objectaddresses');
 		if(\tx_nclib::isLoopable($addresses)) {
@@ -1870,9 +1870,11 @@ class PermitView extends BaseView {
 		);
 
 		switch($field) {
+
 			case 'language':
 				$value = 'nl';
 				break;
+
 			case 'description':
 				if((boolean)$this->controller->configModel->get('convertLatinToUtf8') == true) {
 					$value = $this->convertLatinToUtf8($value);
@@ -1885,10 +1887,12 @@ class PermitView extends BaseView {
 					)
 				);
 				break;
+
 			case 'modified':
-				$value = $this->controller->permitsModel->getField('tstamp', true);
+			case 'publishdate':
 				$value = date($this->controller->configModel->get('owmsDefaults.dateFormat'), $value);
 				break;
+
 			case 'informatietype':
 				$value = $this->controller->configModel->get('owmsDefaults.informationType');
 				break;

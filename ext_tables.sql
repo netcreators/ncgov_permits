@@ -30,6 +30,7 @@ CREATE TABLE tx_ncgovpermits_permits (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 
 	lastpublished int(11) DEFAULT '0' NOT NULL,
+	lastmodified int(11) DEFAULT '0' NOT NULL,
 	type tinyint(4) DEFAULT '0' NOT NULL,
 	language text NOT NULL,
 	producttype text NOT NULL,

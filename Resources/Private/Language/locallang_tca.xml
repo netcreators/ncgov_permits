@@ -15,6 +15,7 @@
 			<label index="tx_ncgovpermits_permits.publishdate">Wanneer vrijgeven voor publicatie?</label>
 			<label index="tx_ncgovpermits_permits.publishenddate">Einddatum publicatie</label>
 			<label index="tx_ncgovpermits_permits.lastpublished">Laatst vrijgegeven voor publicatie</label>
+			<label index="tx_ncgovpermits_permits.lastmodified">Laatst gewijzigd (auto-updated field!)</label>
 			<label index="tx_ncgovpermits_permits.language">Taal</label>
 			<label index="tx_ncgovpermits_permits.municipality">Gemeente (verplicht)</label>
 			<label index="tx_ncgovpermits_permits.municipality.I.0">-- selecteer een gemeente --</label>

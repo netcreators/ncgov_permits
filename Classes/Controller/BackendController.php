@@ -23,6 +23,7 @@
 ***************************************************************/
 
 namespace Netcreators\NcgovPermits\Controller;
+use Netcreators\NcgovPermits\Domain\Model\Permit;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -89,7 +90,7 @@ class BackendController {
 			$row = $config['row'];
 			$list = array();
 			switch($row['type']) {
-				case \Netcreators\NcgovPermits\Domain\Model\Permit::TYPE_PERMIT:
+				case Permit::TYPE_PERMIT:
 					$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 						$this->controller->xmlModel->getGovXmlValueList(
 							$this->controller->configModel->getExtensionConfiguration('permitProductTypeXmlFile'),
@@ -97,7 +98,7 @@ class BackendController {
 						)
 					);
 					break;
-				case \Netcreators\NcgovPermits\Domain\Model\Permit::TYPE_PUBLICATION:
+				case Permit::TYPE_PUBLICATION:
 					$list = \tx_nclib_base_model::getAssociatedArrayConvertedToTCAItems(
 						$this->controller->xmlModel->getGovTxtValueList(
 							$this->controller->configModel->getExtensionConfiguration('publicationProductTypeTxtFile')

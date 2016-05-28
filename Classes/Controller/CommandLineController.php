@@ -84,7 +84,20 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 			$publications = $this->getDatabaseConnection()->exec_SELECTgetRows(
 				'*',
 				'tx_ncgovpermits_permits',
-				'tx_ncgovpermits_permits.pid = ' . $conf['pid'] . ' AND hidden = 0 AND deleted = 0 AND type = 1 AND tstamp > lastpublished AND publishdate <= UNIX_TIMESTAMP(NOW())'
+				// NOTE: Inconsitency: SELECTing here WHERE deleted=0, but later checking "if($publication['deleted']) {...}". Makes no sense.
+				'tx_ncgovpermits_permits.pid = ' . $conf['pid'] . ' AND hidden = 0 AND deleted = 0 AND type = 1 '
+
+					// Note:
+					//		'lastmodified' is updated by ncgov_permits_sync and, for manual edits,
+					//		in @see \Netcreators\NcgovPermits\Service\CoreDataHandler\ProcessDatamapHook::processDatamap_postProcessFieldArray().
+					//		However, we cannot trust that deleted records will have their lastmodified date updated.
+					//		Therefore, for deleted records, we need to rely on tstamp, which represents the date and time of deletion.
+					. ' AND (
+						(deleted = 0 AND lastmodified > lastpublished)
+						OR
+						(deleted = 1 AND tstamp > lastpublished)
+					)
+					AND publishdate <= UNIX_TIMESTAMP(NOW())'
 			);
 
 			if (!empty($publications)) {
@@ -232,7 +245,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 					if ($publicationData['lastpublished'] == 0) {
 						$publicationData['transactiontype'] = 'C';
 					}
-					elseif ($publication['deleted'] == 1) {
+					elseif ($publication['deleted']) {
 						$publicationData['transactiontype'] = 'D';
 					}
 					else {
@@ -255,7 +268,9 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 
 					$publicationData['creator'] = $conf['creator'];
 
-					$publicationData['modified'] = date('Y-m-d' ,$publication['tstamp']);
+					$publicationData['modified'] = $publication['deleted']
+						? date('Y-m-d' ,$publication['tstamp'])
+						: date('Y-m-d' ,$publication['lastmodified']);
 
 					if ($publicationData['validity_start'] > 0) {
 						$publicationData['validity_start'] = date('Y-m-d', $publicationData['validity_start']);

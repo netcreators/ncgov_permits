@@ -51,7 +51,8 @@ class Permit extends Base {
 		$this->setGetMethod('documents', '_getField_getDocuments');
 		$this->setGetMethod('documenttypes', '_getField_getDocumentTypes');
 		$this->setGetMethod('crdate', '_getField_getCreationDate');
-		$this->setGetMethod('tstamp', '_getField_getModifiedDate');
+		$this->setGetMethod('tstamp', '_getField_getTstamp');
+		$this->setGetMethod('lastmodified', '_getField_getModifiedDate');
 		$this->setGetMethod('objectzipcode', '_getField_getObjectZipcode');
 		$this->setGetMethod('objectaddresses', '_getField_getObjectAddresses');
 		$this->setGetMethod('lots', '_getField_getLots');
@@ -114,9 +115,9 @@ class Permit extends Base {
 		}
 		$fields = '*';
 		$where = array(
-			'(lastpublished = 0 OR tstamp > lastpublished)',
-			'publishdate < ' . time(),
-			'type = ' . self::TYPE_PERMIT,	// make sure we get PERMIT records
+			'(lastpublished = 0 OR lastmodified > lastpublished)',
+			'publishdate <= ' . time(),
+			'type = ' . self::TYPE_PERMIT,
 			'hidden=0',
 			'deleted=0',
 			sprintf('%s.pid in (%s)', $this->getTableName(), implode(',', $pageIds)),
@@ -152,7 +153,7 @@ class Permit extends Base {
 		$fields = '*';
 		$where = array(
 			//'(lastpublished = 0 OR tstamp > lastpublished)',
-			//'publishdate < ' . time(),
+			//'publishdate < ' . time(), FIXME: Why is this commented-out?
 			'type = ' . self::TYPE_PUBLICATION,	// make sure we get PUBLICATION records
 			'hidden=0',
 			'deleted=0',
@@ -768,6 +769,14 @@ class Permit extends Base {
 		$date = date($this->controller->configModel->get('config.dateFormat'), $time);
 		return $date;
 	}
+	protected function _getField_getTstamp($field) {
+		$time = $this->getField($field, true);
+		if(empty($time)) {
+			return false;
+		}
+		$date = date($this->controller->configModel->get('config.dateFormat'), $time);
+		return $date;
+	}
 	protected function _getField_getModifiedDate($field) {
 		$time = $this->getField($field, true);
 		if(empty($time)) {
@@ -794,6 +803,9 @@ class Permit extends Base {
 	}
 	protected function _getField_getPublishDate($field) {
 		$time = $this->getField($field, true);
+		if(empty($time)) {
+			return false;
+		}
 		$date = date($this->controller->configModel->get('config.dateFormat'), $time);
 		return $date;
 	}
@@ -953,9 +965,9 @@ class Permit extends Base {
 		if($d) {
 			$result = 'D';
 		} else {
-			if($this->getField('lastpublished') == 0) {
+			if($this->getField('lastpublished', true) == 0) {
 				$result = 'C';
-			} elseif ($this->getField('tstamp', true) > $this->getField('lastpublished')) {
+			} elseif ($this->getField('lastmodified', true) > $this->getField('lastpublished', true)) {
 				$result = 'U';
 			}
 		}
@@ -963,9 +975,11 @@ class Permit extends Base {
 	}
 
 	public function skipThisUpdate() {
+		// NOTE: \Netcreators\NcgovPermits\Domain\Model\Permit::loadPublishablePermits() anyway only loads records with deleted=0! Wtf?
+		// This entire method seems obsolete, due to the SELECT ... WHERE in loadPublishablePermits().
 		$result = false;
 		$d = $this->getField('deleted') == 1 || $this->getField('hidden') == 1;
-		if($d && $this->getField('tstamp', true) > $this->getField('lastpublished')) { // This logic makes no sense to me whatsoever. This could be meant as a 'preview' function. (Selecting records which are newer than the last publish date, but (not yet un-) hidden. Never mind the deleted ones.) Why would you publish a preview in XML which you do not publish on the website?
+		if($d || $this->getField('lastpublished', true) > $this->getField('lastmodified', true)) {
 			$result = true;
 		}
 		return $result;
