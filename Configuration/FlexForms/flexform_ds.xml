@@ -30,22 +30,18 @@
 										<numIndex index="1">publish_permits</numIndex>
 									</numIndex>
 									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:ncgov_permits/Resources/Private/Language/locallang_flexform.xml:pluginMode_option3</numIndex>
-										<numIndex index="1">publish_publications</numIndex>
-									</numIndex>
-									<numIndex index="4" type="array">
 										<numIndex index="0">LLL:EXT:ncgov_permits/Resources/Private/Language/locallang_flexform.xml:pluginMode_option4</numIndex>
 										<numIndex index="1">latest_permits</numIndex>
 									</numIndex>
-									<numIndex index="5" type="array">
+									<numIndex index="4" type="array">
 										<numIndex index="0">LLL:EXT:ncgov_permits/Resources/Private/Language/locallang_flexform.xml:pluginMode_option5</numIndex>
 										<numIndex index="1">latest_publications</numIndex>
 									</numIndex>
-                                                                        <numIndex index="6" type="array">
+                                    <numIndex index="5" type="array">
 										<numIndex index="0">LLL:EXT:ncgov_permits/Resources/Private/Language/locallang_flexform.xml:pluginMode_option6</numIndex>
 										<numIndex index="1">permitsall</numIndex>
 									</numIndex>
-                                                                        <numIndex index="7" type="array">
+                                    <numIndex index="6" type="array">
 										<numIndex index="0">LLL:EXT:ncgov_permits/Resources/Private/Language/locallang_flexform.xml:pluginMode_option7</numIndex>
 										<numIndex index="1">publicationsall</numIndex>
 									</numIndex>

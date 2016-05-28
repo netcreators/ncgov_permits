@@ -137,42 +137,6 @@ class Permit extends Base {
 	}
 
 	/**
-	 * Loads records for the configured page.
-	 *
-	 * @throws \tx_nclib_exception
-	 * @return boolean true if successful, false otherwise.
-	 */
-	public function loadPublishablePublications() {
-		$pageIds = $this->database->getPageIdsRecursive(
-			$this->controller->configModel->get('storageFolder'),
-			$this->controller->configModel->get('recurseDepth')
-		);
-		if($pageIds === false) {
-			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
-		}
-		$fields = '*';
-		$where = array(
-			//'(lastpublished = 0 OR tstamp > lastpublished)',
-			//'publishdate < ' . time(), FIXME: Why is this commented-out?
-			'type = ' . self::TYPE_PUBLICATION,	// make sure we get PUBLICATION records
-			'hidden=0',
-			'deleted=0',
-			sprintf('%s.pid in (%s)', $this->getTableName(), implode(',', $pageIds)),
-		);
-		$where = $this->database->getWhere($where);
-		$orderBy = 'publishdate desc';
-		$groupBy = '';
-
-		$this->database->clear();
-		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
-		if(!$records || !\tx_nclib::isLoopable($records)) {
-			return false;
-		}
-		$this->setIterationArray($records);
-		return true;
-	}
-
-	/**
 	 * Sets the type of records to be loaded (permits / publications)
 	 * @param int $type
 	 * @return void

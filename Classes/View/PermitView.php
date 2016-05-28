@@ -1257,46 +1257,6 @@ class PermitView extends BaseView {
 		);
 		return $content;
 	}
-        
-        
-        
-	/**
-	 * Publication list
-	 * @return string content
-	 */
-	public function getPublicationList() {
-		$subparts = array();
-		if($this->controller->permitsModel->getCount() > 0) {
-			$permitIndex = 0;
-			while ($this->controller->permitsModel->hasNextRecord()) {
-				$permit = array();
-				$record = $this->controller->permitsModel->getRecord(); // FIXME: $record fetched but not used. Is this anyway legacy code that can be removed?
-				$permit['FIELD_PUBLISHDATE'] = $this->controller->permitsModel->getField('publishdate');
-				$permit['FIELD_TITLE'] = $this->controller->permitsModel->getTitle();
-				$permit['FIELD_ADDRESS'] = $this->controller->permitsModel->getAddress();
-				$permit['FIELD_LINK'] = $this->controller->getHtmlCompliantLinkToController(
-					false,
-					$this->controller->configModel->get('displayPage'),
-					array(
-						'id' => $this->controller->permitsModel->getId(),
-						'activeMonth' => date('m',$this->controller->permitsModel->getField('publishdate', true)),
-						'activeYear' => date('Y', $this->controller->permitsModel->getField('publishdate', true))
-					),
-					false
-				);
-				$subparts['RECORDS'][$permitIndex] = $permit;
-				$permitIndex++;
-				$this->controller->permitsModel->moveToNextRecord();
-			}
-		} else {
-			// empty page
-			$subparts['RECORDS_AVAILABLE'] = array();
-		}
-		$content = $this->subpartReplaceRecursive(
-			$subparts, 'PUBLICATION_PUBLISHLIST_VIEW', false, true, $this->controller->configModel->get('cleanRemainingMarkers')
-		);
-		return $content;
-	}
 
 	/**
 	 * Creates year - month(- week) filter for use in the front-end.

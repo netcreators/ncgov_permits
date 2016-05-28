@@ -197,9 +197,6 @@ class PermitController extends BaseController {
 				case 'publish_permits':
 					$content = $this->getPublishPermits();
 					break;
-				case 'publish_publications': // FIXME: Isn't this now replaced by \Netcreators\NcgovPermits\Service\Publication\PublicationPushService / \Netcreators\NcgovPermits\Controller\CommandLineController::cli_main() ?
-					$content = $this->getPublishPublications();
-					break;
 				default:
 					throw new \tx_nclib_exception(
 						'label_exception_invalid_mode',
@@ -483,16 +480,6 @@ class PermitController extends BaseController {
 		$log[] = '(end of log)';
 		$this->logModel->log(implode(chr(10), $log));
 		$content = nl2br(implode(chr(10), $log));
-		return $content;
-	}
-
-	// FIXME: Legacy code? Remove this? Publications are apparently only published via PublicationPushService, not via Index Feed.
-	public function getPublishPublications() {
-		/** @var \Netcreators\NcgovPermits\View\PermitView $view */
-		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
-		$view->initialize($this, 'publish');
-		$this->permitsModel->loadPublishablePublications();
-		$content = $view->getPublicationList();
 		return $content;
 	}
 
