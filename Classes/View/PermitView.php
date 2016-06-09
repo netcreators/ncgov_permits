@@ -1373,6 +1373,7 @@ class PermitView extends BaseView {
 
 	/**
 	 * Adds owms metadata for permit document to page header
+	 * @param $document
 	 * @return void
 	 */
 	public function addMetaDataDocument($document) {

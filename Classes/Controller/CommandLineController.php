@@ -203,11 +203,14 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 
 					// Get parcels
 					$publicationData['parcels'] = array();
-					$parcels = $this->getDatabaseConnection()->exec_SELECTgetRows(
-						'cadastremunicipality, section, number',
-						'tx_ncgovpermits_lots',
-						'uid IN (' . $publication['lots'] . ') AND hidden = 0 AND deleted = 0'
-					);
+					$parcels = array();
+					if(trim($publication['lots'])) {
+						$parcels = $this->getDatabaseConnection()->exec_SELECTgetRows(
+							'cadastremunicipality, section, number',
+							'tx_ncgovpermits_lots',
+							'uid IN (' . $publication['lots'] . ') AND hidden = 0 AND deleted = 0'
+						);
+					}
 					if (!empty($parcels)) {
 						foreach ($parcels as $parcel) {
 							// Get cadastral municipality
@@ -230,11 +233,14 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 
 					// Get coordinates
 					$publicationData['coordinates'] = array();
-					$coordinates = $this->getDatabaseConnection()->exec_SELECTgetRows(
-						'coordinatex, coordinatey',
-						'tx_ncgovpermits_coordinates',
-						'uid IN (' . $publication['coordinates'] . ') AND hidden = 0 AND deleted  = 0'
-					);
+					$coordinates = array();
+					if(trim($publication['coordinates'])) {
+						$coordinates = $this->getDatabaseConnection()->exec_SELECTgetRows(
+							'coordinatex, coordinatey',
+							'tx_ncgovpermits_coordinates',
+							'uid IN (' . $publication['coordinates'] . ') AND hidden = 0 AND deleted  = 0'
+						);
+					}
 					if (!empty($coordinates)) {
 						foreach ($coordinates as $coordinate) {
 							$publicationData['coordinates'][] = $coordinate;
@@ -339,6 +345,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 			}
 			else {
 				echo("No publications to send...\n");
+				flush();
 			}
 
 			$this->displayStats();
@@ -369,6 +376,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 	 */
 	function displayError($message) {
 		echo("! " . $message . "\n");
+		flush();
 		$this->errors++;
 	}
 
@@ -380,6 +388,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 		echo("\nPublications sent: " . $this->sentPublications . "\n");
 		echo("\nErrors: " . $this->errors . "\n");
 		echo("\nDone!\n");
+		flush();
 	}
 
 	/**
@@ -390,6 +399,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 	function displayHelp($message = '') {
 		if ($message) {
 			echo($message . "\n\n");
+			flush();
 		}
 
 		echo("Usage: cli_dispatch.phpsh ncgov_permits base=[www.example.com] pid=[Pid] page=[singleUid] casepage=[case singleUid] user=[Username] pass=[Password] creator=[Creator] [test=1 for pushing to the acc server]\n");

@@ -344,16 +344,21 @@ class PermitController extends BaseController {
 		$view = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\View\\PermitView');
 		$view->initialize($this, 'publish');
 		$log = array();
-		$log[] = 'Publishing records ' . date($this->configModel->get('config.dateFormat') . ' H:i:s');
+		$log[] = 'Publishing and depublishing records ' . date($this->configModel->get('config.dateFormat') . ' H:i:s');
 		$log[] = '______________________________________' . chr(10);
 
 		// Publish new permits (modified later than last publish date, or never published before).
+		$publishedCount = 0;
+		$publishErrorCount = 0;
+		$skippedPublishingCount = 0;
 		if($this->permitsModel->loadPublishablePermits()) {
+			$log[] = '';
 			$log[] = 'Loaded ' . $this->permitsModel->getCount() . ' publishable permits. (Limit: ' . $this->configModel->get('latestlimit') . ')';
 			while($this->permitsModel->hasNextRecord()) {
 				$this->cleanOldDocuments();
 				if($this->permitsModel->skipThisUpdate()) {
 					$log[] = '[-] Skipping publication of permit [' . $this->permitsModel->getId() . ']: ' . $this->permitsModel->getField('title');
+					$skippedPublishingCount++;
 					$this->permitsModel->moveToNextRecord();
 					continue;
 				}
@@ -366,8 +371,10 @@ class PermitController extends BaseController {
 					$absFile = GeneralUtility::getFileAbsFileName($file);
 					if ($this->createXmlFile($absFile, $xml)) {
 						$successful = true;
+						$publishedCount++;
 					} else {
 						$successful = false;
+						$publishErrorCount++;
 						$this->logModel->log('Error publishing record: ' . $this->permitsModel->getId() . ' file ' . $absFile);
 						$log[] = 'Error publishing record: ' . $this->permitsModel->getId() . ' file ' . $absFile;
 					}
@@ -381,13 +388,27 @@ class PermitController extends BaseController {
 				}
 				$this->permitsModel->moveToNextRecord();
 			}
+
 		} else {
 			$log[] = 'Nothing to publish';
 			$log[] = '';
 		}
 
+		$log[] = '';
+		$log[] = 'Publication Summary:';
+		$log[] = 'Published ' . $publishedCount . ' permits in ' . $this->configModel->get('config.xmlFilePublishPath') . '.';
+		$log[] = 'Publication of ' . $publishErrorCount . ' permits failed with errors.';
+		$log[] = $skippedPublishingCount . ' permits were skipped during publication.';
+
+
+
+
 		// Depublish older permits (published longer than 30 days ago).
+		$depublishedCount = 0;
+		$depublishedDocumentsCount = 0;
+		$didNotExistWhileDepublishingCount = 0;
 		if($this->permitsModel->loadDepublishablePermits()) {
+			$log[] = '';
 			$log[] = 'Loaded ' . $this->permitsModel->getCount() . ' de-publishable permits. (Limit: ' . $this->configModel->get('latestlimit') . ')';
 			while($this->permitsModel->hasNextRecord()) {
 
@@ -395,14 +416,23 @@ class PermitController extends BaseController {
 					$this->configModel->get('config.xmlFilePublishPath') . $this->getCaseFileName()
 				);
 				if(is_file($file)) {
+
 					unlink($file);
 					$log[] = '[+] Depublished permit [' . $this->permitsModel->getId() . ' / ' . $file . ']: ' . $this->permitsModel->getField('title');
+					$depublishedCount++;
+					// All good.
+
 				} else {
+
 					$log[] = '[-] XML file ' . $file . ' did not exist while depublishing permit [' . $this->permitsModel->getId() . ']: ' . $this->permitsModel->getField('title');
+					$didNotExistWhileDepublishingCount++;
+					// Note: We set the 'lastpublished' timestamp anyway, to avoid this record to show up again and again.
+
 				}
 
 				$removedDocumentFiles = $this->cleanOldDocuments();
 				if($removedDocumentFiles) {
+					$depublishedDocumentsCount += count($removedDocumentFiles);
 					$log[] = '[+] Depublished documents of permit [' . $this->permitsModel->getId() . ']: ' . $this->permitsModel->getField('title');
 					$log[] = implode(', ' . $removedDocumentFiles);
 				}
@@ -415,10 +445,22 @@ class PermitController extends BaseController {
 			}
 		}
 
+		$log[] = '';
+		$log[] = 'Depublication Summary:';
+		$log[] = 'Depublished ' . $depublishedCount . ' permits from ' . $this->configModel->get('config.xmlFilePublishPath') . '.';
+		$log[] = 'Depublished ' . $depublishedDocumentsCount . ' permit attachments/documents from ' . $this->configModel->get('config.xmlFilePublishPath') . '.';
+		$log[] = $didNotExistWhileDepublishingCount . ' permits had no corresponding depublishable XML files in ' . $this->configModel->get('config.xmlFilePublishPath') . '.';
+		$log[] = $skippedPublishingCount. ' permits were skipped during publication.';
+
+
+
+
 		// Remove orphan XML files
 		$allPublishedPermitXmlFiles = glob($this->configModel->get('config.xmlFilePublishPath') . 'xml_permit_*.xml');
+		$log[] = '';
 		$log[] = 'Found ' . count($allPublishedPermitXmlFiles) . ' xml_permit_*.xml files in ' . $this->configModel->get('config.xmlFilePublishPath') . '.';
-		$removeCount = 0;
+		$removedOrphanPermitCount = 0;
+		$removedOrphanDocumentCount = 0;
 		foreach($allPublishedPermitXmlFiles as $file) {
 			$matches = array();
 			$matchResult = preg_match('/\/xml_permit_([0-9]*).xml$/', $file, $matches);
@@ -434,16 +476,19 @@ class PermitController extends BaseController {
 					$this->configModel->get('config.xmlFilePublishPath') . 'xml_permit_' . $permitId . '.xml'
 				);
 				unlink($file);
-				$removeCount++;
-				$log[] = '[+] No longer in database: Depublished orphan permit XML file [' . $permitId . ' / ' . $file . '].';
+				$removedOrphanPermitCount++;
+				$log[] = '[+] No longer in database: Depublished orphan permit XML file [' . $permitId . '; ' . $file . '].';
 				$removedDocumentFiles = $this->cleanOldDocuments($permitId);
 				if($removedDocumentFiles) {
-					$removeCount += count($removedDocumentFiles);
-					$log[] = '[+] No longer in database: Depublished documents of orphan permit XML file [' . $permitId . ' / ' . $file . ']: ' . implode(', ' . $removedDocumentFiles);
+					$removedOrphanDocumentCount += count($removedDocumentFiles);
+					$log[] = '[+] No longer in database: Depublished documents of orphan permit XML file [' . $permitId . '; ' . $file . ']: ' . implode(', ' . $removedDocumentFiles);
 				}
 			}
 		}
-		$log[] = 'Removed ' . $removeCount . ' orphaned XML permit and document files from ' . $this->configModel->get('config.xmlFilePublishPath') . ' during clean-up.';
+
+		$log[] = 'Clean-up Summary:';
+		$log[] = 'Removed ' . $removedOrphanPermitCount . ' orphaned XML permit files from ' . $this->configModel->get('config.xmlFilePublishPath') . ' during clean-up.';
+		$log[] = 'Removed ' . $removedOrphanDocumentCount . ' orphaned XML permit attachment/document files from ' . $this->configModel->get('config.xmlFilePublishPath') . ' during clean-up.';
 
 
 

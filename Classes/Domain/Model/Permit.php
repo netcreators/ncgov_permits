@@ -152,30 +152,63 @@ class Permit extends Base {
 		}
 		$fields = '*';
 
-		$where = $this->database->getWhere(
-			array( // combine with AND
+		$where = $this->database->getWhere(array( // combine with AND
 
-				// Load all which are hidden or deleted or have been published more than 30 days ago.
-				'(' . $this->database->getWhere( // combine with OR
-					array(
+			// Load all which are
+			// - either hidden
+			// - or deleted
+			// - OR have been modified since their last depublication (if ever)
+			//     AND
+			//     - either have been published more than 30 days ago
+			//     - or should not yet be published
+			//     - or should no longer be published.
+			'(' . $this->database->getWhere(array( // combine with OR
+
+				// Hidden or deleted - we cannot rely on 'lastmodified' for deleted records;
+				// 'tstamp' will then contain the date of deletion.
+
+				'(' . $this->database->getWhere(array( // combine with AND
+					'lastdepublished < tstamp',
+
+					'(' . $this->database->getWhere(array( // combine with OR
+
 						'hidden=1',
 						'deleted=1',
-						'(lastpublished > 0 AND lastpublished < (' . time() . '-' . (
-							// 30 days = 60 * 60 * 24 * 30 = 2592000 seconds
-							2592000
-						) . '))',
+
+					), false) . ')',  // combine with OR
+
+				), true) . ')', // combine with AND
+
+
+
+				'(' . $this->database->getWhere(array( // combine with AND
+					'lastdepublished < lastmodified',
+
+					'(' . $this->database->getWhere(array( // combine with OR
+
+						// Have been published > 30 days ago.
+						// 30 days = 60 * 60 * 24 * 30 = 2592000 seconds
+						'( lastpublished > 0 AND lastpublished < UNIX_TIMESTAMP()-2592000 )',
+
+						// Should not yet be published.
 						'publishdate > ' . time(),
+
+						// Should no longer be published.
 						'publishenddate >= ' . time(),
-					),
-					false // combine with OR
-				) . ')',
 
-				'lastdepublished < lastmodified',
-				'type = ' . self::TYPE_PERMIT,
-				sprintf('pid in (%s)', implode(',', $pageIds)),
+					), false) . ')',  // combine with OR
 
-			)
-		);
+				), true) . ')', // combine with AND
+
+			), false) . ')', // combine with OR
+
+
+			// Entire selection must only contain Permits in the configured storage folders.
+			'type = ' . self::TYPE_PERMIT,
+			sprintf('pid in (%s)', implode(',', $pageIds)),
+
+		), true);
+
 		$orderBy = 'lastmodified ASC';
 		$groupBy = '';
 		$limit = $this->controller->configModel->get('latestlimit');

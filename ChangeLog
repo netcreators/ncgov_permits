@@ -1,4 +1,10 @@
 
+
+2016-06-09 1.1.1 Leonie Philine Bitto <leonie@netcreators.nl>
+	* Bugfix: No more invalid SQL queries being run if a publication's coordinates or lots are empty.
+	* Feature: Improved logging of permits XML publication process.
+	* Bugfix: Corrected depublication selector in \Netcreators\NcgovPermits\Domain\Model\Permit::loadDepublishablePermits().
+
 2016-06-09 1.1.0 Leonie Philine Bitto <leonie@netcreators.nl>
 	* 'lastmodified' field now contains proper data, which is used if to include a Permit into the harvester XML feed,
 		or if to include a Publication in the Bekendmakingen Push service. @see EXT:ncgov_permits_sync
