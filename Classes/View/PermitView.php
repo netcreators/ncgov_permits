@@ -3,7 +3,7 @@
 *  Copyright notice
 *
 *  (c) 2008 Frans van der Veen [netcreators] <extensions@netcreators.com>
-*  (c) 2010 Klaus Bitto [netcreators]
+*  (c) 2010 Leonie Philine Bitto [netcreators]
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is

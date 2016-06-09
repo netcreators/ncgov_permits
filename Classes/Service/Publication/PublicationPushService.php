@@ -37,14 +37,17 @@ class PublicationPushService {
 		$this->pass = $pass;
 		$this->test = $test;
 
-		$this->testuser = $user;
-		$this->testpass = $pass;
 
 		$this->data = array();
 		$this->xml = '';
 
 		$this->url = 'https://zdpushservice.overheid.nl/pushxml/pushxml-bm';
-		$this->testurl = 'https://acc1zoekdienst.overheid.nl/BMPushServices/BMPushService.asmx/PushBMContent';
+
+		// Find Publications pushed to the ACC environment here:
+		//     http://preprod.zoekdienst.asp4all.nl/Bekendmakingen/bmZoeken.aspx?searchtype=Advanced
+		$this->testuser = $user;
+		$this->testpass = $pass;
+		$this->testurl = 'https://zdpushservice-preprod.overheid.nl/BMPushServices/BMPushService.asmx/PushBMContent';
 	}
 
 	/**

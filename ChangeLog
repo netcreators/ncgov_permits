@@ -1,35 +1,44 @@
+
+2016-06-09 1.1.0 Leonie Philine Bitto <leonie@netcreators.nl>
+	* 'lastmodified' field now contains proper data, which is used if to include a Permit into the harvester XML feed,
+		or if to include a Publication in the Bekendmakingen Push service. @see EXT:ncgov_permits_sync
+		This way, no more 12k publications are being pushed daily.
+	* Permits published as XML files for the overheid harvester in fileadmin/permitsxml/ are now depublished after 30 days.
+		This way, the harvester does not need to re-read thousands of files constantly.
+	* Updated Acceptatie Bekendmakingen Push Service URL.
+
 2015-10-21 1.0.8 Jordi Bakker <extensions@netcreators.nl>
 	* Check if file exist for Permit attachment and check capital extension
 
-2015-02-23 1.0.7 Klaus Bitto <klaus@netcreators.nl>
+2015-02-23 1.0.7 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Falling back to storageFolder if publicationsStorageFolder is not set.
 
-2015-01-29 1.0.6 Klaus Bitto <klaus@netcreators.nl>
+2015-01-29 1.0.6 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Adjusted TCA definitions to requirements of the new TCA handling of TYPO3 6.1.
 
-2015-01-28 1.0.5 Klaus Bitto <klaus@netcreators.nl>
+2015-01-28 1.0.5 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Fixed command line invocation. (Corrected class name.)
 	* Added log output to PermitController::getPublishPermits() to spy on cases where records are skipped for possibly no good reason.
 	* Now loading only non-hidden and non-deleted records for publishing. This helps escape from situations where only hidden or deleted records are loaded, skipped, their lastpublished field not updated, and the next time loaded again - endlessly. Resulting in publication dead-lock.
 
-2015-01-27 1.0.4 Klaus Bitto <klaus@netcreators.nl>
+2015-01-27 1.0.4 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Updated nc_lib dependency version.
 	* Increased maximum number of permits document files. (50 was not enough in the case of some imported permits.)
 	* Made publishenddate not required.
 	* Made publicationbody not required, since during export, if publicationbody is empty, the description field content is used.
 
-2014-10-15 1.0.3 Klaus Bitto <klaus@netcreators.nl>
+2014-10-15 1.0.3 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Disabled cHash check.
 
-2014-10-15 1.0.2 Klaus Bitto <klaus@netcreators.nl>
+2014-10-15 1.0.2 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Fix: Quoting and escaping casereference_pub when preparing query in \Netcreators\NcgovPermits\Domain\Model\Permit::_getField_getPublications().
 
-2014-10-15 1.0.1 Klaus Bitto <klaus@netcreators.nl>
+2014-10-15 1.0.1 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Fixed language label loading (scriptRelPath needs dummy file - path alone is not enough.)
 	* Manually setting table names for Domain Models since they cannot be auto-determined by use of the old strategy.
 	* Fixed argument type hint for PermitView::initialize().
 
-2014-10-05 1.0.0 Klaus Bitto <klaus@netcreators.nl>
+2014-10-05 1.0.0 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Version for TYPO3 6.2.
 	* Re-structured directories.
 	* Introduced namespaces.

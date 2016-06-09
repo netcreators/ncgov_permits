@@ -3,7 +3,7 @@
  *  Copyright notice
  *
  *  (c) 2008 Frans van der Veen [netcreators] <extensions@netcreators.com>
- *  (c) 2010 Klaus Bitto [netcreators]
+ *  (c) 2010 Leonie Philine Bitto [netcreators]
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -52,7 +52,7 @@ class Permit extends Base {
 		$this->setGetMethod('documenttypes', '_getField_getDocumentTypes');
 		$this->setGetMethod('crdate', '_getField_getCreationDate');
 		$this->setGetMethod('tstamp', '_getField_getTstamp');
-		$this->setGetMethod('lastmodified', '_getField_getModifiedDate');
+		$this->setGetMethod('lastmodified', '_getField_getLastModifiedDate');
 		$this->setGetMethod('objectzipcode', '_getField_getObjectZipcode');
 		$this->setGetMethod('objectaddresses', '_getField_getObjectAddresses');
 		$this->setGetMethod('lots', '_getField_getLots');
@@ -71,7 +71,7 @@ class Permit extends Base {
 	 * @throws \tx_nclib_exception
 	 * @return boolean true if successful, false otherwise.
 	 */
-	public function loadPermits() {
+	public function loadPermits($limit = '') {
 		$pageIds = $this->database->getPageIdsRecursive(
 			$this->controller->configModel->get('storageFolder'),
 			$this->controller->configModel->get('recurseDepth')
@@ -83,14 +83,14 @@ class Permit extends Base {
 		$where = array(
 			'hidden=0',
 			'deleted=0',
-			sprintf('%s.pid in (%s)', $this->getTableName(), implode(',', $pageIds)),
+			sprintf('pid in (%s)', implode(',', $pageIds)),
 		);
 		$where = $this->database->getWhere($where);
 		$orderBy = '';
 		$groupBy = '';
 
 		$this->database->clear();
-		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy);
+		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy, $limit);
 		if(!$records || !\tx_nclib::isLoopable($records)) {
 			return false;
 		}
@@ -102,7 +102,6 @@ class Permit extends Base {
 	 * Loads records for the specified page.
 	 *
 	 * @throws \tx_nclib_exception
-	 * @internal param int $iPageId the parent pageid
 	 * @return boolean true if successful, false otherwise.
 	 */
 	public function loadPublishablePermits() {
@@ -116,14 +115,68 @@ class Permit extends Base {
 		$fields = '*';
 		$where = array(
 			'(lastpublished = 0 OR lastmodified > lastpublished)',
+			'lastmodified > 0',
 			'publishdate <= ' . time(),
+			'(publishenddate = 0 OR publishenddate > ' . time() . ')',
 			'type = ' . self::TYPE_PERMIT,
 			'hidden=0',
 			'deleted=0',
-			sprintf('%s.pid in (%s)', $this->getTableName(), implode(',', $pageIds)),
+			sprintf('pid in (%s)', implode(',', $pageIds)),
 		);
 		$where = $this->database->getWhere($where);
-		$orderBy = '';
+		$orderBy = 'lastmodified ASC';
+		$groupBy = '';
+		$limit = $this->controller->configModel->get('latestlimit');
+
+		$this->database->clear();
+		$records = $this->database->getQueryRecords($this->getTableName(), $fields, $where, $groupBy, $orderBy, $limit);
+		if(!$records || !\tx_nclib::isLoopable($records)) {
+			return false;
+		}
+		$this->setIterationArray($records);
+		return true;
+	}
+
+	/**
+	 * Load permits which can be removed from the harvester folder fileadmin/permitsxml/.
+	 * @return bool
+	 * @throws \tx_nclib_exception
+	 */
+	public function loadDepublishablePermits() {
+		$pageIds = $this->database->getPageIdsRecursive(
+			$this->controller->configModel->get('storageFolder'),
+			$this->controller->configModel->get('recurseDepth')
+		);
+		if($pageIds === false) {
+			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
+		}
+		$fields = '*';
+
+		$where = $this->database->getWhere(
+			array( // combine with AND
+
+				// Load all which are hidden or deleted or have been published more than 30 days ago.
+				'(' . $this->database->getWhere( // combine with OR
+					array(
+						'hidden=1',
+						'deleted=1',
+						'(lastpublished > 0 AND lastpublished < (' . time() . '-' . (
+							// 30 days = 60 * 60 * 24 * 30 = 2592000 seconds
+							2592000
+						) . '))',
+						'publishdate > ' . time(),
+						'publishenddate >= ' . time(),
+					),
+					false // combine with OR
+				) . ')',
+
+				'lastdepublished < lastmodified',
+				'type = ' . self::TYPE_PERMIT,
+				sprintf('pid in (%s)', implode(',', $pageIds)),
+
+			)
+		);
+		$orderBy = 'lastmodified ASC';
 		$groupBy = '';
 		$limit = $this->controller->configModel->get('latestlimit');
 
@@ -741,7 +794,7 @@ class Permit extends Base {
 		$date = date($this->controller->configModel->get('config.dateFormat'), $time);
 		return $date;
 	}
-	protected function _getField_getModifiedDate($field) {
+	protected function _getField_getLastModifiedDate($field) {
 		$time = $this->getField($field, true);
 		if(empty($time)) {
 			return false;
@@ -896,12 +949,12 @@ class Permit extends Base {
 			throw new \tx_nclib_exception('label_error_no_pages_found', $this->controller);
 		}
 		$fields = '*';
-		$caeseReference = $this->getField('casereference', true);
-		if(empty($caeseReference)) {
+		$caseReference = $this->getField('casereference', true);
+		if(empty($caseReference)) {
 			return false;
 		}
 		$where = array(
-			sprintf('casereference_pub = \'%s\'', $TYPO3_DB->getDatabaseHandle()->real_escape_string($caeseReference)),
+			sprintf('casereference_pub = \'%s\'', $TYPO3_DB->getDatabaseHandle()->real_escape_string($caseReference)),
 			'type=' . self::TYPE_PUBLICATION,
 			'hidden=0',
 			'deleted=0',

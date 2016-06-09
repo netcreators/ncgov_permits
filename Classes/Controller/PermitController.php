@@ -3,7 +3,7 @@
 *  Copyright notice
 *
 *  (c) 2008 Frans van der Veen [netcreators] <extensions@netcreators.com>
-*  (c) 2010 Klaus Bitto [netcreators]
+*  (c) 2010 Leonie Philine Bitto [netcreators]
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -346,6 +346,8 @@ class PermitController extends BaseController {
 		$log = array();
 		$log[] = 'Publishing records ' . date($this->configModel->get('config.dateFormat') . ' H:i:s');
 		$log[] = '______________________________________' . chr(10);
+
+		// Publish new permits (modified later than last publish date, or never published before).
 		if($this->permitsModel->loadPublishablePermits()) {
 			$log[] = 'Loaded ' . $this->permitsModel->getCount() . ' publishable permits. (Limit: ' . $this->configModel->get('latestlimit') . ')';
 			while($this->permitsModel->hasNextRecord()) {
@@ -383,6 +385,69 @@ class PermitController extends BaseController {
 			$log[] = 'Nothing to publish';
 			$log[] = '';
 		}
+
+		// Depublish older permits (published longer than 30 days ago).
+		if($this->permitsModel->loadDepublishablePermits()) {
+			$log[] = 'Loaded ' . $this->permitsModel->getCount() . ' de-publishable permits. (Limit: ' . $this->configModel->get('latestlimit') . ')';
+			while($this->permitsModel->hasNextRecord()) {
+
+				$file = GeneralUtility::getFileAbsFileName(
+					$this->configModel->get('config.xmlFilePublishPath') . $this->getCaseFileName()
+				);
+				if(is_file($file)) {
+					unlink($file);
+					$log[] = '[+] Depublished permit [' . $this->permitsModel->getId() . ' / ' . $file . ']: ' . $this->permitsModel->getField('title');
+				} else {
+					$log[] = '[-] XML file ' . $file . ' did not exist while depublishing permit [' . $this->permitsModel->getId() . ']: ' . $this->permitsModel->getField('title');
+				}
+
+				$removedDocumentFiles = $this->cleanOldDocuments();
+				if($removedDocumentFiles) {
+					$log[] = '[+] Depublished documents of permit [' . $this->permitsModel->getId() . ']: ' . $this->permitsModel->getField('title');
+					$log[] = implode(', ' . $removedDocumentFiles);
+				}
+
+				// let's update the record so it does not get de-published over and over again
+				$this->permitsModel->setField('lastdepublished', time());
+				$this->permitsModel->saveRecord();
+
+				$this->permitsModel->moveToNextRecord();
+			}
+		}
+
+		// Remove orphan XML files
+		$allPublishedPermitXmlFiles = glob($this->configModel->get('config.xmlFilePublishPath') . 'xml_permit_*.xml');
+		$log[] = 'Found ' . count($allPublishedPermitXmlFiles) . ' xml_permit_*.xml files in ' . $this->configModel->get('config.xmlFilePublishPath') . '.';
+		$removeCount = 0;
+		foreach($allPublishedPermitXmlFiles as $file) {
+			$matches = array();
+			$matchResult = preg_match('/\/xml_permit_([0-9]*).xml$/', $file, $matches);
+
+			if($matchResult === 0 /* nothing found */ || $matchResult === FALSE /* match error */) {
+				$log[] = '[-] A file - ' . $file . ' - did not match the expected pattern.';
+				continue;
+			}
+			$permitId = (int)$matches[1];
+
+			if(!$this->permitsModel->loadRecordById($permitId)) {
+				$file = GeneralUtility::getFileAbsFileName(
+					$this->configModel->get('config.xmlFilePublishPath') . 'xml_permit_' . $permitId . '.xml'
+				);
+				unlink($file);
+				$removeCount++;
+				$log[] = '[+] No longer in database: Depublished orphan permit XML file [' . $permitId . ' / ' . $file . '].';
+				$removedDocumentFiles = $this->cleanOldDocuments($permitId);
+				if($removedDocumentFiles) {
+					$removeCount += count($removedDocumentFiles);
+					$log[] = '[+] No longer in database: Depublished documents of orphan permit XML file [' . $permitId . ' / ' . $file . ']: ' . implode(', ' . $removedDocumentFiles);
+				}
+			}
+		}
+		$log[] = 'Removed ' . $removeCount . ' orphaned XML permit and document files from ' . $this->configModel->get('config.xmlFilePublishPath') . ' during clean-up.';
+
+
+
+
 		$log[] = '(end of log)';
 		$this->logModel->log(implode(chr(10), $log));
 		$content = nl2br(implode(chr(10), $log));
@@ -391,24 +456,25 @@ class PermitController extends BaseController {
 
 	/**
 	 * CleanOldDocuments ...
-	 * @return boolean
+	 * @param integer $permitId Optional - usually, the currently loaded permitsModel is used.
+	 * @return array
 	 */
-	public function cleanOldDocuments() {
+	public function cleanOldDocuments($permitId=0) {
+		if(!$permitId) {
+			$permitId = $this->permitsModel->getId();
+		}
+
 		$path = $this->configModel->get('config.xmlFilePublishPath');
-		$dir = @dir($path);
-		$documentFilePart = 'xml_permit_' . $this->permitsModel->getId() . '_document_';
-		$continue = $dir !== false;
-		while($continue) {
-			$entry = $dir->read();
-			if($entry !== false) {
-				if(GeneralUtility::isFirstPartOfStr($entry, $documentFilePart)) {
-					$result = unlink($path . $entry);
-				}
-			} else {
-				$continue = false;
+		$documentFilePart = 'xml_permit_' . $permitId . '_document_';
+		$files = glob($path . $documentFilePart . '*');
+		foreach($files as &$file) {
+			$file = GeneralUtility::getFileAbsFileName($file);
+			if(is_file($file)) {
+				unlink($file);
 			}
 		}
-		return true;
+
+		return $files;
 	}
 
 	/**

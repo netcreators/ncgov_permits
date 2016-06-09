@@ -65,6 +65,17 @@ $tableDefinition = array (
 				'eval' => 'datetime',
 			)
 		),
+		'lastdepublished' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.lastdepublished',
+			'config' => array (
+				'type' => 'input',
+				'size' => '12',
+				'max' => '20',
+				'readOnly' => 1,
+				'eval' => 'datetime',
+			)
+		),
 		'lastmodified' => array (
 			'exclude' => 1,
 			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.lastmodified',
