@@ -15,4 +15,3 @@ $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_controller'
 // Add TypoScript resource
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript/','Permit publication plugin ts (ncgov_permits)');
 
-?>

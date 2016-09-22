@@ -1,4 +1,6 @@
 
+2016-09-22 1.1.2 Leonie Philine Bitto <leonie@netcreators.nl>
+	* [DB UPDATE] Bugfix: Increased log message field size from TEXT to LONGTEXT.
 
 2016-06-09 1.1.1 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Bugfix: No more invalid SQL queries being run if a publication's coordinates or lots are empty.

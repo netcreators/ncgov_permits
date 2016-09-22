@@ -42,8 +42,8 @@ return array (
             'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.message',
             'config' => Array (
                 'type' => 'text',
-                'cols' => '30',
-                'rows' => '10',
+                'cols' => '40',
+                'rows' => '40',
             )
         ),
 		'messagenumber' => array (
