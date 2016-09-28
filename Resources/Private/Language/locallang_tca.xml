@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'ncgov_permits'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tt_content.list_type_pi1">Permit publication extension</label>
+			<label index="tx_ncgovpermits_permits">Bekendmaking of Vergunning</label>
+			<label index="tx_ncgovpermits_permits.type">Type record (Bekendmaking of vergunning)</label>
+			<label index="tx_ncgovpermits_permits.type.I.0">Vergunning</label>
+			<label index="tx_ncgovpermits_permits.type.I.1">Bekendmaking</label>
+			<label index="tx_ncgovpermits_permits.type.I.2">-- Kies een type (Vergunning of Bekendmaking) -- </label>
+			<label index="tx_ncgovpermits_permits.publishdate">Wanneer vrijgeven voor publicatie?</label>
+			<label index="tx_ncgovpermits_permits.publishenddate">Einddatum publicatie</label>
+			<label index="tx_ncgovpermits_permits.lastpublished">Laatst vrijgegeven voor publicatie</label>
+			<label index="tx_ncgovpermits_permits.lastdepublished">Laatst verwijderd van publicatie</label>
+			<label index="tx_ncgovpermits_permits.lastmodified">Laatst gewijzigd (auto-updated field!)</label>
+			<label index="tx_ncgovpermits_permits.language">Taal</label>
+			<label index="tx_ncgovpermits_permits.municipality">Gemeente (verplicht)</label>
+			<label index="tx_ncgovpermits_permits.municipality.I.0">-- selecteer een gemeente --</label>
+			<label index="tx_ncgovpermits_permits.producttype">Product type (verplicht)</label>
+			<label index="tx_ncgovpermits_permits.productactivities">Uitgevoerde activiteit (soms verplicht)</label>
+			<label index="tx_ncgovpermits_permits.publication">Publicatie</label>
+			<label index="tx_ncgovpermits_permits.title">Titel</label>
+			<label index="tx_ncgovpermits_permits.link">Link naar extern / intern document</label>
+			<label index="tx_ncgovpermits_permits.description">Beschrijving (verplicht)</label>
+			<label index="tx_ncgovpermits_permits.publicationbody">Bekendmakingsbericht</label>
+			<label index="tx_ncgovpermits_permits.documents">Bijlagen (optioneel)</label>
+			<label index="tx_ncgovpermits_permits.documenttypes">Typen bijlagen (op volgorde van documenten)</label>
+			<label index="tx_ncgovpermits_permits.casereference">Zaaknummer (verplicht)</label>
+			<label index="tx_ncgovpermits_permits.casereference_pub">Zaaknummer</label>
+			<label index="tx_ncgovpermits_permits.validity_start">Vergunning verleend op</label>
+			<label index="tx_ncgovpermits_permits.validity_end">Vergunning verleend tot</label>
+			<label index="tx_ncgovpermits_permits.phase">Fase (verplicht)</label>
+			<label index="tx_ncgovpermits_permits.phase_not_required">Fase</label>
+			<label index="tx_ncgovpermits_permits.phase.I.0">-- kies een fase --</label>
+			<label index="tx_ncgovpermits_permits.termtype">Termijnsoort (optioneel)</label>
+			<label index="tx_ncgovpermits_permits.termtype.I.0">-- kies een termijnsoort --</label>
+			<label index="tx_ncgovpermits_permits.termtype_start">Startdatum termijn (verplicht als termijnsoort ingevuld)</label>
+			<label index="tx_ncgovpermits_permits.termtype_end">Einddatum termijn (verplicht als termijnsoort ingevuld)</label>
+			<label index="tx_ncgovpermits_permits.company">Bedrijfsnaam</label>
+			<label index="tx_ncgovpermits_permits.companynumber">Bedrijfsnummer (bv KVK of BTW nummer)</label>
+			<label index="tx_ncgovpermits_permits.companyaddress">Adres bedrijf</label>
+			<label index="tx_ncgovpermits_permits.companyaddressnumber">Huisnummer bedrijf</label>
+			<label index="tx_ncgovpermits_permits.companyzipcode">Postcode bedrijf</label>
+			<label index="tx_ncgovpermits_permits.objectreference">Referentienummer (BAG) (optioneel)</label>
+			<label index="tx_ncgovpermits_permits.related">Gerelateerde vergunning/bekendmaking (wordt bij opslaan automatisch aangemaakt, indien aanwezig)</label>
+			<label index="tx_ncgovpermits_permits.edit_related">Bewerk gerelateerd</label>
+
+			<!-- addresses -->
+			<label index="tx_ncgovpermits_addresses">Adres object</label>
+			<label index="tx_ncgovpermits_addresses.zipcode">Postcode object (verplicht in te vullen indien bekend)</label>
+			<label index="tx_ncgovpermits_addresses.addressnumber">Huisnummer object (alleen nummers, verplicht in te vullen indien bekend)</label>
+			<label index="tx_ncgovpermits_addresses.addressnumberadditional">Huisnummer toevoeging object (verplicht in te vullen indien bekend)</label>
+			<label index="tx_ncgovpermits_addresses.address">Adres object (Straatnaam, Nodig voor Google Maps)</label>
+			<label index="tx_ncgovpermits_addresses.city">Woonplaats object (optioneel, invullen indien afwijkend)</label>
+			<label index="tx_ncgovpermits_addresses.municipality">Gemeente object</label>
+			<label index="tx_ncgovpermits_addresses.municipality.I.0">-- selecteer een gemeente --</label>
+			<label index="tx_ncgovpermits_addresses.province.I.0">-- kies een provincie --</label>
+			<label index="tx_ncgovpermits_addresses.province">Provincie object</label>
+			<!-- lots -->
+			<label index="tx_ncgovpermits_lots">Perceel</label>
+			<label index="tx_ncgovpermits_lots.cadastremunicipality">Kadastrale gemeente</label>
+			<label index="tx_ncgovpermits_lots.section">Sectie (max. 2 karakters)</label>
+			<label index="tx_ncgovpermits_lots.number">Nummer</label>
+			<!-- coordinates -->
+			<label index="tx_ncgovpermits_coordinates">Coordinaten</label>
+			<label index="tx_ncgovpermits_coordinates.coordinatex">x</label>
+			<label index="tx_ncgovpermits_coordinates.coordinatey">y</label>
+			<label index="tx_ncgovpermits_coordinates.coordinatez">z</label>
+			<!-- log -->
+			<label index="tx_ncgovpermits_log">Vergunningen xml publicatielog</label>
+			<label index="tx_ncgovpermits_log.message">Bericht</label>
+			<label index="tx_ncgovpermits_log.messagenumber">Volgnummer bericht</label>
+			<label index="tx_ncgovpermits_log.logtype">Type log</label>
+			<!-- log end -->
+		</languageKey>
+	</data>
+</T3locallang>

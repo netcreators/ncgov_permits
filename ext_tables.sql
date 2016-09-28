@@ -1,5 +1,5 @@
 #
-# Table structure for table 'tx_ncgovappointments_log'
+# Table structure for table 'tx_ncgovpermits_log'
 #
 CREATE TABLE tx_ncgovpermits_log (
 	uid int(11) NOT NULL auto_increment,
@@ -9,7 +9,7 @@ CREATE TABLE tx_ncgovpermits_log (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
-	message text NOT NULL,
+	message longtext NOT NULL,
 	logtype tinytext NOT NULL,
 	messagenumber int(11) DEFAULT '0' NOT NULL,
 
@@ -30,6 +30,8 @@ CREATE TABLE tx_ncgovpermits_permits (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 
 	lastpublished int(11) DEFAULT '0' NOT NULL,
+	lastdepublished int(11) DEFAULT '0' NOT NULL,
+	lastmodified int(11) DEFAULT '0' NOT NULL,
 	type tinyint(4) DEFAULT '0' NOT NULL,
 	language text NOT NULL,
 	producttype text NOT NULL,
