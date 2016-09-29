@@ -364,8 +364,8 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 		$cacheHashCalculator = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\CacheHashCalculator');
 
 
-		$additionalParams = sprintf('&tx_ncgovpermits_controller[id]=%d', (int)$contentUID);
-		$url = sprintf('http://%s/index.php?id=%d%s&cHash=%s', $baseURL, (int)$pageUID, $additionalParams, $cacheHashCalculator->generateForParameters($additionalParams));
+		$queryString = sprintf('id=%d&tx_ncgovpermits_controller[id]=%d', (int)$pageUID, (int)$contentUID);
+		$url = sprintf('http://%s/index.php?%s&cHash=%s', $baseURL, $queryString, $cacheHashCalculator->generateForParameters($queryString));
 		return $url;
 	}
 
