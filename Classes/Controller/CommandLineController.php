@@ -80,7 +80,6 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
             $publications = $this->getDatabaseConnection()->exec_SELECTgetRows(
                 '*',
                 'tx_ncgovpermits_permits',
-                // NOTE: Inconsitency: SELECTing here WHERE deleted=0, but later checking "if($publication['deleted']) {...}". Makes no sense.
                 'tx_ncgovpermits_permits.pid = ' . $conf['pid'] . ' AND hidden = 0 AND type = 1 '
 
                 // Note:
@@ -320,6 +319,12 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 
                     $pushError = '';
                     if ($validData) {
+                        $this->displayInfo(
+                            'Sending transaction \'' . $publicationData['transactiontype'] . '\''
+                            . ' for Publication uid: ' . $publication['uid']
+                            . ' / identifier: ' . $publication['identifier']
+                            . ' / remote identifier: ' . $publicationData['identifier']
+                        );
                         $pushError = $publicationPushService->process();
                     } else {
                         $this->displayError(
@@ -395,6 +400,17 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
         echo("! " . $message . "\n");
         flush();
         $this->errors++;
+    }
+
+    /**
+     * Shows info message
+     * @param string $message
+     * @return void
+     */
+    function displayInfo($message)
+    {
+        echo("  " . $message . "\n");
+        flush();
     }
 
     /**
