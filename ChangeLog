@@ -5,6 +5,7 @@
 	* Reformatted for PSR-2.
 	* Cleaned up CLI controller properties.
 	* More detailed logging of C/U/D transactionType publications pushed.
+	* Made the plugin's links cacheable (with cHash).
 
 2016-09-22 1.1.3 Leonie Philine Bitto <leonie@netcreators.nl>
 	* CommandLineController creates proper cHash also with $GLOBALS['TYPO3_CONF_VARS']['FE']['cHashIncludePageId'] set.

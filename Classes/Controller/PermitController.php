@@ -688,18 +688,18 @@ class PermitController extends BaseController
         $currentMonth = date('m');
         $currentWeek = date('W');
         // determine if there are incoming vars
-        $showallrecordsoftheactiveyear = false;
-        $showallrecordsofallyears = false;
+        $showAllRecordsOfTheActiveYear = false;
+        $showAllRecordsOfAllYears = false;
         if ($this->getPiVar('activeMonth') != '') {
             $activeMonth = $this->getPiVar('activeMonth');
             if ($activeMonth == 13) {
-                $showallrecordsoftheactiveyear = true;
+                $showAllRecordsOfTheActiveYear = true;
             }
         }
         if ($this->getPiVar('activeYear') != '') {
             $activeYear = $this->getPiVar('activeYear');
             if ($activeYear == 9999) {
-                $showallrecordsofallyears = true;
+                $showAllRecordsOfAllYears = true;
             }
         }
         /*if($this->getPiVar('activeWeek') != '') {
@@ -729,7 +729,7 @@ class PermitController extends BaseController
         $startWeek = date('W', mktime(0, 0, 0, $activeMonth, 1, $activeYear));
         $endWeek = date('W', mktime(0, 0, 0, $activeMonth + 1, 1, $activeYear));
 
-        if (($showallrecordsoftheactiveyear) || ($showallrecordsofallyears)) {
+        if (($showAllRecordsOfTheActiveYear) || ($showAllRecordsOfAllYears)) {
             $startWeek = 1;
             $endWeek = 52;
         }
@@ -743,7 +743,7 @@ class PermitController extends BaseController
             unset($activeWeek);
         }
         // month stars from 1
-        if ($showallrecordsoftheactiveyear == false) {
+        if ($showAllRecordsOfTheActiveYear == false) {
             $endMonth = $activeMonth;
         } else {
             $endMonth = 12;
@@ -761,12 +761,12 @@ class PermitController extends BaseController
             $startDate = mktime(0, 0, 0, $activeMonth, 1, $activeYear);
             $endDate = mktime(0, 0, 0, $activeMonth + 1, 1, $activeYear);
 
-            if ($showallrecordsoftheactiveyear) {
+            if ($showAllRecordsOfTheActiveYear) {
                 $startDate = mktime(0, 0, 0, 1, 1, $activeYear);
                 $endDate = mktime(0, 0, 0, 1, 1, $activeYear + 1);
             }
 
-            if ($showallrecordsofallyears) {
+            if ($showAllRecordsOfAllYears) {
                 $startDate = mktime(0, 0, 0, 1, 1, 1920);
                 $endDate = mktime(0, 0, 0, 1, 1, ($currentYear + 1));
             }
@@ -905,7 +905,7 @@ class PermitController extends BaseController
     function getURLToFilteredResult($params = array())
     {
         $linkParams = $this->fillPiVarParams($params);
-        return $this->getLinkToController(false, false, $linkParams);
+        return $this->getLinkToController(false, false, $linkParams, '', '', 1);
     }
 
     /**

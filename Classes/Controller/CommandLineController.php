@@ -437,7 +437,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
         echo("\n'Invalid Data' Errors: " . $this->invalidDataErrors . "\n");
         echo("'Remote Push' Errors: " . $this->remotePushErrors . "\n");
         echo("Total Publications sent: " . ($this->invalidDataErrors + $this->remotePushErrors) . "\n");
-        
+
         echo("\nDone!\n");
         flush();
     }
