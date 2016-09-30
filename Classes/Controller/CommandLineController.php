@@ -106,7 +106,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
                 $select['table'],
                 $select['where']
             );
-            echo "Total count of publications to be processed: " . $totalPublicationCount . "\n";
+            echo "STAT: Total count of publications to be processed: " . $totalPublicationCount . "\n";
 
             $publications = $this->getDatabaseConnection()->exec_SELECTgetRows(
                 $select['fields'],
@@ -115,7 +115,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
                 '', '',
                 $this->batchLimit
             );
-            echo "Count of publications to be processsed in this run (max " . $this->batchLimit . "): "
+            echo "STAT: Count of publications to be processsed in this run (max " . $this->batchLimit . "): "
                 . count($publications) . "\n\n";
             flush();
 
@@ -448,14 +448,14 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
      */
     function displayStats()
     {
-        echo("\n'Create' Publications sent: " . $this->sentPublications['C'] . "\n");
-        echo("'Update' Publications sent: " . $this->sentPublications['U'] . "\n");
-        echo("'Delete' Publications sent: " . $this->sentPublications['D'] . "\n");
-        echo("Total Publications sent: " . array_sum($this->sentPublications) . "\n");
+        echo("\nSTAT: 'Create' Publications sent: " . $this->sentPublications['C'] . "\n");
+        echo("STAT: 'Update' Publications sent: " . $this->sentPublications['U'] . "\n");
+        echo("STAT: 'Delete' Publications sent: " . $this->sentPublications['D'] . "\n");
+        echo("STAT: Total Publications sent: " . array_sum($this->sentPublications) . "\n");
 
-        echo("\n'Invalid Data' Errors: " . $this->invalidDataErrors . "\n");
-        echo("'Remote Push' Errors: " . $this->remotePushErrors . "\n");
-        echo("Total Publications sent: " . ($this->invalidDataErrors + $this->remotePushErrors) . "\n");
+        echo("\nSTAT: 'Invalid Data' Errors: " . $this->invalidDataErrors . "\n");
+        echo("STAT: 'Remote Push' Errors: " . $this->remotePushErrors . "\n");
+        echo("STAT: Total Errors: " . ($this->invalidDataErrors + $this->remotePushErrors) . "\n");
 
         echo("\nDone!\n");
         flush();
