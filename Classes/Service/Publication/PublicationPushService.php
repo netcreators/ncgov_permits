@@ -93,7 +93,12 @@ class PublicationPushService {
 
 		$locationInvalid = !$this->validateAddresses() || !$this->validateParcels() || !$this->validateCoordinates();
 
-		return $requiredFilled && $locationFilled && !$locationInvalid;
+		return array(
+			$requiredFilled && $locationFilled && !$locationInvalid,
+			$requiredFilled,
+			$locationFilled,
+			$locationInvalid
+		);
 	}
 
 	/**
@@ -626,4 +631,3 @@ class PublicationPushService {
 	}
 
 }
-?>

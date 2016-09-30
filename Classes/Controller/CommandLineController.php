@@ -85,7 +85,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 				'*',
 				'tx_ncgovpermits_permits',
 				// NOTE: Inconsitency: SELECTing here WHERE deleted=0, but later checking "if($publication['deleted']) {...}". Makes no sense.
-				'tx_ncgovpermits_permits.pid = ' . $conf['pid'] . ' AND hidden = 0 AND deleted = 0 AND type = 1 '
+				'tx_ncgovpermits_permits.pid = ' . $conf['pid'] . ' AND hidden = 0 AND type = 1 '
 
 					// Note:
 					//		'lastmodified' is updated by ncgov_permits_sync and, for manual edits,
@@ -248,13 +248,12 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 					}
 
 					// Set remaining fields
-					if ($publicationData['lastpublished'] == 0) {
-						$publicationData['transactiontype'] = 'C';
-					}
-					elseif ($publication['deleted']) {
+					if ($publication['deleted']) {
 						$publicationData['transactiontype'] = 'D';
 					}
-					else {
+					elseif ($publicationData['lastpublished'] == 0) {
+						$publicationData['transactiontype'] = 'C';
+					} else {
 						$publicationData['transactiontype'] = 'U';
 					}
 
@@ -316,7 +315,12 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 					// Set data in object
 					$publicationPushService->setData($publicationData);
 
-					$validData = $publicationPushService->validateData();
+					list(
+						$validData,
+						$requiredFilled,
+						$locationFilled,
+						$locationInvalid
+					) = $publicationPushService->validateData();
 
 					$pushError = '';
 					if ($validData) {
@@ -324,6 +328,15 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 					}
 					else {
 						$this->displayError('Publicationdata is incomplete or insufficient (uid: ' . $publication['uid'] . ')');
+						if(!$requiredFilled) {
+							$this->displayError('Not all required fields are filled for uid: ' . $publication['uid']);
+						}
+						if(!$locationFilled) {
+							$this->displayError('No addresses, parcels or coordinates are given for uid: ' . $publication['uid']);
+						}
+						if($locationInvalid) {
+							$this->displayError('The location data is invalid for uid: ' . $publication['uid']);
+						}
 					}
 
 					if (empty($pushError)) {
@@ -410,4 +423,3 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 $startstopcache = GeneralUtility::makeInstance('Netcreators\\NcgovPermits\\Controller\\CommandLineController');
 $startstopcache->cli_main($_SERVER['argv']);
 
-?>
