@@ -10,14 +10,13 @@ if (!defined('TYPO3_cliMode')) {
 
 class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineController
 {
-    var $prefix;
-    var $xml_template;
-    var $errors;
-    var $sentPublications;
+    // protected $prefix;
+    protected $xmlTemplatePath;
+    protected $errors;
+    protected $sentPublications;
 
     //Defaults
-    var $creator = '';
-    var $producttypeScheme = 'overheidbm:BekendmakingtypeGemeente';
+    protected $producttypeScheme = 'overheidbm:BekendmakingtypeGemeente';
 
     /**
      * @return \TYPO3\CMS\Core\Database\DatabaseConnection
@@ -37,11 +36,15 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
         $this->cli_help['examples'] = "";
         $this->cli_help['author'] = "Erwin de Jong, (c) 2010";
 
-        $this->prefix = 'tx_ncgovpermits_';
-        $this->xml_template = 'EXT:ncgov_permits/Resources/Private/Templates/Publication.html';
+        // $this->prefix = 'tx_ncgovpermits_';
+        $this->xmlTemplatePath = 'EXT:ncgov_permits/Resources/Private/Templates/Publication.html';
 
         $this->errors = 0;
-        $this->sentPublications = 0;
+        $this->sentPublications = array(
+            'C' => 0,
+            'U' => 0,
+            'D' => 0
+        );
     }
 
     /**
@@ -96,7 +99,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
             );
 
             if (!empty($publications)) {
-                $publicationPushService = new \Netcreators\NcgovPermits\Service\Publication\PublicationPushService($this->xml_template, $conf['user'], $conf['pass'], $conf['test']);
+                $publicationPushService = new \Netcreators\NcgovPermits\Service\Publication\PublicationPushService($this->xmlTemplatePath, $conf['user'], $conf['pass'], $conf['test']);
 
                 foreach ($publications as $publication) {
                     $publicationData = array();
@@ -351,7 +354,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
                                 'lastpublished' => time()
                             )
                         );
-                        $this->sentPublications++;
+                        $this->sentPublications[$publicationData['transactiontype']]++;
                     } else {
                         $this->displayError('Server reply for uid ' . $publication['uid'] . ': ' . $pushError);
                     }
@@ -419,7 +422,10 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
      */
     function displayStats()
     {
-        echo("\nPublications sent: " . $this->sentPublications . "\n");
+        echo("\n'Create' Publications sent: " . $this->sentPublications['C'] . "\n");
+        echo("\n'Update' Publications sent: " . $this->sentPublications['U'] . "\n");
+        echo("\n'Delete' Publications sent: " . $this->sentPublications['D'] . "\n");
+        echo("\nTotal Publications sent: " . array_sum($this->sentPublications) . "\n");
         echo("\nErrors: " . $this->errors . "\n");
         echo("\nDone!\n");
         flush();
