@@ -12,7 +12,7 @@
 
 			<!-- permit list view -->
 			<label index="label_view_details">Meer informatie</label>
-                        <label index="label_month_13">Alle</label>
+			<label index="label_month_13">Alle</label>
 			<label index="label_month_1">Januari</label>
 			<label index="label_month_2">Februari</label>
 			<label index="label_month_3">Maart</label>
@@ -25,7 +25,7 @@
 			<label index="label_month_10">Oktober</label>
 			<label index="label_month_11">November</label>
 			<label index="label_month_12">December</label>
-                        <label index="label_year_9999">Alle</label>
+			<label index="label_year_9999">Alle</label>
 			<label index="label_week">Week</label>
 			<label index="label_type_permit">--Type vergunningen--</label>
 			<label index="label_type_publication">--Type bekendmakingen--</label>
@@ -38,7 +38,7 @@
 			<label index="label_radius">Straal</label>
 			<label index="label_postcodeNum_placeholder">1234</label>
 			<label index="label_postcodeAlpha_placeholder">AA</label>
-			
+
 			<!-- permit detail view -->
 			<label index="label_general">Algemeen</label>
 			<label index="label_location">Locatie</label>
@@ -87,21 +87,38 @@
 			<label index="label_fieldheader_imported">Geimporteerd</label>
 			<label index="label_fieldheader_session_number">Sessie nummer</label>
 			<label index="label_return">Terug naar overzicht</label>
-            <label index="label_fieldheader_permit">Vergunning</label>
-            <label index="label_fieldheader_permit_click">details van de vergunning</label>
+			<label index="label_fieldheader_permit">Vergunning</label>
+			<label index="label_fieldheader_permit_click">details van de vergunning</label>
 
 			<!-- error handling -->
-			<label index="no_records_available">Er zijn voor de door u geselecteerde maand en type geen gegevens aanwezig.</label>
-			<label index="no_records_available_for_period">Er zijn geen gegevens aanwezig voor de afgelopen periode.</label>
+			<label index="no_records_available">Er zijn voor de door u geselecteerde maand en type geen gegevens
+				aanwezig.
+			</label>
+			<label index="no_records_available_for_period">Er zijn geen gegevens aanwezig voor de afgelopen periode.
+			</label>
 			<label index="record_not_found">Kan details voor dit document niet vinden.</label>
-			<label index="label_error_googlemaps_wecmap_not_loaded">Om Google Maps te kunnen gebruiken moet de extensie wec_map zijn geinstalleerd (googleMaps.enabled).</label>
-			<label index="label_error_googlemaps_apikey_not_set">De Google Maps API key is niet geconfigureerd, stel deze eerst in (googleMaps.apiKey).</label>
-			<label index="label_error_googlemaps_width_not_set">Google Maps niet goed geconfigureerd: breedte niet ingesteld, stel deze eerst in (googleMaps.width).</label>
-			<label index="label_error_googlemaps_height_not_set">Google Maps niet goed geconfigureerd: hoogte niet ingesteld, stel deze eerst in (googleMaps.width).</label>
-			
-			<label index="label_error_owmsdefaults_province_not_set">OWMS niet goed geconfigureerd: provincie niet ingesteld, stel deze eerst in (owmsDefaults.province).</label>
-			<label index="label_error_owmsdefaults_city_not_set">OWMS niet goed geconfigureerd: plaats niet ingesteld, stel deze eerst in (owmsDefaults.city).</label>
-			<label index="label_error_owmsdefaults_municipality_not_set">OWMS niet goed geconfigureerd: gemeente niet ingesteld, stel deze eerst in (owmsDefaults.municipality).</label>
+			<label index="label_error_googlemaps_wecmap_not_loaded">Om Google Maps te kunnen gebruiken moet de extensie
+				wec_map zijn geinstalleerd (googleMaps.enabled).
+			</label>
+			<label index="label_error_googlemaps_apikey_not_set">De Google Maps API key is niet geconfigureerd, stel
+				deze eerst in (googleMaps.apiKey).
+			</label>
+			<label index="label_error_googlemaps_width_not_set">Google Maps niet goed geconfigureerd: breedte niet
+				ingesteld, stel deze eerst in (googleMaps.width).
+			</label>
+			<label index="label_error_googlemaps_height_not_set">Google Maps niet goed geconfigureerd: hoogte niet
+				ingesteld, stel deze eerst in (googleMaps.width).
+			</label>
+
+			<label index="label_error_owmsdefaults_province_not_set">OWMS niet goed geconfigureerd: provincie niet
+				ingesteld, stel deze eerst in (owmsDefaults.province).
+			</label>
+			<label index="label_error_owmsdefaults_city_not_set">OWMS niet goed geconfigureerd: plaats niet ingesteld,
+				stel deze eerst in (owmsDefaults.city).
+			</label>
+			<label index="label_error_owmsdefaults_municipality_not_set">OWMS niet goed geconfigureerd: gemeente niet
+				ingesteld, stel deze eerst in (owmsDefaults.municipality).
+			</label>
 		</languageKey>
 	</data>
 </T3locallang>

@@ -24,73 +24,81 @@
 
 namespace Netcreators\NcgovPermits\Domain\Model;
 
-class Xml extends \tx_nclib_xml_model {
-	function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller) {
-		parent::initialize($controller);
-	}
+class Xml extends \tx_nclib_xml_model
+{
+    function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller)
+    {
+        parent::initialize($controller);
+    }
 
-	/**
-	 * Reads gov xml file, returns valuelist
-	 * @param $file
-	 * @param $topicanaidAsValue
-	 * @throws \Exception
-	 * @return array
-	 */
-	public function getGovXmlValueList($file, $topicanaidAsValue) {
-		if(!$this->loadXMLFromFile($file)) {
-			throw new \Exception('Could not load XML file: ' . $file);
-		} else {
-			$this->xmlRoot->registerXPathNameSpace('ns', 'http://standaarden.overheid.nl/owms/terms');
-			$items = $this->xmlRoot->xpath('/ns:cv');
-			$result = array();
-			foreach($items[0] as $node) {
-				if($topicanaidAsValue) {
-					$topicanaid = trim($node);
-				} else {
-					$topicanaid = trim($node['topicanaid']);
-				}
-				$result[$topicanaid] = trim($node);
-			}
-		}
-		return $result;
-	}
+    /**
+     * Reads gov xml file, returns valuelist
+     * @param $file
+     * @param $topicanaidAsValue
+     * @throws \Exception
+     * @return array
+     */
+    public function getGovXmlValueList($file, $topicanaidAsValue)
+    {
+        if (!$this->loadXMLFromFile($file)) {
+            throw new \Exception('Could not load XML file: ' . $file);
+        } else {
+            $this->xmlRoot->registerXPathNameSpace('ns', 'http://standaarden.overheid.nl/owms/terms');
+            $items = $this->xmlRoot->xpath('/ns:cv');
+            $result = array();
+            foreach ($items[0] as $node) {
+                if ($topicanaidAsValue) {
+                    $topicanaid = trim($node);
+                } else {
+                    $topicanaid = trim($node['topicanaid']);
+                }
+                $result[$topicanaid] = trim($node);
+            }
+        }
+        return $result;
+    }
 
-	/**
-	 * Reads gov txt file, returns valuelist
-	 * @param $file
-	 * @return array
-	 */
-	public function getGovTxtValueList($file) {
-		$absFile = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($file);
-		$lines = file($absFile, FILE_IGNORE_NEW_LINES);
-		$result = array();
+    /**
+     * Reads gov txt file, returns valuelist
+     * @param $file
+     * @return array
+     */
+    public function getGovTxtValueList($file)
+    {
+        $absFile = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($file);
+        $lines = file($absFile, FILE_IGNORE_NEW_LINES);
+        $result = array();
 
-		foreach($lines as $index=>$line) {
-			$line = trim($line);
-			if($index == 0
-				||$line[0] == '#'
-				|| empty($line)) {
-				// skip comments, empty lines
-				// and the first line (which for some reason is a comment, but does not start with #)
-				continue;
-			}
-			$result[$line] = $line;
-		}
+        foreach ($lines as $index => $line) {
+            $line = trim($line);
+            if ($index == 0
+                || $line[0] == '#'
+                || empty($line)
+            ) {
+                // skip comments, empty lines
+                // and the first line (which for some reason is a comment, but does not start with #)
+                continue;
+            }
+            $result[$line] = $line;
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	// iteration functions to be handled (used for the loadRecord functions)
-	public final function onNextRecord() {
-		$this->setRecord($this->getCurrentRecord(), true);
-	}
+    // iteration functions to be handled (used for the loadRecord functions)
+    public final function onNextRecord()
+    {
+        $this->setRecord($this->getCurrentRecord(), true);
+    }
 
-	public final function onPreviousRecord() {
-		$this->setRecord($this->getCurrentRecord(), true);
-	}
+    public final function onPreviousRecord()
+    {
+        $this->setRecord($this->getCurrentRecord(), true);
+    }
 
-	public final function onRecordIndexChange() {
-		$this->setRecord($this->getCurrentRecord(), true);
-	}
+    public final function onRecordIndexChange()
+    {
+        $this->setRecord($this->getCurrentRecord(), true);
+    }
 }
 

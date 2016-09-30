@@ -24,69 +24,75 @@
 
 namespace Netcreators\NcgovPermits\Domain\Model;
 
-class Log extends Base {
-	private $messageNumber;
+class Log extends Base
+{
+    private $messageNumber;
 
-	function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller) {
-		parent::initialize($controller);
-		$this->setTableName('tx_ncgovpermits_log');
-		$this->messageNumber = 0;
-	}
+    function initialize(\Netcreators\NcgovPermits\Controller\PermitController &$controller)
+    {
+        parent::initialize($controller);
+        $this->setTableName('tx_ncgovpermits_log');
+        $this->messageNumber = 0;
+    }
 
-	/**
-	 * Writes a log message with a certain type
-	 *
-	 * @param string $message the log message.
-	 * @param array $variables
-	 * @param string $type the type of the message
-	 * @param bool $timestamp
-	 * @return boolean true when successful
-	 */
-	public function log($message, $variables = array(), $type = 'message', $timestamp = false) {
-		$this->messageNumber++;
-		if($variables !== false && \tx_nclib::isLoopable($variables)) {
-			$message .= ' (';
-			$index = 0;
-			foreach($variables as $key=>$value) {
-				if($index > 0) {
-					$message .= ',';
-				}
-				$message .= $key . '=' . (string)$value;
-				$index++;
-			}
-			$message .= ')';
-		}
-		if($this->controller->configModel->get('logFolder') === false) {
-			$pageId = \tx_nclib_tsfe_model::getPageId();
-		} else {
-			$pageId = $this->controller->configModel->get('logFolder');
-		}
-		$record = array(
-			'message' => $message,
-			'logtype' => $type,
-			'pid' => $pageId,
-			'messagenumber' => $this->messageNumber,
-		);
-		if($timestamp) {
-			$record['tstamp'] = $timestamp;
-		} else {
-			$record['tstamp'] = time();
-		}
-		$this->database->insertRecord($this->getTableName(), $record);
-		return true;
-	}
+    /**
+     * Writes a log message with a certain type
+     *
+     * @param string $message the log message.
+     * @param array $variables
+     * @param string $type the type of the message
+     * @param bool $timestamp
+     * @return boolean true when successful
+     */
+    public function log($message, $variables = array(), $type = 'message', $timestamp = false)
+    {
+        $this->messageNumber++;
+        if ($variables !== false && \tx_nclib::isLoopable($variables)) {
+            $message .= ' (';
+            $index = 0;
+            foreach ($variables as $key => $value) {
+                if ($index > 0) {
+                    $message .= ',';
+                }
+                $message .= $key . '=' . (string)$value;
+                $index++;
+            }
+            $message .= ')';
+        }
+        if ($this->controller->configModel->get('logFolder') === false) {
+            $pageId = \tx_nclib_tsfe_model::getPageId();
+        } else {
+            $pageId = $this->controller->configModel->get('logFolder');
+        }
+        $record = array(
+            'message' => $message,
+            'logtype' => $type,
+            'pid' => $pageId,
+            'messagenumber' => $this->messageNumber,
+        );
+        if ($timestamp) {
+            $record['tstamp'] = $timestamp;
+        } else {
+            $record['tstamp'] = time();
+        }
+        $this->database->insertRecord($this->getTableName(), $record);
+        return true;
+    }
 
-	// iteration functions to be handled (used for the loadRecord functions)
-	public final function onNextRecord() {
-		$this->setRecord($this->getCurrentRecord(), true);
-	}
+    // iteration functions to be handled (used for the loadRecord functions)
+    public final function onNextRecord()
+    {
+        $this->setRecord($this->getCurrentRecord(), true);
+    }
 
-	public final function onPreviousRecord() {
-		$this->setRecord($this->getCurrentRecord(), true);
-	}
+    public final function onPreviousRecord()
+    {
+        $this->setRecord($this->getCurrentRecord(), true);
+    }
 
-	public final function onRecordIndexChange() {
-		$this->setRecord($this->getCurrentRecord(), true);
-	}
+    public final function onRecordIndexChange()
+    {
+        $this->setRecord($this->getCurrentRecord(), true);
+    }
 }
 

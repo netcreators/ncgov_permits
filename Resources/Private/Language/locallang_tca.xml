@@ -11,7 +11,7 @@
 			<label index="tx_ncgovpermits_permits.type">Type record (Bekendmaking of vergunning)</label>
 			<label index="tx_ncgovpermits_permits.type.I.0">Vergunning</label>
 			<label index="tx_ncgovpermits_permits.type.I.1">Bekendmaking</label>
-			<label index="tx_ncgovpermits_permits.type.I.2">-- Kies een type (Vergunning of Bekendmaking) -- </label>
+			<label index="tx_ncgovpermits_permits.type.I.2">-- Kies een type (Vergunning of Bekendmaking) --</label>
 			<label index="tx_ncgovpermits_permits.publishdate">Wanneer vrijgeven voor publicatie?</label>
 			<label index="tx_ncgovpermits_permits.publishenddate">Einddatum publicatie</label>
 			<label index="tx_ncgovpermits_permits.lastpublished">Laatst vrijgegeven voor publicatie</label>
@@ -38,24 +38,36 @@
 			<label index="tx_ncgovpermits_permits.phase.I.0">-- kies een fase --</label>
 			<label index="tx_ncgovpermits_permits.termtype">Termijnsoort (optioneel)</label>
 			<label index="tx_ncgovpermits_permits.termtype.I.0">-- kies een termijnsoort --</label>
-			<label index="tx_ncgovpermits_permits.termtype_start">Startdatum termijn (verplicht als termijnsoort ingevuld)</label>
-			<label index="tx_ncgovpermits_permits.termtype_end">Einddatum termijn (verplicht als termijnsoort ingevuld)</label>
+			<label index="tx_ncgovpermits_permits.termtype_start">Startdatum termijn (verplicht als termijnsoort
+				ingevuld)
+			</label>
+			<label index="tx_ncgovpermits_permits.termtype_end">Einddatum termijn (verplicht als termijnsoort
+				ingevuld)
+			</label>
 			<label index="tx_ncgovpermits_permits.company">Bedrijfsnaam</label>
 			<label index="tx_ncgovpermits_permits.companynumber">Bedrijfsnummer (bv KVK of BTW nummer)</label>
 			<label index="tx_ncgovpermits_permits.companyaddress">Adres bedrijf</label>
 			<label index="tx_ncgovpermits_permits.companyaddressnumber">Huisnummer bedrijf</label>
 			<label index="tx_ncgovpermits_permits.companyzipcode">Postcode bedrijf</label>
 			<label index="tx_ncgovpermits_permits.objectreference">Referentienummer (BAG) (optioneel)</label>
-			<label index="tx_ncgovpermits_permits.related">Gerelateerde vergunning/bekendmaking (wordt bij opslaan automatisch aangemaakt, indien aanwezig)</label>
+			<label index="tx_ncgovpermits_permits.related">Gerelateerde vergunning/bekendmaking (wordt bij opslaan
+				automatisch aangemaakt, indien aanwezig)
+			</label>
 			<label index="tx_ncgovpermits_permits.edit_related">Bewerk gerelateerd</label>
 
 			<!-- addresses -->
 			<label index="tx_ncgovpermits_addresses">Adres object</label>
-			<label index="tx_ncgovpermits_addresses.zipcode">Postcode object (verplicht in te vullen indien bekend)</label>
-			<label index="tx_ncgovpermits_addresses.addressnumber">Huisnummer object (alleen nummers, verplicht in te vullen indien bekend)</label>
-			<label index="tx_ncgovpermits_addresses.addressnumberadditional">Huisnummer toevoeging object (verplicht in te vullen indien bekend)</label>
+			<label index="tx_ncgovpermits_addresses.zipcode">Postcode object (verplicht in te vullen indien bekend)
+			</label>
+			<label index="tx_ncgovpermits_addresses.addressnumber">Huisnummer object (alleen nummers, verplicht in te
+				vullen indien bekend)
+			</label>
+			<label index="tx_ncgovpermits_addresses.addressnumberadditional">Huisnummer toevoeging object (verplicht in
+				te vullen indien bekend)
+			</label>
 			<label index="tx_ncgovpermits_addresses.address">Adres object (Straatnaam, Nodig voor Google Maps)</label>
-			<label index="tx_ncgovpermits_addresses.city">Woonplaats object (optioneel, invullen indien afwijkend)</label>
+			<label index="tx_ncgovpermits_addresses.city">Woonplaats object (optioneel, invullen indien afwijkend)
+			</label>
 			<label index="tx_ncgovpermits_addresses.municipality">Gemeente object</label>
 			<label index="tx_ncgovpermits_addresses.municipality.I.0">-- selecteer een gemeente --</label>
 			<label index="tx_ncgovpermits_addresses.province.I.0">-- kies een provincie --</label>

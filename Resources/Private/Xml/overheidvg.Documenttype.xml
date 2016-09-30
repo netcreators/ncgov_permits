@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cv xmlns="http://standaarden.overheid.nl/owms/terms" name="overheidvg:Documenttype"
-    topicanaid="13628">
-   <cvvalue topicanaid="13636">aanvraag</cvvalue>
-   <cvvalue topicanaid="13650">advies</cvvalue>
-   <cvvalue topicanaid="13656">beroepschrift</cvvalue>
-   <cvvalue topicanaid="13654">bezwaarschrift</cvvalue>
-   <cvvalue topicanaid="13638">bijlage</cvvalue>
-   <cvvalue topicanaid="13640">ontwerpbesluit</cvvalue>
-   <cvvalue topicanaid="13660">overig</cvvalue>
-   <cvvalue topicanaid="13652">uitspraak</cvvalue>
-   <cvvalue topicanaid="13648">vergunning</cvvalue>
-   <cvvalue topicanaid="13658">verweerschrift</cvvalue>
-   <cvvalue topicanaid="13644">weigering</cvvalue>
-   <cvvalue topicanaid="13646">zienswijze</cvvalue>
+	topicanaid="13628">
+	<cvvalue topicanaid="13636">aanvraag</cvvalue>
+	<cvvalue topicanaid="13650">advies</cvvalue>
+	<cvvalue topicanaid="13656">beroepschrift</cvvalue>
+	<cvvalue topicanaid="13654">bezwaarschrift</cvvalue>
+	<cvvalue topicanaid="13638">bijlage</cvvalue>
+	<cvvalue topicanaid="13640">ontwerpbesluit</cvvalue>
+	<cvvalue topicanaid="13660">overig</cvvalue>
+	<cvvalue topicanaid="13652">uitspraak</cvvalue>
+	<cvvalue topicanaid="13648">vergunning</cvvalue>
+	<cvvalue topicanaid="13658">verweerschrift</cvvalue>
+	<cvvalue topicanaid="13644">weigering</cvvalue>
+	<cvvalue topicanaid="13646">zienswijze</cvvalue>
 </cv>

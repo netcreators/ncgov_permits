@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cv xmlns="http://standaarden.overheid.nl/owms/terms" name="overheid:Provincie"
-    topicanaid="110">
-   <cvvalue topicanaid="5935">Drenthe</cvvalue>
-   <cvvalue topicanaid="5936">Flevoland</cvvalue>
-   <cvvalue topicanaid="5937">Fryslân</cvvalue>
-   <cvvalue topicanaid="5938">Gelderland</cvvalue>
-   <cvvalue topicanaid="5939">Groningen</cvvalue>
-   <cvvalue topicanaid="5940">Limburg</cvvalue>
-   <cvvalue topicanaid="5941">Noord-Brabant</cvvalue>
-   <cvvalue topicanaid="5942">Noord-Holland</cvvalue>
-   <cvvalue topicanaid="5943">Overijssel</cvvalue>
-   <cvvalue topicanaid="5944">Utrecht</cvvalue>
-   <cvvalue topicanaid="5945">Zeeland</cvvalue>
-   <cvvalue topicanaid="5946">Zuid-Holland</cvvalue>
+	topicanaid="110">
+	<cvvalue topicanaid="5935">Drenthe</cvvalue>
+	<cvvalue topicanaid="5936">Flevoland</cvvalue>
+	<cvvalue topicanaid="5937">Fryslân</cvvalue>
+	<cvvalue topicanaid="5938">Gelderland</cvvalue>
+	<cvvalue topicanaid="5939">Groningen</cvvalue>
+	<cvvalue topicanaid="5940">Limburg</cvvalue>
+	<cvvalue topicanaid="5941">Noord-Brabant</cvvalue>
+	<cvvalue topicanaid="5942">Noord-Holland</cvvalue>
+	<cvvalue topicanaid="5943">Overijssel</cvvalue>
+	<cvvalue topicanaid="5944">Utrecht</cvvalue>
+	<cvvalue topicanaid="5945">Zeeland</cvvalue>
+	<cvvalue topicanaid="5946">Zuid-Holland</cvvalue>
 </cv>

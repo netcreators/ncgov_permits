@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cv xmlns="http://standaarden.overheid.nl/owms/terms" name="overheidvg:Activiteit"
-    topicanaid="13756">
-   <cvvalue topicanaid="13771">alarm</cvvalue>
-   <cvvalue topicanaid="13761">bouwen</cvvalue>
-   <cvvalue topicanaid="13777">brandveiligheid</cvvalue>
-   <cvvalue topicanaid="13779">inrichting</cvvalue>
-   <cvvalue topicanaid="13767">kappen</cvvalue>
-   <cvvalue topicanaid="13773">opslag</cvvalue>
-   <cvvalue topicanaid="13783">overig</cvvalue>
-   <cvvalue topicanaid="13763">reclame</cvvalue>
-   <cvvalue topicanaid="13769">slopen</cvvalue>
-   <cvvalue topicanaid="13765">uitwegen</cvvalue>
-   <cvvalue topicanaid="13775">weg aanleggen</cvvalue>
-   <cvvalue topicanaid="13781">werkzaamheden</cvvalue>
+	topicanaid="13756">
+	<cvvalue topicanaid="13771">alarm</cvvalue>
+	<cvvalue topicanaid="13761">bouwen</cvvalue>
+	<cvvalue topicanaid="13777">brandveiligheid</cvvalue>
+	<cvvalue topicanaid="13779">inrichting</cvvalue>
+	<cvvalue topicanaid="13767">kappen</cvvalue>
+	<cvvalue topicanaid="13773">opslag</cvvalue>
+	<cvvalue topicanaid="13783">overig</cvvalue>
+	<cvvalue topicanaid="13763">reclame</cvvalue>
+	<cvvalue topicanaid="13769">slopen</cvvalue>
+	<cvvalue topicanaid="13765">uitwegen</cvvalue>
+	<cvvalue topicanaid="13775">weg aanleggen</cvvalue>
+	<cvvalue topicanaid="13781">werkzaamheden</cvvalue>
 </cv>

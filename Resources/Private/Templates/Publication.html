@@ -1,108 +1,109 @@
 <!-- ###XML### begin --><?xml version="1.0" encoding="UTF-8"?>
-<message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:overheid="http://standaarden.overheid.nl/owms/terms/" 
-	xmlns:overheidbm="http://standaarden.overheid.nl/bm/terms/" 
-	xmlns="http://standaarden.overheid.nl/bm/terms/" owms-version="3.5"
-	xsi:schemaLocation="http://standaarden.overheid.nl/bm/terms/ 
+<message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xmlns:dcterms="http://purl.org/dc/terms/" xmlns:overheid="http://standaarden.overheid.nl/owms/terms/"
+		 xmlns:overheidbm="http://standaarden.overheid.nl/bm/terms/"
+		 xmlns="http://standaarden.overheid.nl/bm/terms/" owms-version="3.5"
+		 xsi:schemaLocation="http://standaarden.overheid.nl/bm/terms/
 	http://standaarden.overheid.nl/bm/4.0/xsd/bekendmakingdocument.xsd">
 
 	<transactietype>###TRANSACTIETYPE###</transactietype>
 	<transactieID>###TRANSACTIEID###</transactieID>
 	<volgnummer>###VOLGNUMMER###</volgnummer>
 	<aanmaakdatum>###AANMAAKDATUM###</aanmaakdatum>
-	
+
 	<bekendmakingdocument xmlns="http://standaarden.overheid.nl/bm/terms/">
 		<meta>
-			<owmskern>
-				<dcterms:identifier><![CDATA[###IDENTIFIER###]]></dcterms:identifier>
-				<dcterms:title><![CDATA[###TITLE###]]></dcterms:title>
-				<dcterms:language>###LANGUAGE###</dcterms:language>
-				<dcterms:type scheme="overheid:Informatietype">bekendmaking</dcterms:type>
-				<dcterms:creator scheme="overheid:Gemeente">###CREATOR###</dcterms:creator>
-				<dcterms:modified>###MODIFIED###</dcterms:modified>
-				<dcterms:spatial scheme="###SPATIAL_SCHEME###">###SPATIAL###</dcterms:spatial>
-				<!-- ###TEMPORAL### begin -->
-				<dcterms:temporal>
-					<start xmlns="">###TEMPORAL_START###</start>
-					<!-- ###TEMPORALEND### begin -->
-					<end xmlns="">###TEMPORAL_END###</end>
-					<!-- ###TEMPORALEND### end -->
-				</dcterms:temporal>
-				<!-- ###TEMPORAL### end -->
-			</owmskern>
-			<owmsmantel>
-				<!-- ###ZAAK### begin -->
-				<dcterms:references>###ZAAKNUMMER###</dcterms:references>
-				<dcterms:isPartOf resourceIdentifier="###ZAAKURL###"/>
-				<!-- ###ZAAK### end -->
-				<dcterms:description><![CDATA[###DESCRIPTION###]]></dcterms:description>
-			</owmsmantel>
-			<bekendmakingenmeta>
-				<product>
-					<producttype scheme="###PRODUCTTYPE_SCHEME###">###PRODUCTTYPE###</producttype>
-				</product>
-				<!-- ###PUBLICATIEBLOCK### begin -->
-				<publicatie><![CDATA[###PUBLICATIE###]]></publicatie>
-				<!-- ###PUBLICATIEBLOCK### end -->
-				<!-- ###TERMIJN### begin -->
-				<overheidbm:termijn>
-					<overheidbm:fase>aanvraag ontvankelijk</overheidbm:fase>
-					<overheidbm:termijnsoortPeriode>
-						<overheidbm:termijnsoort>bezwaar</overheidbm:termijnsoort>
-						<!-- ###STARTTERMIJN### begin -->
-						<overheidbm:startdatumTermijn>###STARTDATUMTERMIJN###</overheidbm:startdatumTermijn>
-						<!-- ###STARTTERMIJN### end -->
-						<!-- ###EINDTERMIJN### begin -->
-						<overheidbm:einddatumTermijn>###EINDDATUMTERMIJN###</overheidbm:einddatumTermijn>
-						<!-- ###EINDTERMIJN### end -->
-					</overheidbm:termijnsoortPeriode>					
-				</overheidbm:termijn>
-				<!-- ###TERMIJN### end -->
-				<object>
-					<!-- ###REFERENTIENUMMERBLOCK### begin -->
-					<referentienummer>###REFERENTIENUMMER###</referentienummer>
-					<!-- ###REFERENTIENUMMERBLOCK### end -->
-					<!-- ###LOCATIEADRES### begin -->
-					<adres>
-						<!-- ###POSTCODEHUISNUMMER### begin -->
-						<postcodeHuisnummer>
-							<postcode>###POSTCODE###</postcode>
-							<!-- ###HUISNUMMERBLOCK### begin -->
-							<huisnummer>###HUISNUMMER###</huisnummer>
-							<!-- ###HUISNUMMERBLOCK### end -->
-							<!-- ###HUISNUMMERTOEVOEGINGBLOCK### begin -->
-							<huisnummertoevoeging>###HUISNUMMERTOEVOEGING###</huisnummertoevoeging>
-							<!-- ###HUISNUMMERTOEVOEGINGBLOCK### end -->
-						</postcodeHuisnummer>
-						<!-- ###POSTCODEHUISNUMMER### end -->
-						<!-- ###GEMEENTEBLOCK### begin -->
-						<gemeente>###GEMEENTE###</gemeente>
-						<!-- ###GEMEENTEBLOCK### end -->
-						<!-- ###PROVINCIEBLOCK### begin -->
-						<provincie>###PROVINCIE###</provincie>
-						<!-- ###PROVINCIEBLOCK### end -->
-					</adres>
-					<!-- ###LOCATIEADRES### end -->
-					<!-- ###LOCATIEPERCEEL### begin -->
-					<perceel>
-						<kadastralegemeente scheme="overheid:KadastraleGemeente">###KADASTRALEGEMEENTE###</kadastralegemeente>
-						<sectie>###SECTIE###</sectie>
-						<nummer>###NUMMER###</nummer>
-					</perceel>
-					<!-- ###LOCATIEPERCEEL### end -->
-					<!-- ###LOCATIECOORDINATEN### begin -->
-					<coordinaten>
-						<x-waarde>###XWAARDE###</x-waarde>
-						<y-waarde>###YWAARDE###</y-waarde>
-					</coordinaten>
-					<!-- ###LOCATIECOORDINATEN### end -->
-				</object>
-			</bekendmakingenmeta>
+		<owmskern>
+			<dcterms:identifier><![CDATA[###IDENTIFIER###]]></dcterms:identifier>
+			<dcterms:title><![CDATA[###TITLE###]]></dcterms:title>
+			<dcterms:language>###LANGUAGE###</dcterms:language>
+			<dcterms:type scheme="overheid:Informatietype">bekendmaking</dcterms:type>
+			<dcterms:creator scheme="overheid:Gemeente">###CREATOR###</dcterms:creator>
+			<dcterms:modified>###MODIFIED###</dcterms:modified>
+			<dcterms:spatial scheme="###SPATIAL_SCHEME###">###SPATIAL###</dcterms:spatial>
+			<!-- ###TEMPORAL### begin -->
+			<dcterms:temporal>
+				<start xmlns="">###TEMPORAL_START###</start>
+				<!-- ###TEMPORALEND### begin -->
+				<end xmlns="">###TEMPORAL_END###</end>
+				<!-- ###TEMPORALEND### end -->
+			</dcterms:temporal>
+			<!-- ###TEMPORAL### end -->
+		</owmskern>
+		<owmsmantel>
+			<!-- ###ZAAK### begin -->
+			<dcterms:references>###ZAAKNUMMER###</dcterms:references>
+			<dcterms:isPartOf resourceIdentifier="###ZAAKURL###"/>
+			<!-- ###ZAAK### end -->
+			<dcterms:description><![CDATA[###DESCRIPTION###]]></dcterms:description>
+		</owmsmantel>
+		<bekendmakingenmeta>
+			<product>
+				<producttype scheme="###PRODUCTTYPE_SCHEME###">###PRODUCTTYPE###</producttype>
+			</product>
+			<!-- ###PUBLICATIEBLOCK### begin -->
+			<publicatie><![CDATA[###PUBLICATIE###]]></publicatie>
+			<!-- ###PUBLICATIEBLOCK### end -->
+			<!-- ###TERMIJN### begin -->
+			<overheidbm:termijn>
+				<overheidbm:fase>aanvraag ontvankelijk</overheidbm:fase>
+				<overheidbm:termijnsoortPeriode>
+					<overheidbm:termijnsoort>bezwaar</overheidbm:termijnsoort>
+					<!-- ###STARTTERMIJN### begin -->
+					<overheidbm:startdatumTermijn>###STARTDATUMTERMIJN###</overheidbm:startdatumTermijn>
+					<!-- ###STARTTERMIJN### end -->
+					<!-- ###EINDTERMIJN### begin -->
+					<overheidbm:einddatumTermijn>###EINDDATUMTERMIJN###</overheidbm:einddatumTermijn>
+					<!-- ###EINDTERMIJN### end -->
+				</overheidbm:termijnsoortPeriode>
+			</overheidbm:termijn>
+			<!-- ###TERMIJN### end -->
+			<object>
+				<!-- ###REFERENTIENUMMERBLOCK### begin -->
+				<referentienummer>###REFERENTIENUMMER###</referentienummer>
+				<!-- ###REFERENTIENUMMERBLOCK### end -->
+				<!-- ###LOCATIEADRES### begin -->
+				<adres>
+					<!-- ###POSTCODEHUISNUMMER### begin -->
+					<postcodeHuisnummer>
+						<postcode>###POSTCODE###</postcode>
+						<!-- ###HUISNUMMERBLOCK### begin -->
+						<huisnummer>###HUISNUMMER###</huisnummer>
+						<!-- ###HUISNUMMERBLOCK### end -->
+						<!-- ###HUISNUMMERTOEVOEGINGBLOCK### begin -->
+						<huisnummertoevoeging>###HUISNUMMERTOEVOEGING###</huisnummertoevoeging>
+						<!-- ###HUISNUMMERTOEVOEGINGBLOCK### end -->
+					</postcodeHuisnummer>
+					<!-- ###POSTCODEHUISNUMMER### end -->
+					<!-- ###GEMEENTEBLOCK### begin -->
+					<gemeente>###GEMEENTE###</gemeente>
+					<!-- ###GEMEENTEBLOCK### end -->
+					<!-- ###PROVINCIEBLOCK### begin -->
+					<provincie>###PROVINCIE###</provincie>
+					<!-- ###PROVINCIEBLOCK### end -->
+				</adres>
+				<!-- ###LOCATIEADRES### end -->
+				<!-- ###LOCATIEPERCEEL### begin -->
+				<perceel>
+					<kadastralegemeente scheme="overheid:KadastraleGemeente">###KADASTRALEGEMEENTE###
+					</kadastralegemeente>
+					<sectie>###SECTIE###</sectie>
+					<nummer>###NUMMER###</nummer>
+				</perceel>
+				<!-- ###LOCATIEPERCEEL### end -->
+				<!-- ###LOCATIECOORDINATEN### begin -->
+				<coordinaten>
+					<x-waarde>###XWAARDE###</x-waarde>
+					<y-waarde>###YWAARDE###</y-waarde>
+				</coordinaten>
+				<!-- ###LOCATIECOORDINATEN### end -->
+			</object>
+		</bekendmakingenmeta>
 		</meta>
 		<body>
-			<bekendmaking>
-				<![CDATA[###CONTENT###]]>
-			</bekendmaking>
+		<bekendmaking>
+			<![CDATA[###CONTENT###]]>
+		</bekendmaking>
 		</body>
 	</bekendmakingdocument>
 </message>

@@ -1,5 +1,7 @@
 <?php
-if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
+if (!defined('TYPO3_MODE')) {
+    die ('Access denied.');
+}
 
 $_EXTKEY = 'ncgov_permits';
 $_EXTKEYSHORT = 'tx_ncgovpermits';
@@ -7,90 +9,92 @@ $_TABLENAME = $_EXTKEYSHORT . '_log';
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages($_TABLENAME);
 
-return array (
-	'ctrl' => array (
-		'title'     => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_tableName,
-		'label'     => 'message',
-		'tstamp'    => 'tstamp',
-		'crdate'    => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'default_sortby' => 'ORDER BY uid',
-		'delete' 	=> 'deleted',
-		'enablecolumns' => array (
-			'disabled' => 'hidden',
-		),
-		'dividers2tabs' => false,
-		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY).'Resources/Public/Icons/icon_' . $_tableName . '.gif',
-	),
-    'interface' => array (
+return array(
+    'ctrl' => array(
+        'title' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_tableName,
+        'label' => 'message',
+        'tstamp' => 'tstamp',
+        'crdate' => 'crdate',
+        'cruser_id' => 'cruser_id',
+        'default_sortby' => 'ORDER BY uid',
+        'delete' => 'deleted',
+        'enablecolumns' => array(
+            'disabled' => 'hidden',
+        ),
+        'dividers2tabs' => false,
+        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath(
+                $_EXTKEY
+            ) . 'Resources/Public/Icons/icon_' . $_tableName . '.gif',
+    ),
+    'interface' => array(
         'showRecordFieldList' => 'hidden,message,logtype'
     ),
-	'feInterface' => array (
-		'fe_admin_fieldList' => 'hidden,name',
-	),
-    'columns' => array (
-        'hidden' => array (
+    'feInterface' => array(
+        'fe_admin_fieldList' => 'hidden,name',
+    ),
+    'columns' => array(
+        'hidden' => array(
             'exclude' => 1,
-            'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-            'config'  => array (
-                'type'    => 'check',
+            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+            'config' => array(
+                'type' => 'check',
                 'default' => '0'
             )
         ),
-        'message' => array (
+        'message' => array(
             'exclude' => 1,
             'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.message',
-            'config' => Array (
+            'config' => Array(
                 'type' => 'text',
                 'cols' => '40',
                 'rows' => '40',
             )
         ),
-		'messagenumber' => array (
+        'messagenumber' => array(
             'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.messagenumber',
-            'config' => array (
-                'type'     => 'input',
-                'size'     => '4',
-                'max'      => '4',
-                'eval'     => 'int',
+            'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.messagenumber',
+            'config' => array(
+                'type' => 'input',
+                'size' => '4',
+                'max' => '4',
+                'eval' => 'int',
                 'checkbox' => '0',
                 'default' => 0
             )
-		),
-        'logtype' => Array (
+        ),
+        'logtype' => Array(
             'exclude' => 1,
             'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.logtype',
-            'config' => Array (
+            'config' => Array(
                 'type' => 'input',
                 'size' => '10',
                 'max' => '10',
                 'eval' => 'trim',
             )
         ),
-		'smscount' => array (
+        'smscount' => array(
             'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.smscount',
-            'config' => array (
-                'type'     => 'input',
-                'eval'     => 'int',
+            'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.smscount',
+            'config' => array(
+                'type' => 'input',
+                'eval' => 'int',
                 'default' => 0
             )
-		),
-		'emailcount' => array (
+        ),
+        'emailcount' => array(
             'exclude' => 0,
-			'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.emailcount',
-            'config' => array (
-                'type'     => 'input',
-                'eval'     => 'int',
+            'label' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_tca.xml:' . $_TABLENAME . '.emailcount',
+            'config' => array(
+                'type' => 'input',
+                'eval' => 'int',
                 'default' => 0
             )
-		),
-	),
-    'types' => array (
+        ),
+    ),
+    'types' => array(
         '0' => array('showitem' => 'hidden, message, logtype, smscount, emailcount')
     ),
-    'palettes' => array (
+    'palettes' => array(
         '1' => array('showitem' => '')
     )
 );
