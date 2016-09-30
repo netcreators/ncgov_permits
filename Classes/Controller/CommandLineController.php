@@ -12,7 +12,8 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
 {
     // protected $prefix;
     protected $xmlTemplatePath;
-    protected $errors;
+    protected $invalidDataErrors;
+    protected $remotePushErrors;
     protected $sentPublications;
 
     //Defaults
@@ -39,7 +40,8 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
         // $this->prefix = 'tx_ncgovpermits_';
         $this->xmlTemplatePath = 'EXT:ncgov_permits/Resources/Private/Templates/Publication.html';
 
-        $this->errors = 0;
+        $this->invalidDataErrors = 0;
+        $this->remotePushErrors = 0;
         $this->sentPublications = array(
             'C' => 0,
             'U' => 0,
@@ -330,11 +332,14 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
                         );
                         $pushError = $publicationPushService->process();
                     } else {
+                        $this->invalidDataErrors++;
                         $this->displayError(
                             'Publicationdata is incomplete or insufficient (uid: ' . $publication['uid'] . ')'
                         );
                         if (!$requiredFilled) {
-                            $this->displayError('Not all required fields are filled for uid: ' . $publication['uid']);
+                            $this->displayError(
+                                'Not all required fields are filled for uid: ' . $publication['uid']
+                            );
                         }
                         if (!$locationFilled) {
                             $this->displayError(
@@ -342,7 +347,9 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
                             );
                         }
                         if ($locationInvalid) {
-                            $this->displayError('The location data is invalid for uid: ' . $publication['uid']);
+                            $this->displayError(
+                                'The location data is invalid for uid: ' . $publication['uid']
+                            );
                         }
                     }
 
@@ -356,6 +363,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
                         );
                         $this->sentPublications[$publicationData['transactiontype']]++;
                     } else {
+                        $this->remotePushErrors++;
                         $this->displayError('Server reply for uid ' . $publication['uid'] . ': ' . $pushError);
                     }
 
@@ -402,7 +410,6 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
     {
         echo("! " . $message . "\n");
         flush();
-        $this->errors++;
     }
 
     /**
@@ -423,10 +430,14 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
     function displayStats()
     {
         echo("\n'Create' Publications sent: " . $this->sentPublications['C'] . "\n");
-        echo("\n'Update' Publications sent: " . $this->sentPublications['U'] . "\n");
-        echo("\n'Delete' Publications sent: " . $this->sentPublications['D'] . "\n");
-        echo("\nTotal Publications sent: " . array_sum($this->sentPublications) . "\n");
-        echo("\nErrors: " . $this->errors . "\n");
+        echo("'Update' Publications sent: " . $this->sentPublications['U'] . "\n");
+        echo("'Delete' Publications sent: " . $this->sentPublications['D'] . "\n");
+        echo("Total Publications sent: " . array_sum($this->sentPublications) . "\n");
+
+        echo("\n'Invalid Data' Errors: " . $this->invalidDataErrors . "\n");
+        echo("'Remote Push' Errors: " . $this->remotePushErrors . "\n");
+        echo("Total Publications sent: " . ($this->invalidDataErrors + $this->remotePushErrors) . "\n");
+        
         echo("\nDone!\n");
         flush();
     }
