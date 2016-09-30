@@ -44,4 +44,3 @@ class BaseController extends \tx_nclib_base_controller {
 	}
 }
 
-?>

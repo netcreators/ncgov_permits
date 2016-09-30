@@ -1947,4 +1947,3 @@ class PermitView extends BaseView {
 	}
 }
 
-?>

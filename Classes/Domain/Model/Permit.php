@@ -1119,4 +1119,4 @@ class Permit extends Base {
 	}
 }
 
-?>
+

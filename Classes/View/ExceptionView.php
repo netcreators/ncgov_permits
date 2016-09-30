@@ -68,4 +68,3 @@ class ExceptionView extends BaseView {
 	}
 }
 
-?>

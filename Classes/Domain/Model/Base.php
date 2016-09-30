@@ -48,4 +48,3 @@ class Base extends \tx_nclib_base_model {
 	}
 }
 
-?>

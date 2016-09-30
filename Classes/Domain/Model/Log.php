@@ -90,4 +90,3 @@ class Log extends Base {
 	}
 }
 
-?>

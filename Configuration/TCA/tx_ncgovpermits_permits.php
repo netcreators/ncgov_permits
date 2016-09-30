@@ -464,4 +464,3 @@ $tableDefinition['types']['0']['showitem'] = implode(', ', $items);
 
 return $tableDefinition;
 
-?>

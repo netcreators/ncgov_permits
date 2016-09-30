@@ -936,4 +936,3 @@ class PermitController extends BaseController {
 
 }
 
-?>

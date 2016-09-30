@@ -94,4 +94,3 @@ class Xml extends \tx_nclib_xml_model {
 	}
 }
 
-?>

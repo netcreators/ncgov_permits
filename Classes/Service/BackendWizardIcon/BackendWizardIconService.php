@@ -72,4 +72,3 @@ class tx_ncgovpermits_wizicon {
 	}
 }
 
-?>

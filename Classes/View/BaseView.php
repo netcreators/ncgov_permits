@@ -158,4 +158,4 @@ class BaseView extends \tx_nclib_base_view {
 	}
 }
 
-?>
+

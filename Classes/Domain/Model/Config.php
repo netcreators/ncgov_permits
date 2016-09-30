@@ -178,4 +178,4 @@ class Config extends \tx_nclib_config_model {
 	}
 }
 
-?>
+
