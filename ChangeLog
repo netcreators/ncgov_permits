@@ -1,4 +1,7 @@
 
+2016-09-30 1.1.5 Leonie Philine Bitto <leonie@netcreators.nl>
+	* CLI controller is now batched (1000 items / run) to avoid hitting a common value of PHP memory_limit.
+
 2016-09-30 1.1.4 Leonie Philine Bitto <leonie@netcreators.nl>
 	* CommandLineController better handles the remote deletion of locally deleted publications.
 	* CommandLineController provides some more information for invalid datasets while pushing publications.

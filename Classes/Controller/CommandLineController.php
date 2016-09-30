@@ -15,6 +15,7 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
     protected $invalidDataErrors;
     protected $remotePushErrors;
     protected $sentPublications;
+    protected $batchLimit = 1000;
 
     //Defaults
     protected $producttypeScheme = 'overheidbm:BekendmakingtypeGemeente';
@@ -82,23 +83,41 @@ class CommandLineController extends \TYPO3\CMS\Core\Controller\CommandLineContro
             $this->displayHelp('Missing creator!');
         } else {
             // Get publications that have not yet been sent or that have been edited after they were sent
-            $publications = $this->getDatabaseConnection()->exec_SELECTgetRows(
-                '*',
-                'tx_ncgovpermits_permits',
-                'tx_ncgovpermits_permits.pid = ' . $conf['pid'] . ' AND hidden = 0 AND type = 1 '
+            $select = array(
+                'fields' => '*',
+                'table' => 'tx_ncgovpermits_permits',
+                'where' => 'tx_ncgovpermits_permits.pid = ' . $conf['pid'] . ' AND hidden = 0 AND type = 1 '
 
-                // Note:
-                //		'lastmodified' is updated by ncgov_permits_sync and, for manual edits,
-                //		in @see \Netcreators\NcgovPermits\Service\CoreDataHandler\ProcessDatamapHook::processDatamap_postProcessFieldArray().
-                //		However, we cannot trust that deleted records will have their lastmodified date updated.
-                //		Therefore, for deleted records, we need to rely on tstamp, which represents the date and time of deletion.
-                . ' AND (
+                    // Note:
+                    //		'lastmodified' is updated by ncgov_permits_sync and, for manual edits,
+                    //		in @see \Netcreators\NcgovPermits\Service\CoreDataHandler\ProcessDatamapHook::processDatamap_postProcessFieldArray().
+                    //		However, we cannot trust that deleted records will have their lastmodified date updated.
+                    //		Therefore, for deleted records, we need to rely on tstamp, which represents the date and time of deletion.
+                    . ' AND (
 						(deleted = 0 AND lastmodified > lastpublished)
 						OR
 						(deleted = 1 AND tstamp > lastpublished)
 					)
 					AND publishdate <= UNIX_TIMESTAMP(NOW())'
             );
+
+            $totalPublicationCount = $this->getDatabaseConnection()->exec_SELECTcountRows(
+                '*',
+                $select['table'],
+                $select['where']
+            );
+            echo "Total count of publications to be processed: " . $totalPublicationCount . "\n";
+
+            $publications = $this->getDatabaseConnection()->exec_SELECTgetRows(
+                $select['fields'],
+                $select['table'],
+                $select['where'],
+                '', '',
+                $this->batchLimit
+            );
+            echo "Count of publications to be processsed in this run (max " . $this->batchLimit . "): "
+                . count($publications) . "\n\n";
+            flush();
 
             if (!empty($publications)) {
                 $publicationPushService = new \Netcreators\NcgovPermits\Service\Publication\PublicationPushService($this->xmlTemplatePath, $conf['user'], $conf['pass'], $conf['test']);
