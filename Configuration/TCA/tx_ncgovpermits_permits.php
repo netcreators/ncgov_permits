@@ -28,7 +28,7 @@ $tableDefinition = array(
                 $_EXTKEY
             ) . 'Resources/Public/Icons/icon_' . $_tableName . '.gif',
         'searchFields' => 'language, title, description, publicationbody, producttype, productactivities, publication, '
-            . 'identifier, casereference, casereference_pub, phase, termtype, company, companynumber, '
+            . 'casereference, casereference_pub, phase, termtype, company, companynumber, '
             . 'companyaddress, companyaddressnumber, companyzipcode, objectreference',
     ),
     'interface' => array(
