@@ -23,6 +23,7 @@ return array(
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath(
                 $_EXTKEY
             ) . 'Resources/Public/Icons/icon_' . $_tableName . '.gif',
+        'searchFields' => 'zipcode, addressnumber, addressnumberadditional, address, city, municipality, province',
     ),
     'interface' => array(
         'showRecordFieldList' => 'hidden,message,logtype'

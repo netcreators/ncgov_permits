@@ -25,6 +25,7 @@ return array(
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath(
                 $_EXTKEY
             ) . 'Resources/Public/Icons/icon_' . $_tableName . '.gif',
+        'searchFields' => 'message, messagenumber, logtype',
     ),
     'interface' => array(
         'showRecordFieldList' => 'hidden,message,logtype'

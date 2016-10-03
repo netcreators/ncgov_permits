@@ -25,6 +25,7 @@ $tableDefinition = array(
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath(
                 $_EXTKEY
             ) . 'Resources/Public/Icons/icon_' . $_tableName . '.gif',
+        'searchFields' => 'cadastremunicipality, section, number',
     ),
     'interface' => array(
         'showRecordFieldList' => 'hidden,message,logtype'

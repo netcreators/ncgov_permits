@@ -27,6 +27,9 @@ $tableDefinition = array(
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath(
                 $_EXTKEY
             ) . 'Resources/Public/Icons/icon_' . $_tableName . '.gif',
+        'searchFields' => 'language, title, description, publicationbody, producttype, productactivities, publication, '
+            . 'identifier, casereference, casereference_pub, phase, termtype, company, companynumber, '
+            . 'companyaddress, companyaddressnumber, companyzipcode, objectreference',
     ),
     'interface' => array(
         'showRecordFieldList' => 'hidden,message,logtype'
@@ -460,7 +463,10 @@ $tableDefinition = array(
     ),
     'types' => array(
         '0' => array('showitem' => ''),
-        '1' => array('showitem' => 'type, hidden, lastpublished, lastmodified, publishdate, publishenddate, producttype, language, title, description;;9;richtext:rte_transform[flag=rte_enabled|mode=ts_css];3-3-3, link, objectaddresses, related'),
+        '1' => array('showitem' => 'type, hidden, lastpublished, lastmodified, publishdate, publishenddate, '
+            . 'producttype, language, title, '
+            . 'description;;9;richtext:rte_transform[flag=rte_enabled|mode=ts_css];3-3-3, link, objectaddresses, '
+            . 'related'),
         '2' => array('showitem' => 'type'),
     ),
     'palettes' => array(
