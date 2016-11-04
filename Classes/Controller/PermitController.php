@@ -43,7 +43,17 @@ class PermitController extends BaseController
     // same as $_EXTKEY and $_EXTKEYSHORT
     public $extKey = 'ncgov_permits';
     public $extKeyShort = 'tx_ncgovpermits';
-    public $pi_checkCHash = false;
+
+
+    // Cache control for USER plugin (@see Configuration/TypoScript/setup.txt):
+
+    // If set, then links are 1) not using cHash and 2) not allowing pages to be cached. (Set this for all USER_INT plugins!)
+    public $pi_USER_INT_obj = false;
+
+    // If set, then caching is disabled if piVars are incoming while no cHash was set (Set this for all USER plugins!)
+    public $pi_checkCHash = true;
+
+
 
     /**
      * @var \Netcreators\NcgovPermits\Domain\Model\Config
