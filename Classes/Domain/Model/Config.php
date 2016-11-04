@@ -46,7 +46,7 @@ class Config extends \tx_nclib_config_model
             // should all remaining markers be removed?
             'cleanRemainingMarkers' => '0',
             // Cache links?
-            'cacheLinks' => false,
+            'cacheLinks' => true,
             // page where the reminder log messages are stored
             'logFolder' => false,
             // where are the permits shown?

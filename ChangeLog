@@ -1,4 +1,7 @@
 
+2016-11-04 1.1.7 Leonie Philine Bitto <leonie@netcreators.nl>
+	* Fixed Caching for USER plugin with cached links and proper cHash usage.
+
 2016-10-03 1.1.6 Leonie Philine Bitto <leonie@netcreators.nl>
 	* Added TCA searchFields for BackEnd searchability of Permits, Publications and related records.
 
